@@ -5,6 +5,7 @@ import { Cap } from '../../models/cap.model';
 import { CapService } from '../../services/cap.service';
 import { AuthService } from '../../services/auth.service';
 import { ToastService } from '../../services/toast.service';
+import { ImageUploadService } from '../../services/image-upload.service';
 import { TagBadgeComponent } from '../tag-badge/tag-badge.component';
 
 @Component({
@@ -23,6 +24,7 @@ export class CapDetailComponent implements OnInit {
     private capService: CapService,
     private authService: AuthService,
     private toastService: ToastService,
+    private imageUploadService: ImageUploadService,
     private route: ActivatedRoute,
     private router: Router
   ) {
@@ -40,6 +42,10 @@ export class CapDetailComponent implements OnInit {
   async onDelete(): Promise<void> {
     if (this.cap && confirm('Are you sure you want to delete this cap?')) {
       try {
+        // Delete image from Storage if exists
+        if (this.cap.imageUrl) {
+          await this.imageUploadService.deleteCapImage(this.cap.id);
+        }
         await this.capService.deleteCap(this.cap.id);
         this.toastService.success('Cap deleted');
         this.router.navigate(['/']);

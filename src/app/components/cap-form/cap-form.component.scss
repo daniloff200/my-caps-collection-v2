@@ -99,18 +99,168 @@
   margin-top: 6px;
 }
 
-.form__preview {
-  margin-top: 12px;
+// Upload zone
+.upload-zone {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+  padding: 32px 24px;
+  border: 2px dashed rgba(255, 255, 255, 0.12);
+  border-radius: 12px;
+  background: rgba(30, 41, 59, 0.5);
+  cursor: pointer;
+  transition: all 0.2s ease;
+
+  &:hover {
+    border-color: rgba(245, 197, 66, 0.4);
+    background: rgba(245, 197, 66, 0.05);
+  }
+
+  &--active {
+    border-color: #f5c542;
+    background: rgba(245, 197, 66, 0.1);
+    transform: scale(1.01);
+  }
+}
+
+.upload-zone__input {
+  display: none;
+}
+
+.upload-zone__icon {
+  font-size: 36px;
+  opacity: 0.7;
+}
+
+.upload-zone__text {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+}
+
+.upload-zone__main {
+  color: #a0aec0;
+  font-size: 14px;
+  font-weight: 500;
+}
+
+.upload-zone__hint {
+  color: #4a5568;
+  font-size: 12px;
+}
+
+// Upload preview
+.upload-preview {
+  display: flex;
+  gap: 16px;
+  padding: 16px;
+  background: rgba(30, 41, 59, 0.5);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 12px;
+}
+
+.upload-preview__image {
   width: 120px;
   height: 120px;
   border-radius: 10px;
   overflow: hidden;
+  flex-shrink: 0;
   border: 1px solid rgba(255, 255, 255, 0.1);
 
   img {
     width: 100%;
     height: 100%;
     object-fit: cover;
+  }
+}
+
+.upload-preview__info {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  min-width: 0;
+}
+
+.upload-preview__sizes {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 6px;
+  font-size: 13px;
+}
+
+.upload-preview__original {
+  color: #718096;
+}
+
+.upload-preview__arrow {
+  color: #4a5568;
+}
+
+.upload-preview__compressed {
+  color: #48bb78;
+  font-weight: 600;
+}
+
+.upload-preview__saving {
+  color: #48bb78;
+  font-size: 12px;
+}
+
+.upload-preview__compressing {
+  color: #f5c542;
+  font-size: 12px;
+  animation: pulse 1.5s ease-in-out infinite;
+}
+
+.upload-preview__existing {
+  color: #718096;
+  font-size: 13px;
+}
+
+.upload-preview__actions {
+  display: flex;
+  gap: 12px;
+}
+
+.upload-preview__change,
+.upload-preview__remove {
+  padding: 6px 14px;
+  border-radius: 8px;
+  font-size: 13px;
+  cursor: pointer;
+  border: none;
+  transition: all 0.2s ease;
+}
+
+.upload-preview__change {
+  background: rgba(245, 197, 66, 0.15);
+  color: #f5c542;
+
+  &:hover {
+    background: rgba(245, 197, 66, 0.25);
+  }
+}
+
+.upload-preview__remove {
+  background: rgba(245, 101, 101, 0.12);
+  color: #fc8181;
+
+  &:hover {
+    background: rgba(245, 101, 101, 0.22);
+  }
+}
+
+@keyframes pulse {
+  0%,
+  100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.5;
   }
 }
 

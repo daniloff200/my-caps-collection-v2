@@ -101,20 +101,82 @@
       </div>
     </div>
 
-    <!-- Image URL -->
+    <!-- Image Upload -->
     <div class="form__group">
-      <label class="form__label" for="imageUrl">Image URL</label>
-      <input
-        type="url"
-        id="imageUrl"
-        class="form__input"
-        placeholder="https://example.com/cap-photo.jpg"
-        [(ngModel)]="imageUrl"
-        name="imageUrl"
-      />
-      <span class="form__hint">Paste a direct link to the cap image</span>
-      <div class="form__preview" *ngIf="imageUrl">
-        <img [src]="imageUrl" alt="Preview" (error)="imageUrl = ''" />
+      <label class="form__label">Photo</label>
+
+      <!-- Drop zone (when no image) -->
+      <div
+        *ngIf="!imagePreview && !imageUrl"
+        class="upload-zone"
+        [class.upload-zone--active]="isDragging"
+        (dragover)="onDragOver($event)"
+        (dragleave)="onDragLeave($event)"
+        (drop)="onDrop($event)"
+        (click)="fileInput.click()"
+      >
+        <input
+          #fileInput
+          type="file"
+          accept="image/*"
+          class="upload-zone__input"
+          (change)="onFileSelected($event)"
+        />
+        <div class="upload-zone__icon">📷</div>
+        <div class="upload-zone__text">
+          <span class="upload-zone__main">Click to upload or drag & drop</span>
+          <span class="upload-zone__hint">Image will be auto-compressed to ~100KB</span>
+        </div>
+      </div>
+
+      <!-- Preview (when image selected or existing URL) -->
+      <div class="upload-preview" *ngIf="imagePreview || imageUrl">
+        <div class="upload-preview__image">
+          <img [src]="imagePreview || imageUrl" alt="Cap photo" />
+        </div>
+        <div class="upload-preview__info">
+          <div class="upload-preview__sizes" *ngIf="originalSize">
+            <span class="upload-preview__original">
+              Original: {{ formatSize(originalSize) }}
+            </span>
+            <span class="upload-preview__arrow" *ngIf="compressedSize">→</span>
+            <span class="upload-preview__compressed" *ngIf="compressedSize">
+              Compressed: {{ formatSize(compressedSize) }}
+            </span>
+            <span class="upload-preview__saving" *ngIf="compressedSize && originalSize">
+              (saved {{ ((1 - compressedSize / originalSize) * 100).toFixed(0) }}%)
+            </span>
+            <span class="upload-preview__compressing" *ngIf="compressing">
+              Compressing...
+            </span>
+          </div>
+          <div class="upload-preview__existing" *ngIf="!originalSize && imageUrl">
+            Current photo
+          </div>
+          <div class="upload-preview__actions">
+            <button
+              type="button"
+              class="upload-preview__change"
+              (click)="fileInput.click()"
+            >
+              Change photo
+            </button>
+            <input
+              #fileInput
+              type="file"
+              accept="image/*"
+              class="upload-zone__input"
+              (change)="onFileSelected($event)"
+            />
+            <button
+              type="button"
+              class="upload-preview__remove"
+              (click)="removeImage()"
+            >
+              Remove
+            </button>
+          </div>
+        </div>
       </div>
     </div>
 
