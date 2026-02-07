@@ -1,0 +1,106 @@
+<div class="collection">
+  <!-- Search & Filter Bar -->
+  <div class="collection__toolbar">
+    <div class="search-box">
+      <span class="search-box__icon">🔍</span>
+      <input
+        type="text"
+        class="search-box__input"
+        placeholder="Search by name, manufacturer..."
+        [ngModel]="filters.search"
+        (ngModelChange)="onSearchChange($event)"
+      />
+      <button
+        *ngIf="filters.search"
+        class="search-box__clear"
+        (click)="onSearchChange('')"
+      >×</button>
+    </div>
+
+    <button
+      class="btn btn--outline"
+      [class.btn--active]="showFilters"
+      (click)="toggleFilters()"
+    >
+      <span>Filters</span>
+      <span *ngIf="hasActiveFilters" class="btn__badge">!</span>
+    </button>
+
+    <button
+      *ngIf="hasActiveFilters"
+      class="btn btn--ghost"
+      (click)="resetFilters()"
+    >
+      Clear all
+    </button>
+  </div>
+
+  <!-- Filter Panel -->
+  <div class="filters" *ngIf="showFilters">
+    <div class="filters__row">
+      <div class="filters__group">
+        <label class="filters__label">Country</label>
+        <select
+          class="filters__select"
+          [ngModel]="filters.country"
+          (ngModelChange)="onCountryChange($event)"
+        >
+          <option value="">All countries</option>
+          <option *ngFor="let country of allCountries" [value]="country">
+            {{ country }}
+          </option>
+        </select>
+      </div>
+
+      <div class="filters__group">
+        <label class="filters__label">Trade status</label>
+        <select
+          class="filters__select"
+          [ngModel]="tradeFilterValue"
+          (ngModelChange)="onTradeFilterChange($event)"
+        >
+          <option value="">All caps</option>
+          <option value="true">For trade</option>
+          <option value="false">Not for trade</option>
+        </select>
+      </div>
+    </div>
+
+    <div class="filters__tags" *ngIf="allTags.length">
+      <label class="filters__label">Tags</label>
+      <div class="filters__tags-list">
+        <app-tag-badge
+          *ngFor="let tag of allTags"
+          [tag]="tag"
+          [clickable]="true"
+          [active]="filters.tag === tag"
+          (tagClick)="onTagClick($event)"
+        ></app-tag-badge>
+      </div>
+    </div>
+  </div>
+
+  <!-- Results Count -->
+  <div class="collection__meta">
+    <span class="collection__count">
+      {{ filteredCaps.length }} cap{{ filteredCaps.length !== 1 ? 's' : '' }} found
+    </span>
+  </div>
+
+  <!-- Grid -->
+  <div class="collection__grid" *ngIf="filteredCaps.length; else emptyState">
+    <app-cap-card
+      *ngFor="let cap of filteredCaps; trackBy: trackByCap"
+      [cap]="cap"
+    ></app-cap-card>
+  </div>
+
+  <ng-template #emptyState>
+    <div class="empty">
+      <div class="empty__icon">🔍</div>
+      <h3 class="empty__title">No caps found</h3>
+      <p class="empty__text">Try adjusting your search or filters</p>
+      <button class="btn btn--primary" (click)="resetFilters()">Clear filters</button>
+    </div>
+  </ng-template>
+</div>

@@ -1,0 +1,21 @@
+<a [routerLink]="['/cap', cap.id]" class="card">
+  <div class="card__image">
+    <img *ngIf="cap.imageUrl" [src]="cap.imageUrl" [alt]="cap.name" />
+    <div *ngIf="!cap.imageUrl" class="card__placeholder">
+      <span>🍺</span>
+    </div>
+    <span *ngIf="cap.forTrade" class="card__trade-badge">For Trade</span>
+  </div>
+  <div class="card__body">
+    <h3 class="card__name">{{ cap.name }}</h3>
+    <div class="card__info">
+      <span class="card__country">{{ cap.country }}</span>
+      <span class="card__dot">·</span>
+      <span class="card__manufacturer">{{ cap.manufacturer }}</span>
+    </div>
+    <div class="card__tags" *ngIf="cap.tags.length">
+      <app-tag-badge *ngFor="let tag of cap.tags.slice(0, 3)" [tag]="tag"></app-tag-badge>
+      <span *ngIf="cap.tags.length > 3" class="card__more-tags">+{{ cap.tags.length - 3 }}</span>
+    </div>
+  </div>
+</a>

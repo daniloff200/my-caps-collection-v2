@@ -1,0 +1,20 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64">
+  <defs>
+    <radialGradient id="capGrad" cx="40%" cy="35%" r="60%">
+      <stop offset="0%" stop-color="#ffd666"/>
+      <stop offset="100%" stop-color="#d4a017"/>
+    </radialGradient>
+    <radialGradient id="topGrad" cx="40%" cy="35%" r="65%">
+      <stop offset="0%" stop-color="#2d3a5e"/>
+      <stop offset="100%" stop-color="#1a1a2e"/>
+    </radialGradient>
+  </defs>
+  <!-- Crimped edge - 21 teeth -->
+  <polygon points="32,1 35.3,4.8 39.5,2.5 41,7.2 45.7,6.2 45.8,11.2 50.5,11.5 49.2,16.2 53.5,17.8 50.8,22 54.2,24.8 50.5,28.2 53,31.8 48.5,34.2 49.8,38.2 45,39.5 45,43.5 40,43.5 38.8,47.2 34.2,45.8 32,49 29.8,45.8 25.2,47.2 24,43.5 19,43.5 19,39.5 14.2,38.2 15.5,34.2 11,31.8 13.5,28.2 10.5,24.8 13.2,22 10.5,17.8 14.8,16.2 13.5,11.5 18.2,11.2 18.3,6.2 23,7.2 24.5,2.5 28.7,4.8" fill="url(#capGrad)"/>
+  <!-- Cap face -->
+  <circle cx="32" cy="25" r="17.5" fill="url(#topGrad)"/>
+  <!-- Inner decorative ring -->
+  <circle cx="32" cy="25" r="14.5" fill="none" stroke="#f5c542" stroke-width="0.7" opacity="0.4"/>
+  <!-- Star -->
+  <polygon points="32,13 34.2,20 41.5,20 35.6,24.2 37.8,31.2 32,27 26.2,31.2 28.4,24.2 22.5,20 29.8,20" fill="#f5c542" opacity="0.9"/>
+</svg>

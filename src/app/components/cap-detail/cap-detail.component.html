@@ -1,0 +1,62 @@
+<div class="detail" *ngIf="cap">
+  <div class="detail__back">
+    <a routerLink="/" class="detail__back-link">← Back to Collection</a>
+  </div>
+
+  <div class="detail__content">
+    <div class="detail__image">
+      <img *ngIf="cap.imageUrl" [src]="cap.imageUrl" [alt]="cap.name" />
+      <div *ngIf="!cap.imageUrl" class="detail__placeholder">
+        <span>🍺</span>
+      </div>
+    </div>
+
+    <div class="detail__info">
+      <div class="detail__header">
+        <h1 class="detail__name">{{ cap.name }}</h1>
+        <span *ngIf="cap.forTrade" class="detail__trade-badge">For Trade</span>
+      </div>
+
+      <div class="detail__meta">
+        <div class="detail__meta-item">
+          <span class="detail__meta-label">Country</span>
+          <span class="detail__meta-value">{{ cap.country }}</span>
+        </div>
+        <div class="detail__meta-item">
+          <span class="detail__meta-label">Manufacturer</span>
+          <span class="detail__meta-value">{{ cap.manufacturer }}</span>
+        </div>
+        <div class="detail__meta-item">
+          <span class="detail__meta-label">Added</span>
+          <span class="detail__meta-value">{{ cap.dateAdded }}</span>
+        </div>
+      </div>
+
+      <div class="detail__description" *ngIf="cap.description">
+        <p>{{ cap.description }}</p>
+      </div>
+
+      <div class="detail__tags" *ngIf="cap.tags.length">
+        <span class="detail__tags-label">Tags</span>
+        <div class="detail__tags-list">
+          <app-tag-badge *ngFor="let tag of cap.tags" [tag]="tag"></app-tag-badge>
+        </div>
+      </div>
+
+      <div class="detail__actions" *ngIf="isAuthenticated">
+        <a [routerLink]="['/cap', cap.id, 'edit']" class="btn btn--primary">Edit</a>
+        <button class="btn btn--danger" (click)="onDelete()">Delete</button>
+      </div>
+      <div class="detail__actions-locked" *ngIf="!isAuthenticated">
+        <a [routerLink]="['/login']" [queryParams]="{ returnUrl: '/cap/' + cap.id }" class="btn btn--outline">
+          🔒 Unlock to edit
+        </a>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="not-found" *ngIf="!cap">
+  <h2>Cap not found</h2>
+  <a routerLink="/" class="btn btn--primary">Back to Collection</a>
+</div>

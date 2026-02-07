@@ -1,0 +1,9 @@
+<span
+  class="tag"
+  [class.tag--clickable]="clickable"
+  [class.tag--active]="active"
+  (click)="clickable ? tagClick.emit(tag) : null"
+>
+  {{ tag }}
+  <span *ngIf="removable" class="tag__remove" (click)="$event.stopPropagation(); tagRemove.emit(tag)">×</span>
+</span>

@@ -1,0 +1,40 @@
+.tag {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  padding: 3px 10px;
+  border-radius: 12px;
+  font-size: 12px;
+  font-weight: 500;
+  background: rgba(245, 197, 66, 0.12);
+  color: #d4a017;
+  border: 1px solid rgba(245, 197, 66, 0.2);
+  white-space: nowrap;
+}
+
+.tag--clickable {
+  cursor: pointer;
+  transition: all 0.2s ease;
+
+  &:hover {
+    background: rgba(245, 197, 66, 0.25);
+    border-color: rgba(245, 197, 66, 0.4);
+  }
+}
+
+.tag--active {
+  background: #f5c542;
+  color: #1a1a2e;
+  border-color: #f5c542;
+}
+
+.tag__remove {
+  cursor: pointer;
+  font-size: 14px;
+  line-height: 1;
+  opacity: 0.7;
+
+  &:hover {
+    opacity: 1;
+  }
+}

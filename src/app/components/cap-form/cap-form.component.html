@@ -1,0 +1,140 @@
+<div class="form-page">
+  <div class="form-page__header">
+    <h1 class="form-page__title">{{ isEditMode ? 'Edit Cap' : 'Add New Cap' }}</h1>
+    <p class="form-page__subtitle">{{ isEditMode ? 'Update cap information' : 'Add a new crown cap to your collection' }}</p>
+  </div>
+
+  <form class="form" (ngSubmit)="onSubmit()">
+    <!-- Name -->
+    <div class="form__group">
+      <label class="form__label" for="name">Name *</label>
+      <input
+        type="text"
+        id="name"
+        class="form__input"
+        placeholder="e.g. Pilsner Urquell"
+        [(ngModel)]="name"
+        name="name"
+        required
+      />
+    </div>
+
+    <!-- Country & Manufacturer -->
+    <div class="form__row">
+      <div class="form__group">
+        <label class="form__label" for="country">Country *</label>
+        <select
+          id="country"
+          class="form__select"
+          [(ngModel)]="country"
+          name="country"
+          required
+        >
+          <option value="" disabled>Select country</option>
+          <option *ngFor="let c of countries" [value]="c">{{ c }}</option>
+        </select>
+      </div>
+
+      <div class="form__group">
+        <label class="form__label" for="manufacturer">Manufacturer *</label>
+        <input
+          type="text"
+          id="manufacturer"
+          class="form__input"
+          placeholder="e.g. Plzeňský Prazdroj"
+          [(ngModel)]="manufacturer"
+          name="manufacturer"
+          required
+        />
+      </div>
+    </div>
+
+    <!-- Tags -->
+    <div class="form__group">
+      <label class="form__label">Tags</label>
+      <div class="tags-input">
+        <div class="tags-input__current" *ngIf="tags.length">
+          <app-tag-badge
+            *ngFor="let tag of tags"
+            [tag]="tag"
+            [removable]="true"
+            (tagRemove)="removeTag($event)"
+          ></app-tag-badge>
+        </div>
+        <div class="tags-input__field">
+          <input
+            type="text"
+            class="form__input"
+            placeholder="Type a tag and press Enter, or choose from suggestions"
+            [(ngModel)]="customTag"
+            name="customTag"
+            (keydown)="onTagInputKeydown($event)"
+            (focus)="onTagInputFocus()"
+            (blur)="onTagInputBlur()"
+          />
+          <div class="tags-input__suggestions" *ngIf="showTagSuggestions && filteredSuggestions.length">
+            <button
+              type="button"
+              class="tags-input__suggestion"
+              *ngFor="let suggestion of filteredSuggestions"
+              (click)="addTag(suggestion)"
+            >
+              {{ suggestion }}
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Image URL -->
+    <div class="form__group">
+      <label class="form__label" for="imageUrl">Image URL</label>
+      <input
+        type="url"
+        id="imageUrl"
+        class="form__input"
+        placeholder="https://example.com/cap-photo.jpg"
+        [(ngModel)]="imageUrl"
+        name="imageUrl"
+      />
+      <span class="form__hint">Paste a direct link to the cap image</span>
+      <div class="form__preview" *ngIf="imageUrl">
+        <img [src]="imageUrl" alt="Preview" (error)="imageUrl = ''" />
+      </div>
+    </div>
+
+    <!-- Description -->
+    <div class="form__group">
+      <label class="form__label" for="description">Description</label>
+      <textarea
+        id="description"
+        class="form__textarea"
+        placeholder="What makes this cap special?"
+        [(ngModel)]="description"
+        name="description"
+        rows="3"
+      ></textarea>
+    </div>
+
+    <!-- For Trade -->
+    <div class="form__group form__group--checkbox">
+      <label class="form__checkbox">
+        <input
+          type="checkbox"
+          [(ngModel)]="forTrade"
+          name="forTrade"
+        />
+        <span class="form__checkbox-mark"></span>
+        <span class="form__checkbox-text">Available for trade</span>
+      </label>
+    </div>
+
+    <!-- Actions -->
+    <div class="form__actions">
+      <button type="button" class="btn btn--ghost" (click)="cancel()">Cancel</button>
+      <button type="submit" class="btn btn--primary">
+        {{ isEditMode ? 'Save Changes' : 'Add to Collection' }}
+      </button>
+    </div>
+  </form>
+</div>
