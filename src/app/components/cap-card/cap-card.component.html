@@ -4,7 +4,7 @@
     <div *ngIf="!cap.imageUrl" class="card__placeholder">
       <span>🍺</span>
     </div>
-    <span *ngIf="cap.forTrade" class="card__trade-badge">For Trade</span>
+    <span *ngIf="cap.forTrade" class="card__trade-badge">{{ 'CARD.FOR_TRADE' | translate }}</span>
   </div>
   <div class="card__body">
     <h3 class="card__name">{{ cap.name }}</h3>

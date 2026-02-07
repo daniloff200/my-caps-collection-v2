@@ -8,12 +8,13 @@ import { ToastService } from '../../services/toast.service';
 import { ImageUploadService } from '../../services/image-upload.service';
 import { COUNTRIES } from '../../data/countries';
 import { COMMON_TAGS } from '../../data/tags';
+import { TranslateModule, TranslateService } from '@ngx-translate/core';
 import { TagBadgeComponent } from '../tag-badge/tag-badge.component';
 
 @Component({
   selector: 'app-cap-form',
   standalone: true,
-  imports: [CommonModule, FormsModule, TagBadgeComponent],
+  imports: [CommonModule, FormsModule, TranslateModule, TagBadgeComponent],
   templateUrl: './cap-form.component.html',
   styleUrls: ['./cap-form.component.scss'],
 })
@@ -47,6 +48,7 @@ export class CapFormComponent implements OnInit {
     private capService: CapService,
     private toastService: ToastService,
     private imageUploadService: ImageUploadService,
+    private translateService: TranslateService,
     private router: Router,
     private route: ActivatedRoute
   ) {}
@@ -137,7 +139,7 @@ export class CapFormComponent implements OnInit {
       if (file.type.startsWith('image/')) {
         this.handleFile(file);
       } else {
-        this.toastService.error('Please drop an image file');
+        this.toastService.error(this.translateService.instant('TOAST.DROP_IMAGE'));
       }
     }
   }
@@ -182,7 +184,7 @@ export class CapFormComponent implements OnInit {
   async onSubmit(form: NgForm): Promise<void> {
     if (form.invalid) {
       Object.values(form.controls).forEach((control) => control.markAsTouched());
-      this.toastService.error('Please fill in all required fields');
+      this.toastService.error(this.translateService.instant('TOAST.FILL_REQUIRED'));
       return;
     }
 
@@ -211,7 +213,7 @@ export class CapFormComponent implements OnInit {
         };
 
         await this.capService.updateCap(this.capId, capData);
-        this.toastService.success('Cap updated successfully!');
+        this.toastService.success(this.translateService.instant('TOAST.CAP_UPDATED'));
         this.router.navigate(['/cap', this.capId]);
       } else {
         // Add new cap first (to get the ID), then upload image
@@ -236,12 +238,12 @@ export class CapFormComponent implements OnInit {
           await this.capService.updateCap(newCap.id, { imageUrl: finalImageUrl });
         }
 
-        this.toastService.success('Cap added to collection!');
+        this.toastService.success(this.translateService.instant('TOAST.CAP_ADDED'));
         this.router.navigate(['/cap', newCap.id]);
       }
     } catch (err) {
       console.error('Error saving cap:', err);
-      this.toastService.error('Failed to save. Please try again.');
+      this.toastService.error(this.translateService.instant('TOAST.SAVE_FAILED'));
       this.saving = false;
     }
   }

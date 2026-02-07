@@ -6,7 +6,7 @@
       <input
         type="text"
         class="search-box__input"
-        placeholder="Search by name, manufacturer..."
+        [placeholder]="'LIST.SEARCH_PLACEHOLDER' | translate"
         [ngModel]="filters.search"
         (ngModelChange)="onSearchChange($event)"
       />
@@ -22,7 +22,7 @@
       [class.btn--trade-active]="filters.forTrade === true"
       (click)="toggleForTrade()"
     >
-      🔄 For Trade
+      🔄 {{ 'LIST.FOR_TRADE' | translate }}
     </button>
 
     <button
@@ -30,7 +30,7 @@
       [class.btn--active]="showFilters"
       (click)="toggleFilters()"
     >
-      <span>Filters</span>
+      <span>{{ 'LIST.FILTERS' | translate }}</span>
       <span *ngIf="hasActiveFilters" class="btn__badge">!</span>
     </button>
 
@@ -39,7 +39,7 @@
       class="btn btn--ghost"
       (click)="resetFilters()"
     >
-      Clear all
+      {{ 'LIST.CLEAR_ALL' | translate }}
     </button>
   </div>
 
@@ -58,13 +58,13 @@
   <div class="filters" *ngIf="showFilters">
     <div class="filters__row">
       <div class="filters__group">
-        <label class="filters__label">Country</label>
+        <label class="filters__label">{{ 'LIST.COUNTRY' | translate }}</label>
         <select
           class="filters__select"
           [ngModel]="filters.country"
           (ngModelChange)="onCountryChange($event)"
         >
-          <option value="">All countries</option>
+          <option value="">{{ 'LIST.ALL_COUNTRIES' | translate }}</option>
           <option *ngFor="let country of allCountries" [value]="country">
             {{ country }}
           </option>
@@ -72,15 +72,15 @@
       </div>
 
       <div class="filters__group">
-        <label class="filters__label">Trade status</label>
+        <label class="filters__label">{{ 'LIST.TRADE_STATUS' | translate }}</label>
         <select
           class="filters__select"
           [ngModel]="tradeFilterValue"
           (ngModelChange)="onTradeFilterChange($event)"
         >
-          <option value="">All caps</option>
-          <option value="true">For trade</option>
-          <option value="false">Not for trade</option>
+          <option value="">{{ 'LIST.ALL_CAPS' | translate }}</option>
+          <option value="true">{{ 'LIST.FOR_TRADE_OPTION' | translate }}</option>
+          <option value="false">{{ 'LIST.NOT_FOR_TRADE' | translate }}</option>
         </select>
       </div>
     </div>
@@ -89,7 +89,7 @@
   <!-- Results Count -->
   <div class="collection__meta">
     <span class="collection__count">
-      {{ filteredCaps.length }} cap{{ filteredCaps.length !== 1 ? 's' : '' }} found
+      {{ 'LIST.CAPS_FOUND' | translate:{ count: filteredCaps.length } }}
     </span>
   </div>
 
@@ -104,9 +104,9 @@
   <ng-template #emptyState>
     <div class="empty">
       <div class="empty__icon">🔍</div>
-      <h3 class="empty__title">No caps found</h3>
-      <p class="empty__text">Try adjusting your search or filters</p>
-      <button class="btn btn--primary" (click)="resetFilters()">Clear filters</button>
+      <h3 class="empty__title">{{ 'LIST.NO_CAPS' | translate }}</h3>
+      <p class="empty__text">{{ 'LIST.NO_CAPS_HINT' | translate }}</p>
+      <button class="btn btn--primary" (click)="resetFilters()">{{ 'LIST.CLEAR_FILTERS' | translate }}</button>
     </div>
   </ng-template>
 </div>

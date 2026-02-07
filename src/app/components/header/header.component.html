@@ -8,25 +8,36 @@
     <!-- Desktop nav -->
     <nav class="header__nav header__nav--desktop">
       <a routerLink="/" routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }" class="header__link">
-        Collection
+        {{ 'HEADER.COLLECTION' | translate }}
       </a>
       <a routerLink="/add" routerLinkActive="active" class="header__link header__link--add">
-        + Add Cap
+        {{ 'HEADER.ADD_CAP' | translate }}
       </a>
       <a routerLink="/contacts" routerLinkActive="active" class="header__link">
-        Contacts
+        {{ 'HEADER.CONTACTS' | translate }}
       </a>
     </nav>
 
     <div class="header__right header__right--desktop">
+      <div class="header__lang">
+        <button
+          *ngFor="let lang of languages"
+          class="header__lang-btn"
+          [class.header__lang-btn--active]="currentLang === lang.code"
+          (click)="switchLang(lang.code)"
+        >
+          {{ lang.label }}
+        </button>
+      </div>
+
       <div class="header__stats" *ngIf="stats$ | async as stats">
         <div class="header__stat">
           <span class="header__stat-value">{{ stats.total }}</span>
-          <span class="header__stat-label">caps</span>
+          <span class="header__stat-label">{{ 'HEADER.CAPS' | translate }}</span>
         </div>
         <div class="header__stat">
           <span class="header__stat-value">{{ stats.countries }}</span>
-          <span class="header__stat-label">countries</span>
+          <span class="header__stat-label">{{ 'HEADER.COUNTRIES' | translate }}</span>
         </div>
       </div>
 
@@ -34,7 +45,7 @@
         *ngIf="isAuthenticated$ | async"
         class="header__auth-btn"
         (click)="onLogout()"
-        title="Lock editing"
+        [title]="'HEADER.LOCK' | translate"
       >
         🔓
       </button>
@@ -42,7 +53,7 @@
         *ngIf="!(isAuthenticated$ | async)"
         routerLink="/login"
         class="header__auth-btn"
-        title="Unlock editing"
+        [title]="'HEADER.UNLOCK' | translate"
       >
         🔒
       </a>
@@ -53,7 +64,7 @@
       <div class="header__stats header__stats--mobile" *ngIf="stats$ | async as stats">
         <div class="header__stat">
           <span class="header__stat-value">{{ stats.total }}</span>
-          <span class="header__stat-label">caps</span>
+          <span class="header__stat-label">{{ 'HEADER.CAPS' | translate }}</span>
         </div>
       </div>
 
@@ -69,43 +80,41 @@
   <div class="header__mobile-menu" [class.header__mobile-menu--open]="menuOpen">
     <nav class="header__mobile-nav">
       <a routerLink="/" routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }" class="header__mobile-link">
-        Collection
+        {{ 'HEADER.COLLECTION' | translate }}
       </a>
       <a routerLink="/add" routerLinkActive="active" class="header__mobile-link">
-        + Add Cap
+        {{ 'HEADER.ADD_CAP' | translate }}
       </a>
       <a routerLink="/contacts" routerLinkActive="active" class="header__mobile-link">
-        Contacts
+        {{ 'HEADER.CONTACTS' | translate }}
       </a>
     </nav>
 
     <div class="header__mobile-footer">
-      <div class="header__stats" *ngIf="stats$ | async as stats">
-        <div class="header__stat">
-          <span class="header__stat-value">{{ stats.total }}</span>
-          <span class="header__stat-label">caps</span>
-        </div>
-        <div class="header__stat">
-          <span class="header__stat-value">{{ stats.countries }}</span>
-          <span class="header__stat-label">countries</span>
-        </div>
+      <div class="header__lang">
+        <button
+          *ngFor="let lang of languages"
+          class="header__lang-btn"
+          [class.header__lang-btn--active]="currentLang === lang.code"
+          (click)="switchLang(lang.code)"
+        >
+          {{ lang.label }}
+        </button>
       </div>
 
       <button
         *ngIf="isAuthenticated$ | async"
         class="header__auth-btn"
         (click)="onLogout()"
-        title="Lock editing"
       >
-        🔓 Unlock
+        🔓
       </button>
       <a
         *ngIf="!(isAuthenticated$ | async)"
         routerLink="/login"
         class="header__auth-btn"
-        title="Unlock editing"
       >
-        🔒 Login
+        🔒 {{ 'HEADER.LOGIN' | translate }}
       </a>
     </div>
   </div>

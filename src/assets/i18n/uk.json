@@ -1,0 +1,103 @@
+{
+  "HEADER": {
+    "COLLECTION": "Колекція",
+    "ADD_CAP": "+ Додати",
+    "CONTACTS": "Контакти",
+    "CAPS": "кришок",
+    "COUNTRIES": "країн",
+    "LOCK": "Заблокувати",
+    "UNLOCK": "Розблокувати",
+    "LOGIN": "Увійти"
+  },
+  "LIST": {
+    "SEARCH_PLACEHOLDER": "Пошук за назвою, виробником...",
+    "FOR_TRADE": "Для обміну",
+    "FILTERS": "Фільтри",
+    "CLEAR_ALL": "Скинути",
+    "CLEAR_FILTERS": "Скинути фільтри",
+    "COUNTRY": "Країна",
+    "ALL_COUNTRIES": "Усі країни",
+    "TRADE_STATUS": "Статус обміну",
+    "ALL_CAPS": "Усі кришки",
+    "FOR_TRADE_OPTION": "Для обміну",
+    "NOT_FOR_TRADE": "Не для обміну",
+    "CAPS_FOUND": "Знайдено: {{count}}",
+    "NO_CAPS": "Нічого не знайдено",
+    "NO_CAPS_HINT": "Спробуйте змінити параметри пошуку або фільтри"
+  },
+  "CARD": {
+    "FOR_TRADE": "ОБМІН"
+  },
+  "DETAIL": {
+    "BACK": "← Назад до колекції",
+    "FOR_TRADE": "Для обміну",
+    "COUNTRY": "Країна",
+    "MANUFACTURER": "Виробник",
+    "ADDED": "Додано",
+    "TAGS": "Теги",
+    "EDIT": "Редагувати",
+    "DELETE": "Видалити",
+    "UNLOCK_TO_EDIT": "Розблокувати для редагування",
+    "LOADING": "Завантаження...",
+    "NOT_FOUND": "Кришку не знайдено",
+    "BACK_TO_COLLECTION": "Назад до колекції"
+  },
+  "FORM": {
+    "ADD_TITLE": "Нова кришка",
+    "EDIT_TITLE": "Редагування",
+    "ADD_SUBTITLE": "Додати нову пивну кришку до колекції",
+    "EDIT_SUBTITLE": "Оновити інформацію про кришку",
+    "NAME": "Назва",
+    "NAME_PLACEHOLDER": "напр. Pilsner Urquell",
+    "NAME_REQUIRED": "Назва обов'язкова",
+    "COUNTRY": "Країна",
+    "SELECT_COUNTRY": "Оберіть країну",
+    "COUNTRY_REQUIRED": "Країна обов'язкова",
+    "MANUFACTURER": "Виробник",
+    "MANUFACTURER_PLACEHOLDER": "напр. Plzeňský Prazdroj",
+    "MANUFACTURER_REQUIRED": "Виробник обов'язковий",
+    "TAGS": "Теги",
+    "TAGS_PLACEHOLDER": "Введіть тег та натисніть Enter або оберіть зі списку",
+    "PHOTO": "Фото",
+    "UPLOAD_TEXT": "Натисніть для завантаження або перетягніть файл",
+    "UPLOAD_HINT": "Зображення буде автоматично стиснуте до ~100КБ",
+    "ORIGINAL": "Оригінал",
+    "COMPRESSED": "Стиснуто",
+    "SAVED": "економія",
+    "COMPRESSING": "Стиснення...",
+    "CURRENT_PHOTO": "Поточне фото",
+    "CHANGE_PHOTO": "Замінити фото",
+    "REMOVE": "Видалити",
+    "DESCRIPTION": "Опис",
+    "DESCRIPTION_PLACEHOLDER": "Що особливого в цій кришці?",
+    "FOR_TRADE": "Доступна для обміну",
+    "CANCEL": "Скасувати",
+    "SAVING": "Збереження...",
+    "SAVE_CHANGES": "Зберегти",
+    "ADD_TO_COLLECTION": "Додати до колекції"
+  },
+  "LOGIN": {
+    "TITLE": "Доступ адміністратора",
+    "SUBTITLE": "Введіть пароль для додавання або редагування",
+    "PLACEHOLDER": "Введіть пароль",
+    "CHECKING": "Перевірка...",
+    "UNLOCK": "Увійти",
+    "HINT": "Підказка:",
+    "BACK": "← Назад до колекції",
+    "WRONG_PASSWORD": "Невірний пароль"
+  },
+  "CONTACTS": {
+    "TITLE": "Контакти",
+    "SUBTITLE": "Маєте питання про колекцію, хочете обмінятися кришками або просто поспілкуватися? Пишіть!",
+    "FOOTER": "Завжди відкритий для обміну!"
+  },
+  "TOAST": {
+    "CAP_UPDATED": "Кришку оновлено!",
+    "CAP_ADDED": "Кришку додано до колекції!",
+    "SAVE_FAILED": "Не вдалося зберегти. Спробуйте ще раз.",
+    "FILL_REQUIRED": "Заповніть усі обов'язкові поля",
+    "CAP_DELETED": "Кришку видалено",
+    "DELETE_FAILED": "Не вдалося видалити кришку",
+    "DROP_IMAGE": "Перетягніть файл зображення"
+  }
+}

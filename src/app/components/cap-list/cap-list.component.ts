@@ -4,13 +4,14 @@ import { FormsModule } from '@angular/forms';
 import { Subject, takeUntil } from 'rxjs';
 import { Cap, CapFilters, createDefaultFilters } from '../../models/cap.model';
 import { CapService } from '../../services/cap.service';
+import { TranslateModule } from '@ngx-translate/core';
 import { CapCardComponent } from '../cap-card/cap-card.component';
 import { TagBadgeComponent } from '../tag-badge/tag-badge.component';
 
 @Component({
   selector: 'app-cap-list',
   standalone: true,
-  imports: [CommonModule, FormsModule, CapCardComponent, TagBadgeComponent],
+  imports: [CommonModule, FormsModule, TranslateModule, CapCardComponent, TagBadgeComponent],
   templateUrl: './cap-list.component.html',
   styleUrls: ['./cap-list.component.scss'],
 })
