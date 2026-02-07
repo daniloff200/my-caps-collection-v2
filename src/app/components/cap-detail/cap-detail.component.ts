@@ -16,6 +16,7 @@ import { TagBadgeComponent } from '../tag-badge/tag-badge.component';
 export class CapDetailComponent implements OnInit {
   cap: Cap | undefined;
   isAuthenticated = false;
+  loading = true;
 
   constructor(
     private capService: CapService,
@@ -26,16 +27,17 @@ export class CapDetailComponent implements OnInit {
     this.isAuthenticated = this.authService.isAuthenticated;
   }
 
-  ngOnInit(): void {
+  async ngOnInit(): Promise<void> {
     const id = this.route.snapshot.paramMap.get('id');
     if (id) {
-      this.cap = this.capService.getCapById(id);
+      this.cap = await this.capService.getCapByIdAsync(id);
     }
+    this.loading = false;
   }
 
-  onDelete(): void {
+  async onDelete(): Promise<void> {
     if (this.cap && confirm('Are you sure you want to delete this cap?')) {
-      this.capService.deleteCap(this.cap.id);
+      await this.capService.deleteCap(this.cap.id);
       this.router.navigate(['/']);
     }
   }
