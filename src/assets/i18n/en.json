@@ -1,0 +1,103 @@
+{
+  "HEADER": {
+    "COLLECTION": "Collection",
+    "ADD_CAP": "+ Add Cap",
+    "CONTACTS": "Contacts",
+    "CAPS": "caps",
+    "COUNTRIES": "countries",
+    "LOCK": "Lock editing",
+    "UNLOCK": "Unlock editing",
+    "LOGIN": "Login"
+  },
+  "LIST": {
+    "SEARCH_PLACEHOLDER": "Search by name, manufacturer...",
+    "FOR_TRADE": "For Trade",
+    "FILTERS": "Filters",
+    "CLEAR_ALL": "Clear all",
+    "CLEAR_FILTERS": "Clear filters",
+    "COUNTRY": "Country",
+    "ALL_COUNTRIES": "All countries",
+    "TRADE_STATUS": "Trade status",
+    "ALL_CAPS": "All caps",
+    "FOR_TRADE_OPTION": "For trade",
+    "NOT_FOR_TRADE": "Not for trade",
+    "CAPS_FOUND": "{{count}} cap(s) found",
+    "NO_CAPS": "No caps found",
+    "NO_CAPS_HINT": "Try adjusting your search or filters"
+  },
+  "CARD": {
+    "FOR_TRADE": "FOR TRADE"
+  },
+  "DETAIL": {
+    "BACK": "← Back to Collection",
+    "FOR_TRADE": "For Trade",
+    "COUNTRY": "Country",
+    "MANUFACTURER": "Manufacturer",
+    "ADDED": "Added",
+    "TAGS": "Tags",
+    "EDIT": "Edit",
+    "DELETE": "Delete",
+    "UNLOCK_TO_EDIT": "Unlock to edit",
+    "LOADING": "Loading...",
+    "NOT_FOUND": "Cap not found",
+    "BACK_TO_COLLECTION": "Back to Collection"
+  },
+  "FORM": {
+    "ADD_TITLE": "Add New Cap",
+    "EDIT_TITLE": "Edit Cap",
+    "ADD_SUBTITLE": "Add a new crown cap to your collection",
+    "EDIT_SUBTITLE": "Update cap information",
+    "NAME": "Name",
+    "NAME_PLACEHOLDER": "e.g. Pilsner Urquell",
+    "NAME_REQUIRED": "Name is required",
+    "COUNTRY": "Country",
+    "SELECT_COUNTRY": "Select country",
+    "COUNTRY_REQUIRED": "Country is required",
+    "MANUFACTURER": "Manufacturer",
+    "MANUFACTURER_PLACEHOLDER": "e.g. Plzeňský Prazdroj",
+    "MANUFACTURER_REQUIRED": "Manufacturer is required",
+    "TAGS": "Tags",
+    "TAGS_PLACEHOLDER": "Type a tag and press Enter, or choose from suggestions",
+    "PHOTO": "Photo",
+    "UPLOAD_TEXT": "Click to upload or drag & drop",
+    "UPLOAD_HINT": "Image will be auto-compressed to ~100KB",
+    "ORIGINAL": "Original",
+    "COMPRESSED": "Compressed",
+    "SAVED": "saved",
+    "COMPRESSING": "Compressing...",
+    "CURRENT_PHOTO": "Current photo",
+    "CHANGE_PHOTO": "Change photo",
+    "REMOVE": "Remove",
+    "DESCRIPTION": "Description",
+    "DESCRIPTION_PLACEHOLDER": "What makes this cap special?",
+    "FOR_TRADE": "Available for trade",
+    "CANCEL": "Cancel",
+    "SAVING": "Saving...",
+    "SAVE_CHANGES": "Save Changes",
+    "ADD_TO_COLLECTION": "Add to Collection"
+  },
+  "LOGIN": {
+    "TITLE": "Admin Access",
+    "SUBTITLE": "Enter password to add or edit caps",
+    "PLACEHOLDER": "Enter password",
+    "CHECKING": "Checking...",
+    "UNLOCK": "Unlock",
+    "HINT": "Hint:",
+    "BACK": "← Back to Collection",
+    "WRONG_PASSWORD": "Wrong password"
+  },
+  "CONTACTS": {
+    "TITLE": "Contacts",
+    "SUBTITLE": "Have questions about my collection, want to trade caps, or just chat? Feel free to reach out!",
+    "FOOTER": "Always open for trades!"
+  },
+  "TOAST": {
+    "CAP_UPDATED": "Cap updated successfully!",
+    "CAP_ADDED": "Cap added to collection!",
+    "SAVE_FAILED": "Failed to save. Please try again.",
+    "FILL_REQUIRED": "Please fill in all required fields",
+    "CAP_DELETED": "Cap deleted",
+    "DELETE_FAILED": "Failed to delete cap",
+    "DROP_IMAGE": "Please drop an image file"
+  }
+}

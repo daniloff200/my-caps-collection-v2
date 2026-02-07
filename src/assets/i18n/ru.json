@@ -1,0 +1,103 @@
+{
+  "HEADER": {
+    "COLLECTION": "Коллекция",
+    "ADD_CAP": "+ Добавить",
+    "CONTACTS": "Контакты",
+    "CAPS": "крышек",
+    "COUNTRIES": "стран",
+    "LOCK": "Заблокировать",
+    "UNLOCK": "Разблокировать",
+    "LOGIN": "Войти"
+  },
+  "LIST": {
+    "SEARCH_PLACEHOLDER": "Поиск по названию, производителю...",
+    "FOR_TRADE": "Для обмена",
+    "FILTERS": "Фильтры",
+    "CLEAR_ALL": "Сбросить",
+    "CLEAR_FILTERS": "Сбросить фильтры",
+    "COUNTRY": "Страна",
+    "ALL_COUNTRIES": "Все страны",
+    "TRADE_STATUS": "Статус обмена",
+    "ALL_CAPS": "Все крышки",
+    "FOR_TRADE_OPTION": "Для обмена",
+    "NOT_FOR_TRADE": "Не для обмена",
+    "CAPS_FOUND": "Найдено: {{count}}",
+    "NO_CAPS": "Ничего не найдено",
+    "NO_CAPS_HINT": "Попробуйте изменить параметры поиска или фильтры"
+  },
+  "CARD": {
+    "FOR_TRADE": "ОБМЕН"
+  },
+  "DETAIL": {
+    "BACK": "← Назад к коллекции",
+    "FOR_TRADE": "Для обмена",
+    "COUNTRY": "Страна",
+    "MANUFACTURER": "Производитель",
+    "ADDED": "Добавлено",
+    "TAGS": "Теги",
+    "EDIT": "Редактировать",
+    "DELETE": "Удалить",
+    "UNLOCK_TO_EDIT": "Разблокировать для редактирования",
+    "LOADING": "Загрузка...",
+    "NOT_FOUND": "Крышка не найдена",
+    "BACK_TO_COLLECTION": "Назад к коллекции"
+  },
+  "FORM": {
+    "ADD_TITLE": "Новая крышка",
+    "EDIT_TITLE": "Редактирование",
+    "ADD_SUBTITLE": "Добавить новую пивную крышку в коллекцию",
+    "EDIT_SUBTITLE": "Обновить информацию о крышке",
+    "NAME": "Название",
+    "NAME_PLACEHOLDER": "напр. Pilsner Urquell",
+    "NAME_REQUIRED": "Название обязательно",
+    "COUNTRY": "Страна",
+    "SELECT_COUNTRY": "Выберите страну",
+    "COUNTRY_REQUIRED": "Страна обязательна",
+    "MANUFACTURER": "Производитель",
+    "MANUFACTURER_PLACEHOLDER": "напр. Plzeňský Prazdroj",
+    "MANUFACTURER_REQUIRED": "Производитель обязателен",
+    "TAGS": "Теги",
+    "TAGS_PLACEHOLDER": "Введите тег и нажмите Enter или выберите из списка",
+    "PHOTO": "Фото",
+    "UPLOAD_TEXT": "Нажмите для загрузки или перетащите файл",
+    "UPLOAD_HINT": "Изображение будет автоматически сжато до ~100КБ",
+    "ORIGINAL": "Оригинал",
+    "COMPRESSED": "Сжато",
+    "SAVED": "экономия",
+    "COMPRESSING": "Сжатие...",
+    "CURRENT_PHOTO": "Текущее фото",
+    "CHANGE_PHOTO": "Заменить фото",
+    "REMOVE": "Удалить",
+    "DESCRIPTION": "Описание",
+    "DESCRIPTION_PLACEHOLDER": "Что особенного в этой крышке?",
+    "FOR_TRADE": "Доступна для обмена",
+    "CANCEL": "Отмена",
+    "SAVING": "Сохранение...",
+    "SAVE_CHANGES": "Сохранить",
+    "ADD_TO_COLLECTION": "Добавить в коллекцию"
+  },
+  "LOGIN": {
+    "TITLE": "Доступ администратора",
+    "SUBTITLE": "Введите пароль для добавления или редактирования",
+    "PLACEHOLDER": "Введите пароль",
+    "CHECKING": "Проверка...",
+    "UNLOCK": "Войти",
+    "HINT": "Подсказка:",
+    "BACK": "← Назад к коллекции",
+    "WRONG_PASSWORD": "Неверный пароль"
+  },
+  "CONTACTS": {
+    "TITLE": "Контакты",
+    "SUBTITLE": "Есть вопросы о коллекции, хотите обменяться крышками или просто пообщаться? Пишите!",
+    "FOOTER": "Всегда открыт для обмена!"
+  },
+  "TOAST": {
+    "CAP_UPDATED": "Крышка обновлена!",
+    "CAP_ADDED": "Крышка добавлена в коллекцию!",
+    "SAVE_FAILED": "Не удалось сохранить. Попробуйте ещё раз.",
+    "FILL_REQUIRED": "Заполните все обязательные поля",
+    "CAP_DELETED": "Крышка удалена",
+    "DELETE_FAILED": "Не удалось удалить крышку",
+    "DROP_IMAGE": "Перетащите файл изображения"
+  }
+}

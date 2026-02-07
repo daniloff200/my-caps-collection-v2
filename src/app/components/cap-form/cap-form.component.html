@@ -1,33 +1,33 @@
 <div class="form-page">
   <div class="form-page__header">
-    <h1 class="form-page__title">{{ isEditMode ? 'Edit Cap' : 'Add New Cap' }}</h1>
-    <p class="form-page__subtitle">{{ isEditMode ? 'Update cap information' : 'Add a new crown cap to your collection' }}</p>
+    <h1 class="form-page__title">{{ (isEditMode ? 'FORM.EDIT_TITLE' : 'FORM.ADD_TITLE') | translate }}</h1>
+    <p class="form-page__subtitle">{{ (isEditMode ? 'FORM.EDIT_SUBTITLE' : 'FORM.ADD_SUBTITLE') | translate }}</p>
   </div>
 
   <form class="form" #capForm="ngForm" (ngSubmit)="onSubmit(capForm)">
     <!-- Name -->
     <div class="form__group">
-      <label class="form__label" for="name">Name *</label>
+      <label class="form__label" for="name">{{ 'FORM.NAME' | translate }} *</label>
       <input
         type="text"
         id="name"
         class="form__input"
         [class.form__input--error]="nameField.invalid && nameField.touched"
-        placeholder="e.g. Pilsner Urquell"
+        [placeholder]="'FORM.NAME_PLACEHOLDER' | translate"
         [(ngModel)]="name"
         name="name"
         #nameField="ngModel"
         required
       />
       <span class="form__error" *ngIf="nameField.invalid && nameField.touched">
-        Name is required
+        {{ 'FORM.NAME_REQUIRED' | translate }}
       </span>
     </div>
 
     <!-- Country & Manufacturer -->
     <div class="form__row">
       <div class="form__group">
-        <label class="form__label" for="country">Country *</label>
+        <label class="form__label" for="country">{{ 'FORM.COUNTRY' | translate }} *</label>
         <select
           id="country"
           class="form__select"
@@ -37,36 +37,36 @@
           #countryField="ngModel"
           required
         >
-          <option value="" disabled>Select country</option>
+          <option value="" disabled>{{ 'FORM.SELECT_COUNTRY' | translate }}</option>
           <option *ngFor="let c of countries" [value]="c">{{ c }}</option>
         </select>
         <span class="form__error" *ngIf="countryField.invalid && countryField.touched">
-          Country is required
+          {{ 'FORM.COUNTRY_REQUIRED' | translate }}
         </span>
       </div>
 
       <div class="form__group">
-        <label class="form__label" for="manufacturer">Manufacturer *</label>
+        <label class="form__label" for="manufacturer">{{ 'FORM.MANUFACTURER' | translate }} *</label>
         <input
           type="text"
           id="manufacturer"
           class="form__input"
           [class.form__input--error]="manufacturerField.invalid && manufacturerField.touched"
-          placeholder="e.g. Plzeňský Prazdroj"
+          [placeholder]="'FORM.MANUFACTURER_PLACEHOLDER' | translate"
           [(ngModel)]="manufacturer"
           name="manufacturer"
           #manufacturerField="ngModel"
           required
         />
         <span class="form__error" *ngIf="manufacturerField.invalid && manufacturerField.touched">
-          Manufacturer is required
+          {{ 'FORM.MANUFACTURER_REQUIRED' | translate }}
         </span>
       </div>
     </div>
 
     <!-- Tags -->
     <div class="form__group">
-      <label class="form__label">Tags</label>
+      <label class="form__label">{{ 'FORM.TAGS' | translate }}</label>
       <div class="tags-input">
         <div class="tags-input__current" *ngIf="tags.length">
           <app-tag-badge
@@ -80,7 +80,7 @@
           <input
             type="text"
             class="form__input"
-            placeholder="Type a tag and press Enter, or choose from suggestions"
+            [placeholder]="'FORM.TAGS_PLACEHOLDER' | translate"
             [(ngModel)]="customTag"
             name="customTag"
             (keydown)="onTagInputKeydown($event)"
@@ -103,7 +103,7 @@
 
     <!-- Image Upload -->
     <div class="form__group">
-      <label class="form__label">Photo</label>
+      <label class="form__label">{{ 'FORM.PHOTO' | translate }}</label>
 
       <!-- Drop zone (when no image) -->
       <div
@@ -124,8 +124,8 @@
         />
         <div class="upload-zone__icon">📷</div>
         <div class="upload-zone__text">
-          <span class="upload-zone__main">Click to upload or drag & drop</span>
-          <span class="upload-zone__hint">Image will be auto-compressed to ~100KB</span>
+          <span class="upload-zone__main">{{ 'FORM.UPLOAD_TEXT' | translate }}</span>
+          <span class="upload-zone__hint">{{ 'FORM.UPLOAD_HINT' | translate }}</span>
         </div>
       </div>
 
@@ -137,21 +137,21 @@
         <div class="upload-preview__info">
           <div class="upload-preview__sizes" *ngIf="originalSize">
             <span class="upload-preview__original">
-              Original: {{ formatSize(originalSize) }}
+              {{ 'FORM.ORIGINAL' | translate }}: {{ formatSize(originalSize) }}
             </span>
             <span class="upload-preview__arrow" *ngIf="compressedSize">→</span>
             <span class="upload-preview__compressed" *ngIf="compressedSize">
-              Compressed: {{ formatSize(compressedSize) }}
+              {{ 'FORM.COMPRESSED' | translate }}: {{ formatSize(compressedSize) }}
             </span>
             <span class="upload-preview__saving" *ngIf="compressedSize && originalSize">
-              (saved {{ ((1 - compressedSize / originalSize) * 100).toFixed(0) }}%)
+              ({{ 'FORM.SAVED' | translate }} {{ ((1 - compressedSize / originalSize) * 100).toFixed(0) }}%)
             </span>
             <span class="upload-preview__compressing" *ngIf="compressing">
-              Compressing...
+              {{ 'FORM.COMPRESSING' | translate }}
             </span>
           </div>
           <div class="upload-preview__existing" *ngIf="!originalSize && imageUrl">
-            Current photo
+            {{ 'FORM.CURRENT_PHOTO' | translate }}
           </div>
           <div class="upload-preview__actions">
             <button
@@ -159,7 +159,7 @@
               class="upload-preview__change"
               (click)="fileInput.click()"
             >
-              Change photo
+              {{ 'FORM.CHANGE_PHOTO' | translate }}
             </button>
             <input
               #fileInput
@@ -173,7 +173,7 @@
               class="upload-preview__remove"
               (click)="removeImage()"
             >
-              Remove
+              {{ 'FORM.REMOVE' | translate }}
             </button>
           </div>
         </div>
@@ -182,11 +182,11 @@
 
     <!-- Description -->
     <div class="form__group">
-      <label class="form__label" for="description">Description</label>
+      <label class="form__label" for="description">{{ 'FORM.DESCRIPTION' | translate }}</label>
       <textarea
         id="description"
         class="form__textarea"
-        placeholder="What makes this cap special?"
+        [placeholder]="'FORM.DESCRIPTION_PLACEHOLDER' | translate"
         [(ngModel)]="description"
         name="description"
         rows="3"
@@ -202,15 +202,15 @@
           name="forTrade"
         />
         <span class="form__checkbox-mark"></span>
-        <span class="form__checkbox-text">Available for trade</span>
+        <span class="form__checkbox-text">{{ 'FORM.FOR_TRADE' | translate }}</span>
       </label>
     </div>
 
     <!-- Actions -->
     <div class="form__actions">
-      <button type="button" class="btn btn--ghost" (click)="cancel()" [disabled]="saving">Cancel</button>
+      <button type="button" class="btn btn--ghost" (click)="cancel()" [disabled]="saving">{{ 'FORM.CANCEL' | translate }}</button>
       <button type="submit" class="btn btn--primary" [disabled]="saving">
-        {{ saving ? 'Saving...' : (isEditMode ? 'Save Changes' : 'Add to Collection') }}
+        {{ saving ? ('FORM.SAVING' | translate) : ((isEditMode ? 'FORM.SAVE_CHANGES' : 'FORM.ADD_TO_COLLECTION') | translate) }}
       </button>
     </div>
   </form>

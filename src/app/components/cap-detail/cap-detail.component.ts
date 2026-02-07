@@ -6,12 +6,13 @@ import { CapService } from '../../services/cap.service';
 import { AuthService } from '../../services/auth.service';
 import { ToastService } from '../../services/toast.service';
 import { ImageUploadService } from '../../services/image-upload.service';
+import { TranslateModule, TranslateService } from '@ngx-translate/core';
 import { TagBadgeComponent } from '../tag-badge/tag-badge.component';
 
 @Component({
   selector: 'app-cap-detail',
   standalone: true,
-  imports: [CommonModule, RouterLink, TagBadgeComponent],
+  imports: [CommonModule, RouterLink, TranslateModule, TagBadgeComponent],
   templateUrl: './cap-detail.component.html',
   styleUrls: ['./cap-detail.component.scss'],
 })
@@ -25,6 +26,7 @@ export class CapDetailComponent implements OnInit {
     private authService: AuthService,
     private toastService: ToastService,
     private imageUploadService: ImageUploadService,
+    private translateService: TranslateService,
     private route: ActivatedRoute,
     private router: Router
   ) {
@@ -47,10 +49,10 @@ export class CapDetailComponent implements OnInit {
           await this.imageUploadService.deleteCapImage(this.cap.id);
         }
         await this.capService.deleteCap(this.cap.id);
-        this.toastService.success('Cap deleted');
+        this.toastService.success(this.translateService.instant('TOAST.CAP_DELETED'));
         this.router.navigate(['/']);
       } catch (err) {
-        this.toastService.error('Failed to delete cap');
+        this.toastService.error(this.translateService.instant('TOAST.DELETE_FAILED'));
       }
     }
   }

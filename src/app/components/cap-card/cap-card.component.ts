@@ -1,13 +1,14 @@
 import { Component, Input } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterLink } from '@angular/router';
+import { TranslateModule } from '@ngx-translate/core';
 import { Cap } from '../../models/cap.model';
 import { TagBadgeComponent } from '../tag-badge/tag-badge.component';
 
 @Component({
   selector: 'app-cap-card',
   standalone: true,
-  imports: [CommonModule, RouterLink, TagBadgeComponent],
+  imports: [CommonModule, RouterLink, TranslateModule, TagBadgeComponent],
   templateUrl: './cap-card.component.html',
   styleUrls: ['./cap-card.component.scss'],
 })

@@ -1,0 +1,103 @@
+{
+  "HEADER": {
+    "COLLECTION": "Kolekcja",
+    "ADD_CAP": "+ Dodaj",
+    "CONTACTS": "Kontakt",
+    "CAPS": "kapli",
+    "COUNTRIES": "krajów",
+    "LOCK": "Zablokuj",
+    "UNLOCK": "Odblokuj",
+    "LOGIN": "Zaloguj"
+  },
+  "LIST": {
+    "SEARCH_PLACEHOLDER": "Szukaj po nazwie, producencie...",
+    "FOR_TRADE": "Na wymianę",
+    "FILTERS": "Filtry",
+    "CLEAR_ALL": "Wyczyść",
+    "CLEAR_FILTERS": "Wyczyść filtry",
+    "COUNTRY": "Kraj",
+    "ALL_COUNTRIES": "Wszystkie kraje",
+    "TRADE_STATUS": "Status wymiany",
+    "ALL_CAPS": "Wszystkie kapsle",
+    "FOR_TRADE_OPTION": "Na wymianę",
+    "NOT_FOR_TRADE": "Nie na wymianę",
+    "CAPS_FOUND": "Znaleziono: {{count}}",
+    "NO_CAPS": "Nic nie znaleziono",
+    "NO_CAPS_HINT": "Spróbuj zmienić kryteria wyszukiwania lub filtry"
+  },
+  "CARD": {
+    "FOR_TRADE": "WYMIANA"
+  },
+  "DETAIL": {
+    "BACK": "← Wróć do kolekcji",
+    "FOR_TRADE": "Na wymianę",
+    "COUNTRY": "Kraj",
+    "MANUFACTURER": "Producent",
+    "ADDED": "Dodano",
+    "TAGS": "Tagi",
+    "EDIT": "Edytuj",
+    "DELETE": "Usuń",
+    "UNLOCK_TO_EDIT": "Odblokuj do edycji",
+    "LOADING": "Ładowanie...",
+    "NOT_FOUND": "Nie znaleziono kapsla",
+    "BACK_TO_COLLECTION": "Wróć do kolekcji"
+  },
+  "FORM": {
+    "ADD_TITLE": "Nowy kapsel",
+    "EDIT_TITLE": "Edycja",
+    "ADD_SUBTITLE": "Dodaj nowy kapsel piwny do kolekcji",
+    "EDIT_SUBTITLE": "Zaktualizuj informacje o kapslu",
+    "NAME": "Nazwa",
+    "NAME_PLACEHOLDER": "np. Pilsner Urquell",
+    "NAME_REQUIRED": "Nazwa jest wymagana",
+    "COUNTRY": "Kraj",
+    "SELECT_COUNTRY": "Wybierz kraj",
+    "COUNTRY_REQUIRED": "Kraj jest wymagany",
+    "MANUFACTURER": "Producent",
+    "MANUFACTURER_PLACEHOLDER": "np. Plzeňský Prazdroj",
+    "MANUFACTURER_REQUIRED": "Producent jest wymagany",
+    "TAGS": "Tagi",
+    "TAGS_PLACEHOLDER": "Wpisz tag i naciśnij Enter lub wybierz z listy",
+    "PHOTO": "Zdjęcie",
+    "UPLOAD_TEXT": "Kliknij, aby przesłać lub przeciągnij i upuść",
+    "UPLOAD_HINT": "Obraz zostanie automatycznie skompresowany do ~100KB",
+    "ORIGINAL": "Oryginał",
+    "COMPRESSED": "Skompresowany",
+    "SAVED": "oszczędność",
+    "COMPRESSING": "Kompresja...",
+    "CURRENT_PHOTO": "Aktualne zdjęcie",
+    "CHANGE_PHOTO": "Zmień zdjęcie",
+    "REMOVE": "Usuń",
+    "DESCRIPTION": "Opis",
+    "DESCRIPTION_PLACEHOLDER": "Co wyróżnia ten kapsel?",
+    "FOR_TRADE": "Dostępny na wymianę",
+    "CANCEL": "Anuluj",
+    "SAVING": "Zapisywanie...",
+    "SAVE_CHANGES": "Zapisz zmiany",
+    "ADD_TO_COLLECTION": "Dodaj do kolekcji"
+  },
+  "LOGIN": {
+    "TITLE": "Dostęp administratora",
+    "SUBTITLE": "Wprowadź hasło, aby dodać lub edytować kapsle",
+    "PLACEHOLDER": "Wprowadź hasło",
+    "CHECKING": "Sprawdzanie...",
+    "UNLOCK": "Zaloguj",
+    "HINT": "Wskazówka:",
+    "BACK": "← Wróć do kolekcji",
+    "WRONG_PASSWORD": "Nieprawidłowe hasło"
+  },
+  "CONTACTS": {
+    "TITLE": "Kontakt",
+    "SUBTITLE": "Masz pytania o kolekcję, chcesz wymienić się kapslami lub po prostu porozmawiać? Pisz!",
+    "FOOTER": "Zawsze otwarty na wymianę!"
+  },
+  "TOAST": {
+    "CAP_UPDATED": "Kapsel zaktualizowany!",
+    "CAP_ADDED": "Kapsel dodany do kolekcji!",
+    "SAVE_FAILED": "Nie udało się zapisać. Spróbuj ponownie.",
+    "FILL_REQUIRED": "Wypełnij wszystkie wymagane pola",
+    "CAP_DELETED": "Kapsel usunięty",
+    "DELETE_FAILED": "Nie udało się usunąć kapsla",
+    "DROP_IMAGE": "Przeciągnij plik obrazu"
+  }
+}

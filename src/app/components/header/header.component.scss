@@ -139,6 +139,41 @@ $breakpoint-mobile: 768px;
   letter-spacing: 1px;
 }
 
+// Language switcher
+.header__lang {
+  display: flex;
+  gap: 2px;
+  background: rgba(255, 255, 255, 0.05);
+  border-radius: 8px;
+  padding: 2px;
+}
+
+.header__lang-btn {
+  padding: 4px 8px;
+  border: none;
+  border-radius: 6px;
+  background: transparent;
+  color: #718096;
+  font-size: 12px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  letter-spacing: 0.5px;
+
+  &:hover {
+    color: #a0aec0;
+  }
+
+  &--active {
+    background: #f5c542;
+    color: #1a1a2e;
+
+    &:hover {
+      color: #1a1a2e;
+    }
+  }
+}
+
 // Auth button
 .header__auth-btn {
   background: none;
