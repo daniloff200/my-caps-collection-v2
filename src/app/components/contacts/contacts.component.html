@@ -1,0 +1,29 @@
+<div class="contacts-page">
+  <div class="contacts-page__header">
+    <h1 class="contacts-page__title">Contacts</h1>
+    <p class="contacts-page__subtitle">
+      Have questions about my collection, want to trade caps, or just chat? Feel free to reach out!
+    </p>
+  </div>
+
+  <div class="contacts__list">
+    <a
+      *ngFor="let contact of contacts"
+      [href]="contact.link"
+      target="_blank"
+      rel="noopener noreferrer"
+      class="contacts__item"
+    >
+      <span class="contacts__icon" [innerHTML]="getIcon(contact.icon)"></span>
+      <div class="contacts__info">
+        <span class="contacts__label">{{ contact.label }}</span>
+        <span class="contacts__value">{{ contact.value }}</span>
+      </div>
+      <span class="contacts__arrow">→</span>
+    </a>
+  </div>
+
+  <div class="contacts__footer">
+    <p>Always open for trades!</p>
+  </div>
+</div>

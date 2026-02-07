@@ -27,6 +27,7 @@ export const COUNTRIES: string[] = [
   'Portugal',
   'Romania',
   'Russia',
+  'Scotland',
   'Serbia',
   'Slovakia',
   'Slovenia',
@@ -36,8 +37,8 @@ export const COUNTRIES: string[] = [
   'Switzerland',
   'Thailand',
   'Turkey',
-  'UK',
   'Ukraine',
+  'United Kingdom',
   'USA',
   'Vietnam',
 ];

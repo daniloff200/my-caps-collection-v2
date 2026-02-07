@@ -5,16 +5,20 @@
       <span class="header__logo-text">Dima's Caps</span>
     </a>
 
-    <nav class="header__nav">
+    <!-- Desktop nav -->
+    <nav class="header__nav header__nav--desktop">
       <a routerLink="/" routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }" class="header__link">
         Collection
       </a>
       <a routerLink="/add" routerLinkActive="active" class="header__link header__link--add">
         + Add Cap
       </a>
+      <a routerLink="/contacts" routerLinkActive="active" class="header__link">
+        Contacts
+      </a>
     </nav>
 
-    <div class="header__right">
+    <div class="header__right header__right--desktop">
       <div class="header__stats" *ngIf="stats$ | async as stats">
         <div class="header__stat">
           <span class="header__stat-value">{{ stats.total }}</span>
@@ -41,6 +45,67 @@
         title="Unlock editing"
       >
         🔒
+      </a>
+    </div>
+
+    <!-- Mobile: stats + burger -->
+    <div class="header__mobile-right">
+      <div class="header__stats header__stats--mobile" *ngIf="stats$ | async as stats">
+        <div class="header__stat">
+          <span class="header__stat-value">{{ stats.total }}</span>
+          <span class="header__stat-label">caps</span>
+        </div>
+      </div>
+
+      <button class="header__burger" (click)="toggleMenu()" [class.header__burger--open]="menuOpen">
+        <span></span>
+        <span></span>
+        <span></span>
+      </button>
+    </div>
+  </div>
+
+  <!-- Mobile menu -->
+  <div class="header__mobile-menu" [class.header__mobile-menu--open]="menuOpen">
+    <nav class="header__mobile-nav">
+      <a routerLink="/" routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }" class="header__mobile-link">
+        Collection
+      </a>
+      <a routerLink="/add" routerLinkActive="active" class="header__mobile-link">
+        + Add Cap
+      </a>
+      <a routerLink="/contacts" routerLinkActive="active" class="header__mobile-link">
+        Contacts
+      </a>
+    </nav>
+
+    <div class="header__mobile-footer">
+      <div class="header__stats" *ngIf="stats$ | async as stats">
+        <div class="header__stat">
+          <span class="header__stat-value">{{ stats.total }}</span>
+          <span class="header__stat-label">caps</span>
+        </div>
+        <div class="header__stat">
+          <span class="header__stat-value">{{ stats.countries }}</span>
+          <span class="header__stat-label">countries</span>
+        </div>
+      </div>
+
+      <button
+        *ngIf="isAuthenticated$ | async"
+        class="header__auth-btn"
+        (click)="onLogout()"
+        title="Lock editing"
+      >
+        🔓 Unlock
+      </button>
+      <a
+        *ngIf="!(isAuthenticated$ | async)"
+        routerLink="/login"
+        class="header__auth-btn"
+        title="Unlock editing"
+      >
+        🔒 Login
       </a>
     </div>
   </div>
