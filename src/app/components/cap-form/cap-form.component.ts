@@ -18,6 +18,7 @@ import { TagBadgeComponent } from '../tag-badge/tag-badge.component';
 export class CapFormComponent implements OnInit {
   isEditMode = false;
   capId: string | null = null;
+  saving = false;
 
   name = '';
   country = '';
@@ -38,10 +39,10 @@ export class CapFormComponent implements OnInit {
     private route: ActivatedRoute
   ) {}
 
-  ngOnInit(): void {
+  async ngOnInit(): Promise<void> {
     this.capId = this.route.snapshot.paramMap.get('id');
     if (this.capId) {
-      const cap = this.capService.getCapById(this.capId);
+      const cap = await this.capService.getCapByIdAsync(this.capId);
       if (cap) {
         this.isEditMode = true;
         this.name = cap.name;
@@ -90,14 +91,15 @@ export class CapFormComponent implements OnInit {
   }
 
   onTagInputBlur(): void {
-    // Delay to allow click on suggestion
     setTimeout(() => (this.showTagSuggestions = false), 200);
   }
 
-  onSubmit(): void {
+  async onSubmit(): Promise<void> {
     if (!this.name.trim() || !this.country || !this.manufacturer.trim()) {
       return;
     }
+
+    this.saving = true;
 
     const capData = {
       name: this.name.trim(),
@@ -109,12 +111,17 @@ export class CapFormComponent implements OnInit {
       forTrade: this.forTrade,
     };
 
-    if (this.isEditMode && this.capId) {
-      this.capService.updateCap(this.capId, capData);
-      this.router.navigate(['/cap', this.capId]);
-    } else {
-      const newCap = this.capService.addCap(capData as Omit<Cap, 'id' | 'dateAdded'>);
-      this.router.navigate(['/cap', newCap.id]);
+    try {
+      if (this.isEditMode && this.capId) {
+        await this.capService.updateCap(this.capId, capData);
+        this.router.navigate(['/cap', this.capId]);
+      } else {
+        const newCap = await this.capService.addCap(capData as Omit<Cap, 'id' | 'dateAdded'>);
+        this.router.navigate(['/cap', newCap.id]);
+      }
+    } catch (err) {
+      console.error('Error saving cap:', err);
+      this.saving = false;
     }
   }
 

@@ -56,7 +56,11 @@
   </div>
 </div>
 
-<div class="not-found" *ngIf="!cap">
+<div class="loading" *ngIf="loading">
+  <p>Loading...</p>
+</div>
+
+<div class="not-found" *ngIf="!loading && !cap">
   <h2>Cap not found</h2>
   <a routerLink="/" class="btn btn--primary">Back to Collection</a>
 </div>

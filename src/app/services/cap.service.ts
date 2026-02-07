@@ -1,19 +1,34 @@
-import { Injectable } from '@angular/core';
+import { Injectable, inject } from '@angular/core';
 import { BehaviorSubject, Observable, combineLatest, map } from 'rxjs';
+import {
+  Firestore,
+  collection,
+  collectionData,
+  doc,
+  addDoc,
+  updateDoc,
+  deleteDoc,
+  getDoc,
+} from '@angular/fire/firestore';
 import { Cap, CapFilters, createDefaultFilters } from '../models/cap.model';
 import { SEED_CAPS } from '../data/seed-data';
 
-const STORAGE_KEY = 'caps-collection';
+const COLLECTION_NAME = 'caps';
 
 @Injectable({
   providedIn: 'root',
 })
 export class CapService {
+  private firestore = inject(Firestore);
+  private capsCollection = collection(this.firestore, COLLECTION_NAME);
+
   private capsSubject = new BehaviorSubject<Cap[]>([]);
   private filtersSubject = new BehaviorSubject<CapFilters>(createDefaultFilters());
+  private loadedSubject = new BehaviorSubject<boolean>(false);
 
   caps$ = this.capsSubject.asObservable();
   filters$ = this.filtersSubject.asObservable();
+  loaded$ = this.loadedSubject.asObservable();
 
   filteredCaps$: Observable<Cap[]> = combineLatest([this.caps$, this.filters$]).pipe(
     map(([caps, filters]) => this.applyFilters(caps, filters))
@@ -44,30 +59,21 @@ export class CapService {
   );
 
   constructor() {
-    this.loadFromStorage();
+    this.subscribeToFirestore();
   }
 
-  private loadFromStorage(): void {
-    const stored = localStorage.getItem(STORAGE_KEY);
-    if (stored) {
-      try {
-        const caps = JSON.parse(stored) as Cap[];
+  private subscribeToFirestore(): void {
+    collectionData(this.capsCollection, { idField: 'id' }).subscribe({
+      next: (data) => {
+        const caps = data as Cap[];
         this.capsSubject.next(caps);
-      } catch {
-        this.seedData();
-      }
-    } else {
-      this.seedData();
-    }
-  }
-
-  private seedData(): void {
-    this.capsSubject.next(SEED_CAPS);
-    this.saveToStorage();
-  }
-
-  private saveToStorage(): void {
-    localStorage.setItem(STORAGE_KEY, JSON.stringify(this.capsSubject.value));
+        this.loadedSubject.next(true);
+      },
+      error: (err) => {
+        console.error('Firestore read error:', err);
+        this.loadedSubject.next(true);
+      },
+    });
   }
 
   private formatDate(date: Date): string {
@@ -75,10 +81,6 @@ export class CapService {
     const mm = String(date.getMonth() + 1).padStart(2, '0');
     const yyyy = date.getFullYear();
     return `${dd}/${mm}/${yyyy}`;
-  }
-
-  private generateId(): string {
-    return Date.now().toString(36) + Math.random().toString(36).substring(2);
   }
 
   private applyFilters(caps: Cap[], filters: CapFilters): Cap[] {
@@ -123,34 +125,47 @@ export class CapService {
     return this.capsSubject.value.find((cap) => cap.id === id);
   }
 
-  addCap(cap: Omit<Cap, 'id' | 'dateAdded'>): Cap {
-    const newCap: Cap = {
+  async getCapByIdAsync(id: string): Promise<Cap | undefined> {
+    // First try from local cache
+    const local = this.capsSubject.value.find((cap) => cap.id === id);
+    if (local) return local;
+
+    // Fallback to Firestore
+    const docRef = doc(this.firestore, COLLECTION_NAME, id);
+    const snapshot = await getDoc(docRef);
+    if (snapshot.exists()) {
+      return { id: snapshot.id, ...snapshot.data() } as Cap;
+    }
+    return undefined;
+  }
+
+  async addCap(cap: Omit<Cap, 'id' | 'dateAdded'>): Promise<Cap> {
+    const capData = {
       ...cap,
-      id: this.generateId(),
+      imageUrl: cap.imageUrl || '',
+      description: cap.description || '',
       dateAdded: this.formatDate(new Date()),
     };
-    const caps = [...this.capsSubject.value, newCap];
-    this.capsSubject.next(caps);
-    this.saveToStorage();
-    return newCap;
+    const docRef = await addDoc(this.capsCollection, capData);
+    return { ...capData, id: docRef.id } as Cap;
   }
 
-  updateCap(id: string, updates: Partial<Cap>): void {
-    const caps = this.capsSubject.value.map((cap) =>
-      cap.id === id ? { ...cap, ...updates } : cap
-    );
-    this.capsSubject.next(caps);
-    this.saveToStorage();
+  async updateCap(id: string, updates: Partial<Cap>): Promise<void> {
+    const docRef = doc(this.firestore, COLLECTION_NAME, id);
+    // Remove id from updates if present — Firestore doc ID is not a field
+    const { id: _id, ...data } = updates as any;
+    await updateDoc(docRef, data);
   }
 
-  deleteCap(id: string): void {
-    const caps = this.capsSubject.value.filter((cap) => cap.id !== id);
-    this.capsSubject.next(caps);
-    this.saveToStorage();
+  async deleteCap(id: string): Promise<void> {
+    const docRef = doc(this.firestore, COLLECTION_NAME, id);
+    await deleteDoc(docRef);
   }
 
-  resetToSeedData(): void {
-    this.capsSubject.next(SEED_CAPS);
-    this.saveToStorage();
+  async seedData(): Promise<void> {
+    for (const cap of SEED_CAPS) {
+      const { id, ...data } = cap;
+      await addDoc(this.capsCollection, data);
+    }
   }
 }

@@ -131,9 +131,9 @@
 
     <!-- Actions -->
     <div class="form__actions">
-      <button type="button" class="btn btn--ghost" (click)="cancel()">Cancel</button>
-      <button type="submit" class="btn btn--primary">
-        {{ isEditMode ? 'Save Changes' : 'Add to Collection' }}
+      <button type="button" class="btn btn--ghost" (click)="cancel()" [disabled]="saving">Cancel</button>
+      <button type="submit" class="btn btn--primary" [disabled]="saving">
+        {{ saving ? 'Saving...' : (isEditMode ? 'Save Changes' : 'Add to Collection') }}
       </button>
     </div>
   </form>
