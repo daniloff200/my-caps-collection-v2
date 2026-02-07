@@ -68,6 +68,11 @@ export class CapListComponent implements OnInit, OnDestroy {
     this.capService.updateFilters({ forTrade });
   }
 
+  toggleForTrade(): void {
+    const newValue = this.filters.forTrade === true ? null : true;
+    this.capService.updateFilters({ forTrade: newValue });
+  }
+
   resetFilters(): void {
     this.capService.resetFilters();
   }

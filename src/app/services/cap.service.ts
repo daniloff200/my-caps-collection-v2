@@ -152,8 +152,12 @@ export class CapService {
 
   async updateCap(id: string, updates: Partial<Cap>): Promise<void> {
     const docRef = doc(this.firestore, COLLECTION_NAME, id);
-    // Remove id from updates if present — Firestore doc ID is not a field
-    const { id: _id, ...data } = updates as any;
+    // Remove id and replace undefined values — Firestore doesn't accept undefined
+    const { id: _id, ...rest } = updates as any;
+    const data: Record<string, any> = {};
+    for (const [key, value] of Object.entries(rest)) {
+      data[key] = value === undefined ? '' : value;
+    }
     await updateDoc(docRef, data);
   }
 

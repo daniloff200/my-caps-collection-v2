@@ -4,7 +4,7 @@
     <p class="form-page__subtitle">{{ isEditMode ? 'Update cap information' : 'Add a new crown cap to your collection' }}</p>
   </div>
 
-  <form class="form" (ngSubmit)="onSubmit()">
+  <form class="form" #capForm="ngForm" (ngSubmit)="onSubmit(capForm)">
     <!-- Name -->
     <div class="form__group">
       <label class="form__label" for="name">Name *</label>
@@ -12,11 +12,16 @@
         type="text"
         id="name"
         class="form__input"
+        [class.form__input--error]="nameField.invalid && nameField.touched"
         placeholder="e.g. Pilsner Urquell"
         [(ngModel)]="name"
         name="name"
+        #nameField="ngModel"
         required
       />
+      <span class="form__error" *ngIf="nameField.invalid && nameField.touched">
+        Name is required
+      </span>
     </div>
 
     <!-- Country & Manufacturer -->
@@ -26,13 +31,18 @@
         <select
           id="country"
           class="form__select"
+          [class.form__input--error]="countryField.invalid && countryField.touched"
           [(ngModel)]="country"
           name="country"
+          #countryField="ngModel"
           required
         >
           <option value="" disabled>Select country</option>
           <option *ngFor="let c of countries" [value]="c">{{ c }}</option>
         </select>
+        <span class="form__error" *ngIf="countryField.invalid && countryField.touched">
+          Country is required
+        </span>
       </div>
 
       <div class="form__group">
@@ -41,11 +51,16 @@
           type="text"
           id="manufacturer"
           class="form__input"
+          [class.form__input--error]="manufacturerField.invalid && manufacturerField.touched"
           placeholder="e.g. Plzeňský Prazdroj"
           [(ngModel)]="manufacturer"
           name="manufacturer"
+          #manufacturerField="ngModel"
           required
         />
+        <span class="form__error" *ngIf="manufacturerField.invalid && manufacturerField.touched">
+          Manufacturer is required
+        </span>
       </div>
     </div>
 

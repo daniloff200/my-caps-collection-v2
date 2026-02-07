@@ -1,0 +1,15 @@
+<div class="toast-container" *ngIf="toasts$ | async as toasts">
+  <div
+    *ngFor="let toast of toasts"
+    class="toast"
+    [class.toast--success]="toast.type === 'success'"
+    [class.toast--error]="toast.type === 'error'"
+    [class.toast--info]="toast.type === 'info'"
+    (click)="dismiss(toast.id)"
+  >
+    <span class="toast__icon">
+      {{ toast.type === 'success' ? '✓' : toast.type === 'error' ? '✗' : 'ℹ' }}
+    </span>
+    <span class="toast__message">{{ toast.message }}</span>
+  </div>
+</div>

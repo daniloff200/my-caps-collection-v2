@@ -1,9 +1,10 @@
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { FormsModule } from '@angular/forms';
+import { FormsModule, NgForm } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Cap } from '../../models/cap.model';
 import { CapService } from '../../services/cap.service';
+import { ToastService } from '../../services/toast.service';
 import { COUNTRIES } from '../../data/countries';
 import { COMMON_TAGS } from '../../data/tags';
 import { TagBadgeComponent } from '../tag-badge/tag-badge.component';
@@ -35,6 +36,7 @@ export class CapFormComponent implements OnInit {
 
   constructor(
     private capService: CapService,
+    private toastService: ToastService,
     private router: Router,
     private route: ActivatedRoute
   ) {}
@@ -94,8 +96,11 @@ export class CapFormComponent implements OnInit {
     setTimeout(() => (this.showTagSuggestions = false), 200);
   }
 
-  async onSubmit(): Promise<void> {
-    if (!this.name.trim() || !this.country || !this.manufacturer.trim()) {
+  async onSubmit(form: NgForm): Promise<void> {
+    if (form.invalid) {
+      // Mark all fields as touched to show errors
+      Object.values(form.controls).forEach((control) => control.markAsTouched());
+      this.toastService.error('Please fill in all required fields');
       return;
     }
 
@@ -106,21 +111,24 @@ export class CapFormComponent implements OnInit {
       country: this.country,
       manufacturer: this.manufacturer.trim(),
       tags: this.tags,
-      imageUrl: this.imageUrl.trim() || undefined,
-      description: this.description.trim() || undefined,
+      imageUrl: this.imageUrl.trim(),
+      description: this.description.trim(),
       forTrade: this.forTrade,
     };
 
     try {
       if (this.isEditMode && this.capId) {
         await this.capService.updateCap(this.capId, capData);
+        this.toastService.success('Cap updated successfully!');
         this.router.navigate(['/cap', this.capId]);
       } else {
         const newCap = await this.capService.addCap(capData as Omit<Cap, 'id' | 'dateAdded'>);
+        this.toastService.success('Cap added to collection!');
         this.router.navigate(['/cap', newCap.id]);
       }
     } catch (err) {
       console.error('Error saving cap:', err);
+      this.toastService.error('Failed to save. Please try again.');
       this.saving = false;
     }
   }

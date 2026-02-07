@@ -75,6 +75,39 @@
   white-space: nowrap;
 }
 
+.btn--trade {
+  background: rgba(72, 187, 120, 0.12);
+  border: 1px solid rgba(72, 187, 120, 0.3);
+  color: #48bb78;
+
+  &:hover {
+    background: rgba(72, 187, 120, 0.2);
+    border-color: rgba(72, 187, 120, 0.5);
+  }
+}
+
+.btn--trade-active {
+  background: #48bb78;
+  border-color: #48bb78;
+  color: #fff;
+
+  &:hover {
+    background: #38a169;
+    border-color: #38a169;
+  }
+}
+
+.tags-bar {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  margin-bottom: 16px;
+  padding: 12px 16px;
+  background: rgba(255, 255, 255, 0.03);
+  border-radius: 10px;
+  border: 1px solid rgba(255, 255, 255, 0.04);
+}
+
 .btn--outline {
   background: transparent;
   border: 1px solid rgba(255, 255, 255, 0.15);

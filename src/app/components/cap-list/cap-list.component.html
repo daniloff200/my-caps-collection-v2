@@ -18,6 +18,14 @@
     </div>
 
     <button
+      class="btn btn--trade"
+      [class.btn--trade-active]="filters.forTrade === true"
+      (click)="toggleForTrade()"
+    >
+      🔄 For Trade
+    </button>
+
+    <button
       class="btn btn--outline"
       [class.btn--active]="showFilters"
       (click)="toggleFilters()"
@@ -33,6 +41,17 @@
     >
       Clear all
     </button>
+  </div>
+
+  <!-- Tags quick filter -->
+  <div class="tags-bar" *ngIf="allTags.length">
+    <app-tag-badge
+      *ngFor="let tag of allTags"
+      [tag]="tag"
+      [clickable]="true"
+      [active]="filters.tag === tag"
+      (tagClick)="onTagClick($event)"
+    ></app-tag-badge>
   </div>
 
   <!-- Filter Panel -->
@@ -63,19 +82,6 @@
           <option value="true">For trade</option>
           <option value="false">Not for trade</option>
         </select>
-      </div>
-    </div>
-
-    <div class="filters__tags" *ngIf="allTags.length">
-      <label class="filters__label">Tags</label>
-      <div class="filters__tags-list">
-        <app-tag-badge
-          *ngFor="let tag of allTags"
-          [tag]="tag"
-          [clickable]="true"
-          [active]="filters.tag === tag"
-          (tagClick)="onTagClick($event)"
-        ></app-tag-badge>
       </div>
     </div>
   </div>
