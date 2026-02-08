@@ -18,7 +18,6 @@
         [attr.fill]="hoveredId === feat.id ? getHoverColor(feat) : feat.fill"
         [attr.stroke-width]="strokeWidth"
         class="map-country"
-        [class.has-caps]="feat.count > 0"
         (mouseenter)="onMouseEnter(feat)"
         (mouseleave)="onMouseLeave()"
         (click)="onCountryClicked(feat)"

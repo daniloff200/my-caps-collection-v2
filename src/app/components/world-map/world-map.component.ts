@@ -51,10 +51,13 @@ export class WorldMapComponent implements OnInit, OnDestroy, AfterViewInit {
   readonly minScale = 1;
   readonly maxScale = 12;
   isPanning = false;
+  private mouseDown = false;
+  private wasDragged = false;
   private panStartX = 0;
   private panStartY = 0;
   private panStartTx = 0;
   private panStartTy = 0;
+  private readonly dragThreshold = 4; // px to distinguish click from drag
 
   // Touch zoom
   private lastPinchDist = 0;
@@ -155,7 +158,7 @@ export class WorldMapComponent implements OnInit, OnDestroy, AfterViewInit {
   // ─── Hover & Click ──────────────────────────
 
   getHoverColor(feat: MapFeature): string {
-    if (feat.count === 0) return '#4a5568';
+    if (feat.count === 0) return '#3d4a5c';
     return '#f5c542';
   }
 
@@ -181,8 +184,8 @@ export class WorldMapComponent implements OnInit, OnDestroy, AfterViewInit {
   }
 
   onCountryClicked(feat: MapFeature): void {
-    if (this.isPanning) return;
-    if (feat.name && feat.count > 0) {
+    if (this.wasDragged) return;
+    if (feat.name) {
       this.countryClick.emit(feat.name);
     }
   }
@@ -216,33 +219,44 @@ export class WorldMapComponent implements OnInit, OnDestroy, AfterViewInit {
 
   onPanStart(event: MouseEvent): void {
     if (event.button !== 0) return; // only left click
-    this.isPanning = true;
+    this.mouseDown = true;
+    this.wasDragged = false;
     this.panStartX = event.clientX;
     this.panStartY = event.clientY;
     this.panStartTx = this.translateX;
     this.panStartTy = this.translateY;
-    this.tooltip = null;
   }
 
   @HostListener('document:mousemove', ['$event'])
   onPanMove(event: MouseEvent): void {
-    if (!this.isPanning) return;
+    if (!this.mouseDown) return;
 
-    const svgRect = this.svgEl.nativeElement.getBoundingClientRect();
-    const dx = ((event.clientX - this.panStartX) / svgRect.width) * this.svgW;
-    const dy = ((event.clientY - this.panStartY) / svgRect.height) * this.svgH;
+    const distX = Math.abs(event.clientX - this.panStartX);
+    const distY = Math.abs(event.clientY - this.panStartY);
 
-    this.translateX = this.panStartTx + dx;
-    this.translateY = this.panStartTy + dy;
-    this.clampTranslation();
+    // Only start actual panning after exceeding threshold
+    if (!this.isPanning && (distX > this.dragThreshold || distY > this.dragThreshold)) {
+      this.isPanning = true;
+      this.wasDragged = true;
+      this.tooltip = null;
+    }
+
+    if (this.isPanning) {
+      const svgRect = this.svgEl.nativeElement.getBoundingClientRect();
+      const dx = ((event.clientX - this.panStartX) / svgRect.width) * this.svgW;
+      const dy = ((event.clientY - this.panStartY) / svgRect.height) * this.svgH;
+
+      this.translateX = this.panStartTx + dx;
+      this.translateY = this.panStartTy + dy;
+      this.clampTranslation();
+    }
   }
 
   @HostListener('document:mouseup')
   onPanEnd(): void {
-    // Use timeout so the click event on country doesn't fire immediately after pan
-    if (this.isPanning) {
-      setTimeout(() => (this.isPanning = false), 50);
-    }
+    this.mouseDown = false;
+    this.isPanning = false;
+    // wasDragged stays true until next mousedown — so click handler can check it
   }
 
   // ─── Touch Support ──────────────────────────
