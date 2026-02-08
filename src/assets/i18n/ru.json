@@ -5,9 +5,17 @@
     "CONTACTS": "Контакты",
     "CAPS": "крышек",
     "COUNTRIES": "стран",
+    "COUNTRIES_NAV": "Страны",
     "LOCK": "Заблокировать",
     "UNLOCK": "Разблокировать",
     "LOGIN": "Войти"
+  },
+  "COUNTRIES": {
+    "TITLE": "Страны",
+    "CAPS_IN": "крышек в",
+    "COUNTRIES_LABEL": "странах",
+    "UNKNOWN": "Неизвестные",
+    "EMPTY": "В коллекции пока нет крышек"
   },
   "LIST": {
     "SEARCH_PLACEHOLDER": "Поиск по названию, производителю...",

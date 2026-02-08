@@ -5,9 +5,17 @@
     "CONTACTS": "Контакти",
     "CAPS": "кришок",
     "COUNTRIES": "країн",
+    "COUNTRIES_NAV": "Країни",
     "LOCK": "Заблокувати",
     "UNLOCK": "Розблокувати",
     "LOGIN": "Увійти"
+  },
+  "COUNTRIES": {
+    "TITLE": "Країни",
+    "CAPS_IN": "кришок у",
+    "COUNTRIES_LABEL": "країнах",
+    "UNKNOWN": "Невідомі",
+    "EMPTY": "У колекції поки немає кришок"
   },
   "LIST": {
     "SEARCH_PLACEHOLDER": "Пошук за назвою, виробником...",

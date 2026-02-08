@@ -5,9 +5,17 @@
     "CONTACTS": "Kontakt",
     "CAPS": "kapli",
     "COUNTRIES": "krajów",
+    "COUNTRIES_NAV": "Kraje",
     "LOCK": "Zablokuj",
     "UNLOCK": "Odblokuj",
     "LOGIN": "Zaloguj"
+  },
+  "COUNTRIES": {
+    "TITLE": "Kraje",
+    "CAPS_IN": "kapsli w",
+    "COUNTRIES_LABEL": "krajach",
+    "UNKNOWN": "Nieznane",
+    "EMPTY": "Brak kapsli w kolekcji"
   },
   "LIST": {
     "SEARCH_PLACEHOLDER": "Szukaj po nazwie, producencie...",

@@ -1,0 +1,69 @@
+<div class="countries-page">
+  <div class="countries-page__header">
+    <h1 class="countries-page__title">{{ 'COUNTRIES.TITLE' | translate }}</h1>
+    <p class="countries-page__subtitle">
+      {{ totalCaps }} {{ 'COUNTRIES.CAPS_IN' | translate }} {{ totalCountries }} {{ 'COUNTRIES.COUNTRIES_LABEL' | translate }}
+    </p>
+  </div>
+
+  <!-- Unknown block -->
+  <div class="country-block country-block--unknown" *ngIf="unknownCaps.length">
+    <div class="country-block__header" (click)="toggleCountry('Unknown')">
+      <div class="country-block__left">
+        <span class="country-block__icon">❓</span>
+        <span class="country-block__name">{{ 'COUNTRIES.UNKNOWN' | translate }}</span>
+      </div>
+      <div class="country-block__right">
+        <span class="country-block__count">{{ unknownCaps.length }}</span>
+        <span class="country-block__arrow" [class.country-block__arrow--open]="isExpanded('Unknown')">▸</span>
+      </div>
+    </div>
+    <div class="country-block__caps" *ngIf="isExpanded('Unknown')">
+      <a
+        *ngFor="let cap of unknownCaps"
+        [routerLink]="['/cap', cap.id]"
+        class="country-cap"
+      >
+        <div class="country-cap__image">
+          <img *ngIf="cap.imageUrl" [src]="cap.imageUrl" [alt]="cap.name" />
+          <span *ngIf="!cap.imageUrl" class="country-cap__placeholder">🍺</span>
+        </div>
+        <span class="country-cap__name">{{ cap.name }}</span>
+      </a>
+    </div>
+  </div>
+
+  <!-- Country groups -->
+  <div
+    class="country-block"
+    *ngFor="let group of countryGroups"
+  >
+    <div class="country-block__header" (click)="toggleCountry(group.country)">
+      <div class="country-block__left">
+        <span class="country-block__name">{{ group.country }}</span>
+      </div>
+      <div class="country-block__right">
+        <span class="country-block__count">{{ group.count }}</span>
+        <span class="country-block__arrow" [class.country-block__arrow--open]="isExpanded(group.country)">▸</span>
+      </div>
+    </div>
+    <div class="country-block__caps" *ngIf="isExpanded(group.country)">
+      <a
+        *ngFor="let cap of group.caps"
+        [routerLink]="['/cap', cap.id]"
+        class="country-cap"
+      >
+        <div class="country-cap__image">
+          <img *ngIf="cap.imageUrl" [src]="cap.imageUrl" [alt]="cap.name" />
+          <span *ngIf="!cap.imageUrl" class="country-cap__placeholder">🍺</span>
+        </div>
+        <span class="country-cap__name">{{ cap.name }}</span>
+      </a>
+    </div>
+  </div>
+
+  <!-- Empty state -->
+  <div class="countries-empty" *ngIf="!countryGroups.length && !unknownCaps.length">
+    <p>{{ 'COUNTRIES.EMPTY' | translate }}</p>
+  </div>
+</div>
