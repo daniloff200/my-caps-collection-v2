@@ -41,4 +41,5 @@ export const COUNTRIES: string[] = [
   'United Kingdom',
   'USA',
   'Vietnam',
+  'Unknown'
 ];
