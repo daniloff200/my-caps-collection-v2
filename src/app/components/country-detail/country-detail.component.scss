@@ -1,0 +1,147 @@
+.country-detail {
+  max-width: 960px;
+  margin: 0 auto;
+  padding: 32px 24px;
+}
+
+.country-detail__back {
+  display: inline-flex;
+  align-items: center;
+  color: #718096;
+  text-decoration: none;
+  font-size: 14px;
+  margin-bottom: 20px;
+  transition: color 0.2s;
+
+  &:hover {
+    color: #f5c542;
+  }
+}
+
+.country-detail__header {
+  display: flex;
+  align-items: baseline;
+  gap: 16px;
+  margin-bottom: 28px;
+  flex-wrap: wrap;
+}
+
+.country-detail__title {
+  font-size: 28px;
+  font-weight: 700;
+  color: #e2e8f0;
+  margin: 0;
+}
+
+.country-detail__count {
+  background: rgba(245, 197, 66, 0.15);
+  color: #f5c542;
+  padding: 4px 14px;
+  border-radius: 20px;
+  font-size: 14px;
+  font-weight: 600;
+}
+
+// Cap grid
+.country-detail__grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+  gap: 14px;
+}
+
+.detail-cap {
+  display: flex;
+  flex-direction: column;
+  background: rgba(255, 255, 255, 0.03);
+  border: 1px solid rgba(255, 255, 255, 0.06);
+  border-radius: 12px;
+  overflow: hidden;
+  text-decoration: none;
+  transition: all 0.2s ease;
+  position: relative;
+
+  &:hover {
+    border-color: rgba(245, 197, 66, 0.25);
+    background: rgba(255, 255, 255, 0.05);
+    transform: translateY(-2px);
+  }
+}
+
+.detail-cap__image {
+  width: 100%;
+  aspect-ratio: 1;
+  overflow: hidden;
+  background: rgba(255, 255, 255, 0.04);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+}
+
+.detail-cap__placeholder {
+  font-size: 36px;
+  opacity: 0.4;
+}
+
+.detail-cap__info {
+  padding: 10px 12px;
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+}
+
+.detail-cap__name {
+  color: #e2e8f0;
+  font-size: 13px;
+  font-weight: 600;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.detail-cap__manufacturer {
+  color: #718096;
+  font-size: 12px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.detail-cap__trade {
+  position: absolute;
+  top: 8px;
+  right: 8px;
+  background: rgba(72, 187, 120, 0.9);
+  color: white;
+  font-size: 10px;
+  font-weight: 700;
+  padding: 3px 8px;
+  border-radius: 4px;
+  letter-spacing: 0.5px;
+  text-transform: uppercase;
+}
+
+// Empty & loading states
+.country-detail__empty,
+.country-detail__loading {
+  text-align: center;
+  padding: 60px 24px;
+  color: #4a5568;
+  font-size: 15px;
+}
+
+@media (max-width: 600px) {
+  .country-detail__grid {
+    grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
+    gap: 10px;
+  }
+
+  .country-detail__title {
+    font-size: 22px;
+  }
+}

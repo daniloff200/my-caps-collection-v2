@@ -1,5 +1,5 @@
 .countries-page {
-  max-width: 800px;
+  max-width: 960px;
   margin: 0 auto;
   padding: 32px 24px;
 }
@@ -19,6 +19,11 @@
   color: #718096;
   margin: 0;
   font-size: 15px;
+}
+
+.countries-page__number {
+  color: #f5c542;
+  font-weight: 700;
 }
 
 // Country block
@@ -68,6 +73,8 @@
   display: flex;
   align-items: center;
   gap: 10px;
+  cursor: pointer;
+  flex: 1;
 }
 
 .country-block__icon {
@@ -97,11 +104,32 @@
   text-align: center;
 }
 
+.country-block__link {
+  color: #718096;
+  font-size: 16px;
+  cursor: pointer;
+  text-decoration: none;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 28px;
+  height: 28px;
+  border-radius: 6px;
+  transition: all 0.2s ease;
+
+  &:hover {
+    color: #f5c542;
+    background: rgba(245, 197, 66, 0.1);
+  }
+}
+
 .country-block__arrow {
   color: #4a5568;
   font-size: 14px;
   transition: transform 0.2s ease;
   display: inline-block;
+  cursor: pointer;
+  padding: 4px;
 
   &--open {
     transform: rotate(90deg);

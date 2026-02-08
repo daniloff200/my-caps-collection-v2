@@ -1,0 +1,57 @@
+<div class="world-map-wrapper">
+  <svg
+    #svgEl
+    viewBox="0 0 960 500"
+    class="world-map"
+    [class.grabbing]="isPanning"
+    preserveAspectRatio="xMidYMid meet"
+    (mousedown)="onPanStart($event)"
+    (wheel)="onWheel($event)"
+    (touchstart)="onTouchStart($event)"
+    (touchmove)="onTouchMove($event)"
+    (touchend)="onTouchEnd()"
+  >
+    <g [attr.transform]="transform">
+      <path
+        *ngFor="let feat of features"
+        [attr.d]="feat.path"
+        [attr.fill]="hoveredId === feat.id ? getHoverColor(feat) : feat.fill"
+        [attr.stroke-width]="strokeWidth"
+        class="map-country"
+        [class.has-caps]="feat.count > 0"
+        (mouseenter)="onMouseEnter(feat)"
+        (mouseleave)="onMouseLeave()"
+        (click)="onCountryClicked(feat)"
+      />
+    </g>
+  </svg>
+
+  <!-- Zoom controls -->
+  <div class="map-controls">
+    <button class="map-controls__btn" (click)="zoomIn()" title="Zoom in">+</button>
+    <span class="map-controls__level">{{ zoomPercent }}%</span>
+    <button class="map-controls__btn" (click)="zoomOut()" title="Zoom out">−</button>
+    <button
+      class="map-controls__btn map-controls__btn--reset"
+      (click)="resetZoom()"
+      title="Reset"
+      *ngIf="scale > 1"
+    >↺</button>
+  </div>
+
+  <!-- Tooltip -->
+  <div
+    class="map-tooltip"
+    *ngIf="tooltip && !isPanning"
+    [style.left.px]="tooltipX"
+    [style.top.px]="tooltipY"
+  >
+    <strong>{{ tooltip.name }}</strong>
+    <span *ngIf="tooltip.count > 0" class="map-tooltip__count">
+      {{ tooltip.count }} {{ 'COUNTRIES.CAPS_LABEL' | translate }}
+    </span>
+    <span *ngIf="tooltip.count === 0" class="map-tooltip__empty">
+      {{ 'COUNTRIES.NO_CAPS_MAP' | translate }}
+    </span>
+  </div>
+</div>

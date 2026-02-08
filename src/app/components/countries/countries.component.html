@@ -2,9 +2,13 @@
   <div class="countries-page__header">
     <h1 class="countries-page__title">{{ 'COUNTRIES.TITLE' | translate }}</h1>
     <p class="countries-page__subtitle">
-      {{ totalCaps }} {{ 'COUNTRIES.CAPS_IN' | translate }} {{ totalCountries }} {{ 'COUNTRIES.COUNTRIES_LABEL' | translate }}
+      <span class="countries-page__number">{{ totalCaps }}</span> {{ 'COUNTRIES.CAPS_IN' | translate }}
+      <span class="countries-page__number">{{ totalCountries }}</span> {{ 'COUNTRIES.COUNTRIES_LABEL' | translate }}
     </p>
   </div>
+
+  <!-- Interactive World Map -->
+  <app-world-map (countryClick)="onMapCountryClick($event)"></app-world-map>
 
   <!-- Unknown block -->
   <div class="country-block country-block--unknown" *ngIf="unknownCaps.length">
@@ -38,13 +42,22 @@
     class="country-block"
     *ngFor="let group of countryGroups"
   >
-    <div class="country-block__header" (click)="toggleCountry(group.country)">
-      <div class="country-block__left">
+    <div class="country-block__header">
+      <div class="country-block__left" (click)="toggleCountry(group.country)">
         <span class="country-block__name">{{ group.country }}</span>
       </div>
       <div class="country-block__right">
         <span class="country-block__count">{{ group.count }}</span>
-        <span class="country-block__arrow" [class.country-block__arrow--open]="isExpanded(group.country)">▸</span>
+        <a
+          class="country-block__link"
+          (click)="navigateToCountry(group.country)"
+          title="{{ group.country }}"
+        >→</a>
+        <span
+          class="country-block__arrow"
+          [class.country-block__arrow--open]="isExpanded(group.country)"
+          (click)="toggleCountry(group.country)"
+        >▸</span>
       </div>
     </div>
     <div class="country-block__caps" *ngIf="isExpanded(group.country)">

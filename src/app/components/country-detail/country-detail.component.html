@@ -1,0 +1,36 @@
+<div class="country-detail">
+  <a routerLink="/countries" class="country-detail__back">
+    ← {{ 'COUNTRY_DETAIL.BACK' | translate }}
+  </a>
+
+  <div class="country-detail__header">
+    <h1 class="country-detail__title">{{ countryName }}</h1>
+    <span class="country-detail__count">{{ caps.length }} {{ 'COUNTRIES.CAPS_LABEL' | translate }}</span>
+  </div>
+
+  <div class="country-detail__grid" *ngIf="caps.length > 0">
+    <a
+      *ngFor="let cap of caps"
+      [routerLink]="['/cap', cap.id]"
+      class="detail-cap"
+    >
+      <div class="detail-cap__image">
+        <img *ngIf="cap.imageUrl" [src]="cap.imageUrl" [alt]="cap.name" />
+        <span *ngIf="!cap.imageUrl" class="detail-cap__placeholder">🍺</span>
+      </div>
+      <div class="detail-cap__info">
+        <span class="detail-cap__name">{{ cap.name }}</span>
+        <span class="detail-cap__manufacturer" *ngIf="cap.manufacturer">{{ cap.manufacturer }}</span>
+      </div>
+      <span class="detail-cap__trade" *ngIf="cap.forTrade">{{ 'CARD.FOR_TRADE' | translate }}</span>
+    </a>
+  </div>
+
+  <div class="country-detail__empty" *ngIf="!loading && caps.length === 0">
+    <p>{{ 'COUNTRY_DETAIL.NO_CAPS' | translate }}</p>
+  </div>
+
+  <div class="country-detail__loading" *ngIf="loading">
+    <p>{{ 'DETAIL.LOADING' | translate }}</p>
+  </div>
+</div>

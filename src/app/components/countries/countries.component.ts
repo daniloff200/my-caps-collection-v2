@@ -1,10 +1,11 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { RouterLink } from '@angular/router';
+import { Router, RouterLink } from '@angular/router';
 import { Subject, takeUntil } from 'rxjs';
 import { TranslateModule } from '@ngx-translate/core';
 import { Cap } from '../../models/cap.model';
 import { CapService } from '../../services/cap.service';
+import { WorldMapComponent } from '../world-map/world-map.component';
 
 interface CountryGroup {
   country: string;
@@ -15,7 +16,7 @@ interface CountryGroup {
 @Component({
   selector: 'app-countries',
   standalone: true,
-  imports: [CommonModule, RouterLink, TranslateModule],
+  imports: [CommonModule, RouterLink, TranslateModule, WorldMapComponent],
   templateUrl: './countries.component.html',
   styleUrls: ['./countries.component.scss'],
 })
@@ -28,7 +29,10 @@ export class CountriesComponent implements OnInit, OnDestroy {
 
   private destroy$ = new Subject<void>();
 
-  constructor(private capService: CapService) {}
+  constructor(
+    private capService: CapService,
+    private router: Router
+  ) {}
 
   ngOnInit(): void {
     this.capService.caps$.pipe(takeUntil(this.destroy$)).subscribe((caps) => {
@@ -77,5 +81,13 @@ export class CountriesComponent implements OnInit, OnDestroy {
 
   isExpanded(country: string): boolean {
     return this.expandedCountries.has(country);
+  }
+
+  onMapCountryClick(countryName: string): void {
+    this.router.navigate(['/countries', countryName]);
+  }
+
+  navigateToCountry(countryName: string): void {
+    this.router.navigate(['/countries', countryName]);
   }
 }

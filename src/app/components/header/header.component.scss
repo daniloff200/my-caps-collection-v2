@@ -124,6 +124,19 @@ $breakpoint-mobile: 768px;
   display: flex;
   flex-direction: column;
   align-items: center;
+  text-decoration: none;
+
+  &--link {
+    cursor: pointer;
+    border-radius: 8px;
+    padding: 4px 10px;
+    margin: -4px -10px;
+    transition: background 0.2s ease;
+
+    &:hover {
+      background: rgba(245, 197, 66, 0.1);
+    }
+  }
 }
 
 .header__stat-value {

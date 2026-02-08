@@ -14,8 +14,14 @@
     "TITLE": "Countries",
     "CAPS_IN": "caps in",
     "COUNTRIES_LABEL": "countries",
+    "CAPS_LABEL": "caps",
+    "NO_CAPS_MAP": "No caps yet",
     "UNKNOWN": "Unknown",
     "EMPTY": "No caps in collection yet"
+  },
+  "COUNTRY_DETAIL": {
+    "BACK": "Back to Countries",
+    "NO_CAPS": "No caps from this country yet"
   },
   "LIST": {
     "SEARCH_PLACEHOLDER": "Search by name, manufacturer...",

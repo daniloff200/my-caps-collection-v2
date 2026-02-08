@@ -14,8 +14,14 @@
     "TITLE": "Kraje",
     "CAPS_IN": "kapsli w",
     "COUNTRIES_LABEL": "krajach",
+    "CAPS_LABEL": "kapsli",
+    "NO_CAPS_MAP": "Brak kapsli",
     "UNKNOWN": "Nieznane",
     "EMPTY": "Brak kapsli w kolekcji"
+  },
+  "COUNTRY_DETAIL": {
+    "BACK": "Wróć do krajów",
+    "NO_CAPS": "Brak kapsli z tego kraju"
   },
   "LIST": {
     "SEARCH_PLACEHOLDER": "Szukaj po nazwie, producencie...",
