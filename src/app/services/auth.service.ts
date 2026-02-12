@@ -12,7 +12,7 @@ export class AuthService {
   private authenticatedSubject = new BehaviorSubject<boolean>(false);
   authenticated$ = this.authenticatedSubject.asObservable();
 
-  readonly hint = '{FirstLetterName}{FirstLetterSurname}{BirthDate}!!';
+  readonly hint = 'DD-{BD}-!!';
 
   constructor() {
     this.authenticatedSubject.next(sessionStorage.getItem(SESSION_KEY) === 'true');
