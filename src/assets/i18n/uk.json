@@ -36,6 +36,11 @@
     "FOR_TRADE_OPTION": "Для обміну",
     "NOT_FOR_TRADE": "Не для обміну",
     "CAPS_FOUND": "Знайдено: {{count}}",
+    "SORT_NEWEST": "Спочатку нові",
+    "SORT_OLDEST": "Спочатку старі",
+    "SORT_NAME_AZ": "Назва А → Я",
+    "SORT_NAME_ZA": "Назва Я → А",
+    "SORT_COUNTRY": "За країною",
     "NO_CAPS": "Нічого не знайдено",
     "NO_CAPS_HINT": "Спробуйте змінити параметри пошуку або фільтри"
   },

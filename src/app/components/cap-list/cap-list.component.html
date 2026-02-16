@@ -86,11 +86,24 @@
     </div>
   </div>
 
-  <!-- Results Count -->
+  <!-- Results Count + Sort -->
   <div class="collection__meta">
     <span class="collection__count">
       {{ 'LIST.CAPS_FOUND' | translate:{ count: filteredCaps.length } }}
     </span>
+    <div class="collection__sort">
+      <select
+        class="sort-select"
+        [ngModel]="filters.sort"
+        (ngModelChange)="onSortChange($event)"
+      >
+        <option value="newest">{{ 'LIST.SORT_NEWEST' | translate }}</option>
+        <option value="oldest">{{ 'LIST.SORT_OLDEST' | translate }}</option>
+        <option value="name_asc">{{ 'LIST.SORT_NAME_AZ' | translate }}</option>
+        <option value="name_desc">{{ 'LIST.SORT_NAME_ZA' | translate }}</option>
+        <option value="country">{{ 'LIST.SORT_COUNTRY' | translate }}</option>
+      </select>
+    </div>
   </div>
 
   <!-- Grid -->

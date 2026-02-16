@@ -84,7 +84,7 @@ export class CapService {
   }
 
   private applyFilters(caps: Cap[], filters: CapFilters): Cap[] {
-    return caps.filter((cap) => {
+    const filtered = caps.filter((cap) => {
       if (filters.search) {
         const searchLower = filters.search.toLowerCase();
         const matchesSearch =
@@ -108,6 +108,36 @@ export class CapService {
 
       return true;
     });
+
+    return this.applySorting(filtered, filters.sort);
+  }
+
+  private applySorting(caps: Cap[], sort: string): Cap[] {
+    const sorted = [...caps];
+    switch (sort) {
+      case 'newest':
+        return sorted.sort((a, b) => this.parseDate(b.dateAdded) - this.parseDate(a.dateAdded));
+      case 'oldest':
+        return sorted.sort((a, b) => this.parseDate(a.dateAdded) - this.parseDate(b.dateAdded));
+      case 'name_asc':
+        return sorted.sort((a, b) => a.name.localeCompare(b.name));
+      case 'name_desc':
+        return sorted.sort((a, b) => b.name.localeCompare(a.name));
+      case 'country':
+        return sorted.sort((a, b) => a.country.localeCompare(b.country) || a.name.localeCompare(b.name));
+      default:
+        return sorted;
+    }
+  }
+
+  /** Parse DD/MM/YYYY to timestamp */
+  private parseDate(dateStr: string): number {
+    if (!dateStr) return 0;
+    const parts = dateStr.split('/');
+    if (parts.length === 3) {
+      return new Date(+parts[2], +parts[1] - 1, +parts[0]).getTime();
+    }
+    return 0;
   }
 
   updateFilters(filters: Partial<CapFilters>): void {

@@ -2,7 +2,7 @@ import { Component, OnDestroy, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { Subject, takeUntil } from 'rxjs';
-import { Cap, CapFilters, createDefaultFilters } from '../../models/cap.model';
+import { Cap, CapFilters, SortOption, createDefaultFilters } from '../../models/cap.model';
 import { CapService } from '../../services/cap.service';
 import { TranslateModule } from '@ngx-translate/core';
 import { CapCardComponent } from '../cap-card/cap-card.component';
@@ -90,6 +90,10 @@ export class CapListComponent implements OnInit, OnDestroy {
     if (this.filters.forTrade === true) return 'true';
     if (this.filters.forTrade === false) return 'false';
     return '';
+  }
+
+  onSortChange(sort: string): void {
+    this.capService.updateFilters({ sort: sort as SortOption });
   }
 
   trackByCap(index: number, cap: Cap): string {

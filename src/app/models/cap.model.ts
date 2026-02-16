@@ -10,11 +10,14 @@ export interface Cap {
   dateAdded: string;
 }
 
+export type SortOption = 'newest' | 'oldest' | 'name_asc' | 'name_desc' | 'country';
+
 export interface CapFilters {
   search: string;
   country: string;
   tag: string;
   forTrade: boolean | null;
+  sort: SortOption;
 }
 
 export function createDefaultFilters(): CapFilters {
@@ -23,5 +26,6 @@ export function createDefaultFilters(): CapFilters {
     country: '',
     tag: '',
     forTrade: null,
+    sort: 'newest',
   };
 }

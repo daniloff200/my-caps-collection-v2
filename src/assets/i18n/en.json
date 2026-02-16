@@ -36,6 +36,11 @@
     "FOR_TRADE_OPTION": "For trade",
     "NOT_FOR_TRADE": "Not for trade",
     "CAPS_FOUND": "{{count}} cap(s) found",
+    "SORT_NEWEST": "Newest first",
+    "SORT_OLDEST": "Oldest first",
+    "SORT_NAME_AZ": "Name A → Z",
+    "SORT_NAME_ZA": "Name Z → A",
+    "SORT_COUNTRY": "By country",
     "NO_CAPS": "No caps found",
     "NO_CAPS_HINT": "Try adjusting your search or filters"
   },

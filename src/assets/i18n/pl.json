@@ -36,6 +36,11 @@
     "FOR_TRADE_OPTION": "Na wymianę",
     "NOT_FOR_TRADE": "Nie na wymianę",
     "CAPS_FOUND": "Znaleziono: {{count}}",
+    "SORT_NEWEST": "Najnowsze",
+    "SORT_OLDEST": "Najstarsze",
+    "SORT_NAME_AZ": "Nazwa A → Z",
+    "SORT_NAME_ZA": "Nazwa Z → A",
+    "SORT_COUNTRY": "Wg kraju",
     "NO_CAPS": "Nic nie znaleziono",
     "NO_CAPS_HINT": "Spróbuj zmienić kryteria wyszukiwania lub filtry"
   },
