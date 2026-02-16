@@ -109,9 +109,38 @@
   <!-- Grid -->
   <div class="collection__grid" *ngIf="filteredCaps.length; else emptyState">
     <app-cap-card
-      *ngFor="let cap of filteredCaps; trackBy: trackByCap"
+      *ngFor="let cap of paginatedCaps; trackBy: trackByCap"
       [cap]="cap"
     ></app-cap-card>
+  </div>
+
+  <!-- Pagination -->
+  <div class="pagination" *ngIf="totalPages > 1">
+    <button
+      class="pagination__btn"
+      [disabled]="currentPage === 1"
+      (click)="goToPage(currentPage - 1)"
+    >‹</button>
+
+    <ng-container *ngFor="let page of visiblePages; let i = index">
+      <!-- Gap indicator -->
+      <span
+        class="pagination__dots"
+        *ngIf="i > 0 && page - visiblePages[i - 1] > 1"
+      >…</span>
+
+      <button
+        class="pagination__btn"
+        [class.pagination__btn--active]="page === currentPage"
+        (click)="goToPage(page)"
+      >{{ page }}</button>
+    </ng-container>
+
+    <button
+      class="pagination__btn"
+      [disabled]="currentPage === totalPages"
+      (click)="goToPage(currentPage + 1)"
+    >›</button>
   </div>
 
   <ng-template #emptyState>
