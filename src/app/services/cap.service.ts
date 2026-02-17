@@ -69,15 +69,39 @@ export class CapService {
           ...d,
           forTrade: d.forTrade ?? false,
           needsReplacement: d.needsReplacement ?? false,
+          createdAt: d.createdAt ?? 0,
         })) as Cap[];
         this.capsSubject.next(caps);
         this.loadedSubject.next(true);
+
+        // Backfill createdAt for old records that don't have it
+        this.backfillCreatedAt(caps);
       },
       error: (err) => {
         console.error('Firestore read error:', err);
         this.loadedSubject.next(true);
       },
     });
+  }
+
+  private backfillDone = false;
+
+  private async backfillCreatedAt(caps: Cap[]): Promise<void> {
+    if (this.backfillDone) return;
+    this.backfillDone = true;
+
+    const toFix = caps.filter((c) => !c.createdAt && c.dateAdded);
+    for (const cap of toFix) {
+      const ts = this.parseDateStr(cap.dateAdded);
+      if (ts > 0) {
+        try {
+          const docRef = doc(this.firestore, COLLECTION_NAME, cap.id);
+          await updateDoc(docRef, { createdAt: ts });
+        } catch (err) {
+          console.warn('Backfill failed for', cap.id, err);
+        }
+      }
+    }
   }
 
   private formatDate(date: Date): string {
@@ -120,9 +144,9 @@ export class CapService {
     const sorted = [...caps];
     switch (sort) {
       case 'newest':
-        return sorted.sort((a, b) => this.parseDate(b.dateAdded) - this.parseDate(a.dateAdded));
+        return sorted.sort((a, b) => this.getTimestamp(b) - this.getTimestamp(a));
       case 'oldest':
-        return sorted.sort((a, b) => this.parseDate(a.dateAdded) - this.parseDate(b.dateAdded));
+        return sorted.sort((a, b) => this.getTimestamp(a) - this.getTimestamp(b));
       case 'name_asc':
         return sorted.sort((a, b) => a.name.localeCompare(b.name));
       case 'name_desc':
@@ -134,8 +158,14 @@ export class CapService {
     }
   }
 
-  /** Parse DD/MM/YYYY to timestamp */
-  private parseDate(dateStr: string): number {
+  /** Get precise timestamp: use createdAt if available, fallback to parsing dateAdded */
+  private getTimestamp(cap: Cap): number {
+    if (cap.createdAt) return cap.createdAt;
+    return this.parseDateStr(cap.dateAdded);
+  }
+
+  /** Parse DD/MM/YYYY to timestamp (fallback for old records) */
+  private parseDateStr(dateStr: string): number {
     if (!dateStr) return 0;
     const parts = dateStr.split('/');
     if (parts.length === 3) {
@@ -179,6 +209,7 @@ export class CapService {
       imageUrl: cap.imageUrl || '',
       description: cap.description || '',
       dateAdded: this.formatDate(new Date()),
+      createdAt: Date.now(),
     };
     const docRef = await addDoc(this.capsCollection, capData);
     return { ...capData, id: docRef.id } as Cap;

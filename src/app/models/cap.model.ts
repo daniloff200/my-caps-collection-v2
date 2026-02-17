@@ -9,6 +9,7 @@ export interface Cap {
   forTrade: boolean;
   needsReplacement: boolean;
   dateAdded: string;
+  createdAt?: number; // Unix timestamp in ms for precise sorting
 }
 
 export type SortOption = 'newest' | 'oldest' | 'name_asc' | 'name_desc' | 'country';
