@@ -5,6 +5,7 @@
       <span>🍺</span>
     </div>
     <span *ngIf="cap.forTrade" class="card__trade-badge">{{ 'CARD.FOR_TRADE' | translate }}</span>
+    <span *ngIf="cap.needsReplacement" class="card__replace-badge">{{ 'CARD.REPLACE' | translate }}</span>
   </div>
   <div class="card__body">
     <h3 class="card__name">{{ cap.name }}</h3>

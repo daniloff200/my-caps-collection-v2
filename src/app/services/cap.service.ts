@@ -65,7 +65,11 @@ export class CapService {
   private subscribeToFirestore(): void {
     collectionData(this.capsCollection, { idField: 'id' }).subscribe({
       next: (data) => {
-        const caps = data as Cap[];
+        const caps = (data as any[]).map((d) => ({
+          ...d,
+          forTrade: d.forTrade ?? false,
+          needsReplacement: d.needsReplacement ?? false,
+        })) as Cap[];
         this.capsSubject.next(caps);
         this.loadedSubject.next(true);
       },

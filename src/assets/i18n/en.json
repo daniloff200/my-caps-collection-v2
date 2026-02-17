@@ -45,11 +45,13 @@
     "NO_CAPS_HINT": "Try adjusting your search or filters"
   },
   "CARD": {
-    "FOR_TRADE": "FOR TRADE"
+    "FOR_TRADE": "FOR TRADE",
+    "REPLACE": "REPLACE"
   },
   "DETAIL": {
     "BACK": "← Back to Collection",
     "FOR_TRADE": "For Trade",
+    "NEEDS_REPLACEMENT": "Needs Replacement",
     "COUNTRY": "Country",
     "MANUFACTURER": "Manufacturer",
     "ADDED": "Added",
@@ -90,6 +92,7 @@
     "DESCRIPTION": "Description",
     "DESCRIPTION_PLACEHOLDER": "What makes this cap special?",
     "FOR_TRADE": "Available for trade",
+    "NEEDS_REPLACEMENT": "Needs replacement (bad condition)",
     "CANCEL": "Cancel",
     "SAVING": "Saving...",
     "SAVE_CHANGES": "Save Changes",

@@ -7,6 +7,7 @@ export interface Cap {
   imageUrl?: string;
   description?: string;
   forTrade: boolean;
+  needsReplacement: boolean;
   dateAdded: string;
 }
 

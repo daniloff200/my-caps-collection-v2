@@ -30,6 +30,7 @@ export class CapFormComponent implements OnInit {
   imageUrl = '';
   description = '';
   forTrade = false;
+  needsReplacement = false;
 
   // Image upload
   selectedFile: File | null = null;
@@ -66,6 +67,7 @@ export class CapFormComponent implements OnInit {
         this.imageUrl = cap.imageUrl || '';
         this.description = cap.description || '';
         this.forTrade = cap.forTrade;
+        this.needsReplacement = cap.needsReplacement ?? false;
       }
     }
   }
@@ -210,6 +212,7 @@ export class CapFormComponent implements OnInit {
           imageUrl: finalImageUrl,
           description: this.description.trim(),
           forTrade: this.forTrade,
+          needsReplacement: this.needsReplacement,
         };
 
         await this.capService.updateCap(this.capId, capData);
@@ -225,6 +228,7 @@ export class CapFormComponent implements OnInit {
           imageUrl: '',
           description: this.description.trim(),
           forTrade: this.forTrade,
+          needsReplacement: this.needsReplacement,
         };
 
         const newCap = await this.capService.addCap(capData as Omit<Cap, 'id' | 'dateAdded'>);

@@ -45,11 +45,13 @@
     "NO_CAPS_HINT": "Попробуйте изменить параметры поиска или фильтры"
   },
   "CARD": {
-    "FOR_TRADE": "ОБМЕН"
+    "FOR_TRADE": "ОБМЕН",
+    "REPLACE": "ЗАМЕНА"
   },
   "DETAIL": {
     "BACK": "← Назад к коллекции",
     "FOR_TRADE": "Для обмена",
+    "NEEDS_REPLACEMENT": "Требуется замена",
     "COUNTRY": "Страна",
     "MANUFACTURER": "Производитель",
     "ADDED": "Добавлено",
@@ -90,6 +92,7 @@
     "DESCRIPTION": "Описание",
     "DESCRIPTION_PLACEHOLDER": "Что особенного в этой крышке?",
     "FOR_TRADE": "Доступна для обмена",
+    "NEEDS_REPLACEMENT": "Требуется замена (плохое состояние)",
     "CANCEL": "Отмена",
     "SAVING": "Сохранение...",
     "SAVE_CHANGES": "Сохранить",

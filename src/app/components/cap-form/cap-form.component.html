@@ -193,7 +193,7 @@
       ></textarea>
     </div>
 
-    <!-- For Trade -->
+    <!-- For Trade & Needs Replacement -->
     <div class="form__group form__group--checkbox">
       <label class="form__checkbox">
         <input
@@ -203,6 +203,18 @@
         />
         <span class="form__checkbox-mark"></span>
         <span class="form__checkbox-text">{{ 'FORM.FOR_TRADE' | translate }}</span>
+      </label>
+    </div>
+
+    <div class="form__group form__group--checkbox">
+      <label class="form__checkbox form__checkbox--replace">
+        <input
+          type="checkbox"
+          [(ngModel)]="needsReplacement"
+          name="needsReplacement"
+        />
+        <span class="form__checkbox-mark form__checkbox-mark--replace"></span>
+        <span class="form__checkbox-text">{{ 'FORM.NEEDS_REPLACEMENT' | translate }}</span>
       </label>
     </div>
 

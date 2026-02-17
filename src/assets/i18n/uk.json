@@ -45,11 +45,13 @@
     "NO_CAPS_HINT": "Спробуйте змінити параметри пошуку або фільтри"
   },
   "CARD": {
-    "FOR_TRADE": "ОБМІН"
+    "FOR_TRADE": "ОБМІН",
+    "REPLACE": "ЗАМІНА"
   },
   "DETAIL": {
     "BACK": "← Назад до колекції",
     "FOR_TRADE": "Для обміну",
+    "NEEDS_REPLACEMENT": "Потрібна заміна",
     "COUNTRY": "Країна",
     "MANUFACTURER": "Виробник",
     "ADDED": "Додано",
@@ -90,6 +92,7 @@
     "DESCRIPTION": "Опис",
     "DESCRIPTION_PLACEHOLDER": "Що особливого в цій кришці?",
     "FOR_TRADE": "Доступна для обміну",
+    "NEEDS_REPLACEMENT": "Потрібна заміна (поганий стан)",
     "CANCEL": "Скасувати",
     "SAVING": "Збереження...",
     "SAVE_CHANGES": "Зберегти",

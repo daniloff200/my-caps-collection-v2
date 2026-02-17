@@ -54,6 +54,20 @@
   letter-spacing: 0.5px;
 }
 
+.card__replace-badge {
+  position: absolute;
+  top: 8px;
+  left: 8px;
+  background: #e53e3e;
+  color: #fff;
+  font-size: 10px;
+  font-weight: 600;
+  padding: 3px 7px;
+  border-radius: 6px;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
 .card__body {
   padding: 14px;
   display: flex;

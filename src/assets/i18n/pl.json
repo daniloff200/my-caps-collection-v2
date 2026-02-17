@@ -45,11 +45,13 @@
     "NO_CAPS_HINT": "Spróbuj zmienić kryteria wyszukiwania lub filtry"
   },
   "CARD": {
-    "FOR_TRADE": "WYMIANA"
+    "FOR_TRADE": "WYMIANA",
+    "REPLACE": "WYMIEŃ"
   },
   "DETAIL": {
     "BACK": "← Wróć do kolekcji",
     "FOR_TRADE": "Na wymianę",
+    "NEEDS_REPLACEMENT": "Wymaga wymiany",
     "COUNTRY": "Kraj",
     "MANUFACTURER": "Producent",
     "ADDED": "Dodano",
@@ -90,6 +92,7 @@
     "DESCRIPTION": "Opis",
     "DESCRIPTION_PLACEHOLDER": "Co wyróżnia ten kapsel?",
     "FOR_TRADE": "Dostępny na wymianę",
+    "NEEDS_REPLACEMENT": "Wymaga wymiany (zły stan)",
     "CANCEL": "Anuluj",
     "SAVING": "Zapisywanie...",
     "SAVE_CHANGES": "Zapisz zmiany",

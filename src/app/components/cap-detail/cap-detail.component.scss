@@ -84,6 +84,18 @@
   white-space: nowrap;
 }
 
+.detail__replace-badge {
+  background: #e53e3e;
+  color: #fff;
+  font-size: 12px;
+  font-weight: 600;
+  padding: 4px 10px;
+  border-radius: 6px;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  white-space: nowrap;
+}
+
 .detail__meta {
   display: flex;
   gap: 32px;

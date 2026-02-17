@@ -15,6 +15,7 @@
       <div class="detail__header">
         <h1 class="detail__name">{{ cap.name }}</h1>
         <span *ngIf="cap.forTrade" class="detail__trade-badge">{{ 'DETAIL.FOR_TRADE' | translate }}</span>
+        <span *ngIf="cap.needsReplacement" class="detail__replace-badge">{{ 'DETAIL.NEEDS_REPLACEMENT' | translate }}</span>
       </div>
 
       <div class="detail__meta">
