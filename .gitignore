@@ -2,5 +2,7 @@
 node_modules/
 dist/
 .env
+.angular
+.firebase
 src/environments/environment.ts
 src/environments/environment.prod.ts
