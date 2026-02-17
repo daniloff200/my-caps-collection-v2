@@ -1,22 +1,23 @@
 <div class="collection">
-  <!-- Search & Filter Bar -->
-  <div class="collection__toolbar">
-    <div class="search-box">
-      <span class="search-box__icon">🔍</span>
-      <input
-        type="text"
-        class="search-box__input"
-        [placeholder]="'LIST.SEARCH_PLACEHOLDER' | translate"
-        [ngModel]="filters.search"
-        (ngModelChange)="onSearchChange($event)"
-      />
-      <button
-        *ngIf="filters.search"
-        class="search-box__clear"
-        (click)="onSearchChange('')"
-      >×</button>
-    </div>
+  <!-- Search -->
+  <div class="search-box">
+    <span class="search-box__icon">🔍</span>
+    <input
+      type="text"
+      class="search-box__input"
+      [placeholder]="'LIST.SEARCH_PLACEHOLDER' | translate"
+      [ngModel]="filters.search"
+      (ngModelChange)="onSearchChange($event)"
+    />
+    <button
+      *ngIf="filters.search"
+      class="search-box__clear"
+      (click)="onSearchChange('')"
+    >×</button>
+  </div>
 
+  <!-- Filter Bar -->
+  <div class="collection__toolbar">
     <button
       class="btn btn--trade"
       [class.btn--trade-active]="filters.forTrade === true"
