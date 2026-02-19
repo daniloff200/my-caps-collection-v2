@@ -5,11 +5,12 @@ import { Subject, takeUntil, switchMap } from 'rxjs';
 import { TranslateModule } from '@ngx-translate/core';
 import { Cap } from '../../models/cap.model';
 import { CapService } from '../../services/cap.service';
+import { CountryFlagPipe } from '../../pipes/country-flag.pipe';
 
 @Component({
   selector: 'app-country-detail',
   standalone: true,
-  imports: [CommonModule, RouterLink, TranslateModule],
+  imports: [CommonModule, RouterLink, TranslateModule, CountryFlagPipe],
   templateUrl: './country-detail.component.html',
   styleUrls: ['./country-detail.component.scss'],
 })

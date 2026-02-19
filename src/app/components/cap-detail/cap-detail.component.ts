@@ -8,11 +8,12 @@ import { ToastService } from '../../services/toast.service';
 import { ImageUploadService } from '../../services/image-upload.service';
 import { TranslateModule, TranslateService } from '@ngx-translate/core';
 import { TagBadgeComponent } from '../tag-badge/tag-badge.component';
+import { CountryFlagPipe } from '../../pipes/country-flag.pipe';
 
 @Component({
   selector: 'app-cap-detail',
   standalone: true,
-  imports: [CommonModule, RouterLink, TranslateModule, TagBadgeComponent],
+  imports: [CommonModule, RouterLink, TranslateModule, TagBadgeComponent, CountryFlagPipe],
   templateUrl: './cap-detail.component.html',
   styleUrls: ['./cap-detail.component.scss'],
 })

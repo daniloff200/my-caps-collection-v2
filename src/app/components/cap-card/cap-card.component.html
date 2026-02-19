@@ -10,7 +10,7 @@
   <div class="card__body">
     <h3 class="card__name">{{ cap.name }}</h3>
     <div class="card__info">
-      <span class="card__country">{{ cap.country }}</span>
+      <span class="card__country">{{ cap.country | countryFlag }} {{ cap.country }}</span>
       <span class="card__dot">·</span>
       <span class="card__manufacturer">{{ cap.manufacturer }}</span>
     </div>

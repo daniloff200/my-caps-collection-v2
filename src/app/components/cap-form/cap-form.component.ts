@@ -10,11 +10,12 @@ import { COUNTRIES } from '../../data/countries';
 import { COMMON_TAGS } from '../../data/tags';
 import { TranslateModule, TranslateService } from '@ngx-translate/core';
 import { TagBadgeComponent } from '../tag-badge/tag-badge.component';
+import { CountryFlagPipe } from '../../pipes/country-flag.pipe';
 
 @Component({
   selector: 'app-cap-form',
   standalone: true,
-  imports: [CommonModule, FormsModule, TranslateModule, TagBadgeComponent],
+  imports: [CommonModule, FormsModule, TranslateModule, TagBadgeComponent, CountryFlagPipe],
   templateUrl: './cap-form.component.html',
   styleUrls: ['./cap-form.component.scss'],
 })

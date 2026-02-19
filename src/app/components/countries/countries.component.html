@@ -44,6 +44,7 @@
   >
     <div class="country-block__header">
       <div class="country-block__left" (click)="toggleCountry(group.country)">
+        <span class="country-block__flag">{{ group.country | countryFlag }}</span>
         <span class="country-block__name">{{ group.country }}</span>
       </div>
       <div class="country-block__right">
