@@ -221,6 +221,7 @@ const SPECIAL_FLAGS: Record<string, string> = {
   'DDR': '⚒️',
   'Yugoslavia': '★',
   'Russian Federation': '🏳️‍🌈',
+  'Belarus': '🏳️🚩🏳️',
 };
 
 function alpha2ToFlag(code: string): string {
