@@ -6,7 +6,7 @@ import { TranslateModule } from '@ngx-translate/core';
 import { Cap } from '../../models/cap.model';
 import { CapService } from '../../services/cap.service';
 import { WorldMapComponent } from '../world-map/world-map.component';
-import { CountryFlagPipe } from '../../pipes/country-flag.pipe';
+import { CountryFlagComponent } from '../country-flag/country-flag.component';
 
 interface CountryGroup {
   country: string;
@@ -17,7 +17,7 @@ interface CountryGroup {
 @Component({
   selector: 'app-countries',
   standalone: true,
-  imports: [CommonModule, RouterLink, TranslateModule, WorldMapComponent, CountryFlagPipe],
+  imports: [CommonModule, RouterLink, TranslateModule, WorldMapComponent, CountryFlagComponent],
   templateUrl: './countries.component.html',
   styleUrls: ['./countries.component.scss'],
 })

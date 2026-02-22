@@ -38,7 +38,7 @@
           required
         >
           <option value="" disabled>{{ 'FORM.SELECT_COUNTRY' | translate }}</option>
-          <option *ngFor="let c of countries" [value]="c">{{ c }} {{ c | countryFlag }}</option>
+          <option *ngFor="let c of countries" [value]="c">{{ c }} {{ c | countryFlagEmoji }}</option>
         </select>
         <span class="form__error" *ngIf="countryField.invalid && countryField.touched">
           {{ 'FORM.COUNTRY_REQUIRED' | translate }}

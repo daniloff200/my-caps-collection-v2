@@ -67,7 +67,7 @@
         >
           <option value="">{{ 'LIST.ALL_COUNTRIES' | translate }}</option>
           <option *ngFor="let country of allCountries" [value]="country">
-            {{ country }} {{ country | countryFlag }}
+            {{ country }} {{ country | countryFlagEmoji }}
           </option>
         </select>
       </div>

@@ -4,7 +4,7 @@
   </a>
 
   <div class="country-detail__header">
-    <h1 class="country-detail__title">{{ countryName | countryFlag }} {{ countryName }}</h1>
+    <h1 class="country-detail__title"><app-country-flag [country]="countryName"></app-country-flag> {{ countryName }}</h1>
     <span class="country-detail__count">{{ caps.length }} {{ 'COUNTRIES.CAPS_LABEL' | translate }}</span>
   </div>
 
