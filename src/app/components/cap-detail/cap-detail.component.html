@@ -33,6 +33,13 @@
         </div>
       </div>
 
+      <div class="detail__meta-item detail__cci" *ngIf="cap.cciUrl && cciId">
+        <span class="detail__meta-label">CrownCaps.info</span>
+        <span class="detail__meta-value">
+          <a [href]="cap.cciUrl" target="_blank" rel="noopener noreferrer" class="detail__cci-link">#{{ cciId }}</a>
+        </span>
+      </div>
+
       <div class="detail__description" *ngIf="cap.description">
         <p>{{ cap.description }}</p>
       </div>

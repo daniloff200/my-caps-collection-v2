@@ -129,6 +129,18 @@
   }
 }
 
+.detail__cci-link {
+  color: #63b3ed;
+  text-decoration: none;
+  font-weight: 500;
+  transition: color 0.2s ease;
+
+  &:hover {
+    color: #90cdf4;
+    text-decoration: underline;
+  }
+}
+
 .detail__tags-label {
   display: block;
   font-size: 12px;

@@ -69,6 +69,7 @@ export class CapService {
           ...d,
           forTrade: d.forTrade ?? false,
           needsReplacement: d.needsReplacement ?? false,
+          cciUrl: d.cciUrl ?? '',
           createdAt: d.createdAt ?? 0,
         })) as Cap[];
         this.capsSubject.next(caps);

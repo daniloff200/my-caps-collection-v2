@@ -193,6 +193,20 @@
       ></textarea>
     </div>
 
+    <!-- CCI URL -->
+    <div class="form__group">
+      <label class="form__label" for="cciUrl">{{ 'FORM.CCI_URL' | translate }}</label>
+      <input
+        type="url"
+        id="cciUrl"
+        class="form__input"
+        [placeholder]="'FORM.CCI_URL_PLACEHOLDER' | translate"
+        [(ngModel)]="cciUrl"
+        name="cciUrl"
+      />
+      <span class="form__hint">{{ 'FORM.CCI_URL_HINT' | translate }}</span>
+    </div>
+
     <!-- For Trade & Needs Replacement -->
     <div class="form__group form__group--checkbox">
       <label class="form__checkbox">

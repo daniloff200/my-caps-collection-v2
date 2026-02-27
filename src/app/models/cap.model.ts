@@ -8,6 +8,7 @@ export interface Cap {
   description?: string;
   forTrade: boolean;
   needsReplacement: boolean;
+  cciUrl?: string;
   dateAdded: string;
   createdAt?: number; // Unix timestamp in ms for precise sorting
 }

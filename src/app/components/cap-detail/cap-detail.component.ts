@@ -42,6 +42,12 @@ export class CapDetailComponent implements OnInit {
     this.loading = false;
   }
 
+  get cciId(): string {
+    if (!this.cap?.cciUrl) return '';
+    const match = this.cap.cciUrl.match(/\/(\d+)\/?$/);
+    return match ? match[1] : '';
+  }
+
   async onDelete(): Promise<void> {
     if (this.cap && confirm('Are you sure you want to delete this cap?')) {
       try {
