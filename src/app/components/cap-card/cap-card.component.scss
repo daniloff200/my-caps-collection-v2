@@ -101,6 +101,19 @@
   white-space: nowrap;
 }
 
+.card__cci {
+  color: #63b3ed;
+  font-size: 12px;
+  white-space: nowrap;
+  margin-left: auto;
+  text-decoration: none;
+
+  &:hover {
+    text-decoration: underline;
+    color: #90cdf4;
+  }
+}
+
 .card__tags {
   display: flex;
   flex-wrap: wrap;

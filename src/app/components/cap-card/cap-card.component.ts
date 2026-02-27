@@ -15,4 +15,10 @@ import { CountryFlagComponent } from '../country-flag/country-flag.component';
 })
 export class CapCardComponent {
   @Input({ required: true }) cap!: Cap;
+
+  get cciId(): string {
+    if (!this.cap?.cciUrl) return '';
+    const match = this.cap.cciUrl.match(/\/(\d+)\/?$/);
+    return match ? match[1] : '';
+  }
 }
