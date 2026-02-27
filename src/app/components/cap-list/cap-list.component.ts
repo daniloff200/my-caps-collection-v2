@@ -23,6 +23,7 @@ export class CapListComponent implements OnInit, OnDestroy {
   allCountries: string[] = [];
   filters: CapFilters = createDefaultFilters();
   showFilters = false;
+  loaded = false;
 
   // Pagination
   readonly pageSize = 25;
@@ -33,6 +34,10 @@ export class CapListComponent implements OnInit, OnDestroy {
   constructor(private capService: CapService) {}
 
   ngOnInit(): void {
+    this.capService.loaded$
+      .pipe(takeUntil(this.destroy$))
+      .subscribe((loaded) => (this.loaded = loaded));
+
     this.capService.filteredCaps$
       .pipe(takeUntil(this.destroy$))
       .subscribe((caps) => {

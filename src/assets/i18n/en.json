@@ -41,6 +41,7 @@
     "SORT_NAME_AZ": "Name A → Z",
     "SORT_NAME_ZA": "Name Z → A",
     "SORT_COUNTRY": "By country",
+    "LOADING": "Loading collection...",
     "NO_CAPS": "No caps found",
     "NO_CAPS_HINT": "Try adjusting your search or filters"
   },

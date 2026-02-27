@@ -1,3 +1,114 @@
+// Loader — beer mug filling animation
+.loader {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 120px 24px;
+  gap: 28px;
+}
+
+.beer-mug {
+  position: relative;
+  display: flex;
+  align-items: flex-end;
+}
+
+.beer-mug__glass {
+  position: relative;
+  width: 72px;
+  height: 96px;
+  background: rgba(255, 255, 255, 0.08);
+  border: 3px solid rgba(255, 255, 255, 0.2);
+  border-radius: 4px 4px 8px 8px;
+  overflow: hidden;
+}
+
+.beer-mug__beer {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  background: linear-gradient(180deg, #f5c542 0%, #e5a820 100%);
+  border-radius: 0 0 5px 5px;
+  animation: fillBeer 2.5s ease-in-out infinite;
+}
+
+.beer-mug__foam {
+  position: absolute;
+  top: -14px;
+  left: -3px;
+  right: -3px;
+  height: 18px;
+  display: flex;
+  justify-content: center;
+  animation: foamAppear 2.5s ease-in-out infinite;
+}
+
+.beer-mug__foam-bubble {
+  position: absolute;
+  background: #fffbe6;
+  border-radius: 50%;
+
+  &--1 { width: 22px; height: 18px; left: 0; top: 2px; }
+  &--2 { width: 20px; height: 17px; left: 14px; top: -2px; }
+  &--3 { width: 24px; height: 19px; left: 28px; top: 0; }
+  &--4 { width: 18px; height: 16px; left: 48px; top: -1px; }
+  &--5 { width: 16px; height: 15px; left: 60px; top: 3px; }
+}
+
+.beer-mug__bubble {
+  position: absolute;
+  background: rgba(255, 255, 255, 0.35);
+  border-radius: 50%;
+  animation: riseBubble 2s ease-in infinite;
+
+  &--1 { width: 4px; height: 4px; left: 20px; bottom: 8px; animation-delay: 0.3s; animation-duration: 1.8s; }
+  &--2 { width: 3px; height: 3px; left: 40px; bottom: 5px; animation-delay: 0.8s; animation-duration: 2.1s; }
+  &--3 { width: 5px; height: 5px; left: 52px; bottom: 10px; animation-delay: 1.3s; animation-duration: 1.6s; }
+}
+
+.beer-mug__handle {
+  width: 14px;
+  height: 48px;
+  border: 3px solid rgba(255, 255, 255, 0.2);
+  border-left: none;
+  border-radius: 0 10px 10px 0;
+  margin-bottom: 14px;
+  margin-left: -1px;
+}
+
+@keyframes fillBeer {
+  0%, 5% { height: 0; }
+  40% { height: 80%; }
+  70%, 85% { height: 75%; }
+  100% { height: 0; }
+}
+
+@keyframes foamAppear {
+  0%, 15% { opacity: 0; transform: scaleY(0); }
+  35% { opacity: 1; transform: scaleY(1); }
+  75% { opacity: 1; transform: scaleY(1); }
+  95%, 100% { opacity: 0; transform: scaleY(0); }
+}
+
+@keyframes riseBubble {
+  0% { transform: translateY(0); opacity: 0.6; }
+  100% { transform: translateY(-70px); opacity: 0; }
+}
+
+.loader__text {
+  color: #718096;
+  font-size: 15px;
+  margin: 0;
+  animation: loaderPulse 1.5s ease-in-out infinite;
+}
+
+@keyframes loaderPulse {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.4; }
+}
+
 .collection {
   max-width: 1400px;
   margin: 0 auto;

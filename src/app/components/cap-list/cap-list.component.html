@@ -1,4 +1,26 @@
-<div class="collection">
+<!-- Loader -->
+<div class="loader" *ngIf="!loaded">
+  <div class="beer-mug">
+    <div class="beer-mug__glass">
+      <div class="beer-mug__beer">
+        <div class="beer-mug__foam">
+          <div class="beer-mug__foam-bubble beer-mug__foam-bubble--1"></div>
+          <div class="beer-mug__foam-bubble beer-mug__foam-bubble--2"></div>
+          <div class="beer-mug__foam-bubble beer-mug__foam-bubble--3"></div>
+          <div class="beer-mug__foam-bubble beer-mug__foam-bubble--4"></div>
+          <div class="beer-mug__foam-bubble beer-mug__foam-bubble--5"></div>
+        </div>
+      </div>
+      <div class="beer-mug__bubble beer-mug__bubble--1"></div>
+      <div class="beer-mug__bubble beer-mug__bubble--2"></div>
+      <div class="beer-mug__bubble beer-mug__bubble--3"></div>
+    </div>
+    <div class="beer-mug__handle"></div>
+  </div>
+  <p class="loader__text">{{ 'LIST.LOADING' | translate }}</p>
+</div>
+
+<div class="collection" *ngIf="loaded">
   <!-- Search -->
   <div class="search-box">
     <span class="search-box__icon">🔍</span>
