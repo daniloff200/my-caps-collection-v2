@@ -63,4 +63,7 @@ export const COMMON_TAGS: string[] = [
   'bush',
   'vehicle',
   'year',
+  'qr-code',
+  'music',
+  'heart',
 ];
