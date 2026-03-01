@@ -51,6 +51,19 @@
         </div>
       </div>
 
+      <div class="detail__colors" *ngIf="cap.colors?.length">
+        <span class="detail__tags-label">{{ 'DETAIL.COLORS' | translate }}</span>
+        <div class="detail__colors-list">
+          <span
+            *ngFor="let color of cap.colors"
+            class="detail__color-dot"
+            [style.background]="getColorHex(color)"
+            [style.border-color]="getColorBorder(color)"
+            [title]="color"
+          ></span>
+        </div>
+      </div>
+
       <div class="detail__actions" *ngIf="isAuthenticated">
         <a [routerLink]="['/cap', cap.id, 'edit']" class="btn btn--primary">{{ 'DETAIL.EDIT' | translate }}</a>
         <button class="btn btn--danger" (click)="onDelete()">{{ 'DETAIL.DELETE' | translate }}</button>

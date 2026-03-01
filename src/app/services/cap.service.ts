@@ -69,6 +69,7 @@ export class CapService {
           ...d,
           forTrade: d.forTrade ?? false,
           needsReplacement: d.needsReplacement ?? false,
+          colors: d.colors ?? [],
           cciUrl: d.cciUrl ?? '',
           createdAt: d.createdAt ?? 0,
         })) as Cap[];
@@ -131,11 +132,11 @@ export class CapService {
         return false;
       }
 
-      if (filters.forTrade !== null && cap.forTrade !== filters.forTrade) {
+      if (filters.color && !cap.colors?.includes(filters.color)) {
         return false;
       }
 
-      return true;
+      return !(filters.forTrade !== null && cap.forTrade !== filters.forTrade);
     });
 
     return this.applySorting(filtered, filters.sort);

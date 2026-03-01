@@ -4,6 +4,7 @@ export interface Cap {
   country: string;
   manufacturer: string;
   tags: string[];
+  colors: string[];
   imageUrl?: string;
   description?: string;
   forTrade: boolean;
@@ -19,6 +20,7 @@ export interface CapFilters {
   search: string;
   country: string;
   tag: string;
+  color: string;
   forTrade: boolean | null;
   sort: SortOption;
 }
@@ -28,6 +30,7 @@ export function createDefaultFilters(): CapFilters {
     search: '',
     country: '',
     tag: '',
+    color: '',
     forTrade: null,
     sort: 'newest',
   };

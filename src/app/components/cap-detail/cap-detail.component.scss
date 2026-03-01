@@ -157,6 +157,19 @@
   gap: 6px;
 }
 
+.detail__colors-list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.detail__color-dot {
+  width: 22px;
+  height: 22px;
+  border-radius: 50%;
+  border: 2px solid;
+}
+
 .detail__actions {
   display: flex;
   gap: 12px;

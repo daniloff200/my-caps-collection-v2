@@ -101,6 +101,26 @@
       </div>
     </div>
 
+    <!-- Colors -->
+    <div class="form__group">
+      <label class="form__label">{{ 'FORM.COLORS' | translate }}</label>
+      <div class="color-picker">
+        <button
+          type="button"
+          *ngFor="let c of capColors"
+          class="color-picker__dot"
+          [class.color-picker__dot--active]="colors.includes(c.id)"
+          [style.background]="c.hex"
+          [style.border-color]="c.border || c.hex"
+          [title]="c.id"
+          (click)="toggleColor(c.id)"
+        >
+          <span class="color-picker__check" *ngIf="colors.includes(c.id)">✓</span>
+        </button>
+      </div>
+      <span class="form__hint">{{ 'FORM.COLORS_HINT' | translate }}</span>
+    </div>
+
     <!-- Image Upload -->
     <div class="form__group">
       <label class="form__label">{{ 'FORM.PHOTO' | translate }}</label>

@@ -99,6 +99,44 @@
   margin-top: 6px;
 }
 
+// Color picker
+.color-picker {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+
+.color-picker__dot {
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  border: 3px solid;
+  cursor: pointer;
+  position: relative;
+  transition: all 0.2s ease;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0;
+
+  &:hover {
+    transform: scale(1.15);
+  }
+
+  &--active {
+    transform: scale(1.15);
+    box-shadow: 0 0 0 3px rgba(245, 197, 66, 0.4);
+  }
+}
+
+.color-picker__check {
+  font-size: 14px;
+  font-weight: 700;
+  color: #fff;
+  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.5);
+  line-height: 1;
+}
+
 // Upload zone
 .upload-zone {
   display: flex;

@@ -11,6 +11,7 @@ export const SEED_CAPS: Cap[] = [
     description: 'Classic Latvian lager with golden star on the cap',
     forTrade: false,
     needsReplacement: false,
+    colors: [],
     dateAdded: '15/01/2024',
   },
   {
@@ -23,6 +24,7 @@ export const SEED_CAPS: Cap[] = [
     description: 'The original pilsner beer, green cap with coat of arms',
     forTrade: true,
     needsReplacement: false,
+    colors: [],
     dateAdded: '10/02/2024',
   },
   {
@@ -35,6 +37,7 @@ export const SEED_CAPS: Cap[] = [
     description: 'Iconic black cap with the Guinness harp',
     forTrade: false,
     needsReplacement: false,
+    colors: [],
     dateAdded: '05/03/2024',
   },
   {
@@ -47,6 +50,7 @@ export const SEED_CAPS: Cap[] = [
     description: 'Bavarian wheat beer with the monk logo',
     forTrade: true,
     needsReplacement: false,
+    colors: [],
     dateAdded: '20/03/2024',
   },
   {
@@ -59,6 +63,7 @@ export const SEED_CAPS: Cap[] = [
     description: 'Belgian Trappist ale, dark blue cap with shield emblem',
     forTrade: false,
     needsReplacement: false,
+    colors: [],
     dateAdded: '01/04/2024',
   },
   {
@@ -71,6 +76,7 @@ export const SEED_CAPS: Cap[] = [
     description: 'Russian export lager, silver cap with number 7',
     forTrade: true,
     needsReplacement: false,
+    colors: [],
     dateAdded: '15/04/2024',
   },
   {
@@ -83,6 +89,7 @@ export const SEED_CAPS: Cap[] = [
     description: 'Green cap with red star',
     forTrade: false,
     needsReplacement: false,
+    colors: [],
     dateAdded: '01/05/2024',
   },
   {
@@ -95,6 +102,7 @@ export const SEED_CAPS: Cap[] = [
     description: 'Blue cap with BrewDog punk logo',
     forTrade: false,
     needsReplacement: false,
+    colors: [],
     dateAdded: '20/05/2024',
   },
   {
@@ -107,6 +115,7 @@ export const SEED_CAPS: Cap[] = [
     description: 'White cap with golden crown emblem',
     forTrade: true,
     needsReplacement: false,
+    colors: [],
     dateAdded: '10/06/2024',
   },
   {
@@ -119,6 +128,7 @@ export const SEED_CAPS: Cap[] = [
     description: 'Silver cap with iconic star logo',
     forTrade: false,
     needsReplacement: false,
+    colors: [],
     dateAdded: '01/07/2024',
   },
   {
@@ -131,6 +141,7 @@ export const SEED_CAPS: Cap[] = [
     description: 'Dark cap with golden Leffe abbey crest',
     forTrade: false,
     needsReplacement: false,
+    colors: [],
     dateAdded: '15/07/2024',
   },
   {
@@ -143,6 +154,7 @@ export const SEED_CAPS: Cap[] = [
     description: 'Green cap with Lviv lion emblem',
     forTrade: true,
     needsReplacement: false,
+    colors: [],
     dateAdded: '01/08/2024',
   },
 ];

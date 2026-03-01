@@ -114,6 +114,19 @@
   }
 }
 
+.card__colors {
+  display: flex;
+  gap: 4px;
+}
+
+.card__color-dot {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  border: 1.5px solid;
+  flex-shrink: 0;
+}
+
 .card__tags {
   display: flex;
   flex-wrap: wrap;

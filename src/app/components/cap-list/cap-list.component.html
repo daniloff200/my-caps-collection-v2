@@ -77,6 +77,21 @@
     ></app-tag-badge>
   </div>
 
+  <!-- Colors quick filter -->
+  <div class="colors-bar">
+    <span class="colors-bar__label">{{ 'LIST.COLOR' | translate }}:</span>
+    <button
+      *ngFor="let c of capColors"
+      type="button"
+      class="colors-bar__dot"
+      [class.colors-bar__dot--active]="filters.color === c.id"
+      [style.background]="c.hex"
+      [style.border-color]="c.border || c.hex"
+      [title]="c.id"
+      (click)="onColorClick(c.id)"
+    ></button>
+  </div>
+
   <!-- Filter Panel -->
   <div class="filters" *ngIf="showFilters">
     <div class="filters__row">

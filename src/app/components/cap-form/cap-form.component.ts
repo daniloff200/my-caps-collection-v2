@@ -8,15 +8,15 @@ import { ToastService } from '../../services/toast.service';
 import { ImageUploadService } from '../../services/image-upload.service';
 import { COUNTRIES } from '../../data/countries';
 import { COMMON_TAGS } from '../../data/tags';
+import { CAP_COLORS, CapColor } from '../../data/colors';
 import { TranslateModule, TranslateService } from '@ngx-translate/core';
 import { TagBadgeComponent } from '../tag-badge/tag-badge.component';
-import { CountryFlagComponent } from '../country-flag/country-flag.component';
 import { CountryFlagEmojiPipe } from '../../pipes/country-flag-emoji.pipe';
 
 @Component({
   selector: 'app-cap-form',
   standalone: true,
-  imports: [CommonModule, FormsModule, TranslateModule, TagBadgeComponent, CountryFlagComponent, CountryFlagEmojiPipe],
+  imports: [CommonModule, FormsModule, TranslateModule, TagBadgeComponent, CountryFlagEmojiPipe],
   templateUrl: './cap-form.component.html',
   styleUrls: ['./cap-form.component.scss'],
 })
@@ -31,6 +31,7 @@ export class CapFormComponent implements OnInit {
   tags: string[] = [];
   imageUrl = '';
   description = '';
+  colors: string[] = [];
   forTrade = false;
   needsReplacement = false;
   cciUrl = '';
@@ -46,6 +47,7 @@ export class CapFormComponent implements OnInit {
   customTag = '';
   countries = COUNTRIES;
   commonTags = COMMON_TAGS;
+  capColors = CAP_COLORS;
   showTagSuggestions = false;
 
   constructor(
@@ -69,6 +71,7 @@ export class CapFormComponent implements OnInit {
         this.tags = [...cap.tags];
         this.imageUrl = cap.imageUrl || '';
         this.description = cap.description || '';
+        this.colors = cap.colors ? [...cap.colors] : [];
         this.forTrade = cap.forTrade;
         this.needsReplacement = cap.needsReplacement ?? false;
         this.cciUrl = cap.cciUrl || '';
@@ -95,6 +98,15 @@ export class CapFormComponent implements OnInit {
 
   removeTag(tag: string): void {
     this.tags = this.tags.filter((t) => t !== tag);
+  }
+
+  toggleColor(colorId: string): void {
+    const idx = this.colors.indexOf(colorId);
+    if (idx >= 0) {
+      this.colors.splice(idx, 1);
+    } else {
+      this.colors.push(colorId);
+    }
   }
 
   onTagInputKeydown(event: KeyboardEvent): void {
@@ -213,6 +225,7 @@ export class CapFormComponent implements OnInit {
           country: this.country,
           manufacturer: this.manufacturer.trim(),
           tags: this.tags,
+          colors: this.colors,
           imageUrl: finalImageUrl,
           description: this.description.trim(),
           forTrade: this.forTrade,
@@ -230,6 +243,7 @@ export class CapFormComponent implements OnInit {
           country: this.country,
           manufacturer: this.manufacturer.trim(),
           tags: this.tags,
+          colors: this.colors,
           imageUrl: '',
           description: this.description.trim(),
           forTrade: this.forTrade,

@@ -9,6 +9,7 @@ import { ImageUploadService } from '../../services/image-upload.service';
 import { TranslateModule, TranslateService } from '@ngx-translate/core';
 import { TagBadgeComponent } from '../tag-badge/tag-badge.component';
 import { CountryFlagComponent } from '../country-flag/country-flag.component';
+import { CAP_COLORS } from '../../data/colors';
 
 @Component({
   selector: 'app-cap-detail',
@@ -40,6 +41,15 @@ export class CapDetailComponent implements OnInit {
       this.cap = await this.capService.getCapByIdAsync(id);
     }
     this.loading = false;
+  }
+
+  getColorHex(colorId: string): string {
+    return CAP_COLORS.find(c => c.id === colorId)?.hex || '#718096';
+  }
+
+  getColorBorder(colorId: string): string {
+    const c = CAP_COLORS.find(col => col.id === colorId);
+    return c?.border || c?.hex || '#718096';
   }
 
   get cciId(): string {
