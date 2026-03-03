@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, OnDestroy, ViewChild, ElementRef } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule, NgForm } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
@@ -21,7 +21,7 @@ import { CountryFlagEmojiPipe } from '../../pipes/country-flag-emoji.pipe';
   templateUrl: './cap-form.component.html',
   styleUrls: ['./cap-form.component.scss'],
 })
-export class CapFormComponent implements OnInit {
+export class CapFormComponent implements OnInit, OnDestroy {
   isEditMode = false;
   capId: string | null = null;
   saving = false;
@@ -37,13 +37,32 @@ export class CapFormComponent implements OnInit {
   needsReplacement = false;
   cciUrl = '';
 
-  // Image upload
   selectedFile: File | null = null;
   imagePreview: string | null = null;
   isDragging = false;
   compressedSize: number | null = null;
   originalSize: number | null = null;
   compressing = false;
+
+  // Crop state
+  showCropStage = false;
+  rawCropPreview: string | null = null;
+  cropReady = false;
+  cropCenterX = 0;
+  cropCenterY = 0;
+  cropRadius = 0;
+
+  private cropMode: 'none' | 'move' | 'resize' = 'none';
+  private pointerStartX = 0;
+  private pointerStartY = 0;
+  private startCX = 0;
+  private startCY = 0;
+
+  @ViewChild('cropImage') cropImageRef?: ElementRef<HTMLImageElement>;
+  @ViewChild('cropContainer') cropContainerRef?: ElementRef<HTMLDivElement>;
+
+  private boundPointerMove = this.onPointerMove.bind(this);
+  private boundPointerUp = this.onPointerUp.bind(this);
 
   customTag = '';
   countries = COUNTRIES;
@@ -62,6 +81,11 @@ export class CapFormComponent implements OnInit {
   ) {}
 
   async ngOnInit(): Promise<void> {
+    document.addEventListener('mousemove', this.boundPointerMove);
+    document.addEventListener('mouseup', this.boundPointerUp);
+    document.addEventListener('touchmove', this.boundPointerMove, { passive: false });
+    document.addEventListener('touchend', this.boundPointerUp);
+
     this.capId = this.route.snapshot.paramMap.get('id');
     if (this.capId) {
       const cap = await this.capService.getCapByIdAsync(this.capId);
@@ -79,6 +103,13 @@ export class CapFormComponent implements OnInit {
         this.cciUrl = cap.cciUrl || '';
       }
     }
+  }
+
+  ngOnDestroy(): void {
+    document.removeEventListener('mousemove', this.boundPointerMove);
+    document.removeEventListener('mouseup', this.boundPointerUp);
+    document.removeEventListener('touchmove', this.boundPointerMove);
+    document.removeEventListener('touchend', this.boundPointerUp);
   }
 
   get filteredSuggestions(): string[] {
@@ -128,7 +159,7 @@ export class CapFormComponent implements OnInit {
     setTimeout(() => (this.showTagSuggestions = false), 200);
   }
 
-  // --- Image upload methods ---
+  // --- Image upload ---
 
   onFileSelected(event: Event): void {
     const input = event.target as HTMLInputElement;
@@ -164,27 +195,163 @@ export class CapFormComponent implements OnInit {
     }
   }
 
-  async handleFile(file: File): Promise<void> {
-    this.selectedFile = file;
-    this.originalSize = file.size;
+  handleFile(file: File): void {
+    this.cropReady = false;
+    this.selectedFile = null;
+    this.imagePreview = null;
     this.compressedSize = null;
+    this.originalSize = null;
 
-    // Show preview immediately
     const reader = new FileReader();
     reader.onload = (e) => {
-      this.imagePreview = e.target?.result as string;
+      this.rawCropPreview = e.target?.result as string;
+      this.showCropStage = true;
     };
     reader.readAsDataURL(file);
+  }
 
-    // Compress to show expected size
+  onCropImageLoaded(): void {
+    const img = this.cropImageRef?.nativeElement;
+    if (!img) return;
+    const w = img.clientWidth;
+    const h = img.clientHeight;
+    this.cropCenterX = w / 2;
+    this.cropCenterY = h / 2;
+    this.cropRadius = Math.min(w, h) * 0.4;
+    this.cropReady = true;
+  }
+
+  // --- Crop interaction ---
+
+  onCropPointerDown(event: MouseEvent | TouchEvent): void {
+    if (!this.cropReady) return;
+    event.preventDefault();
+
+    const pos = this.getClientPos(event);
+    const container = this.cropContainerRef?.nativeElement;
+    if (!container) return;
+    const rect = container.getBoundingClientRect();
+    const x = pos.x - rect.left;
+    const y = pos.y - rect.top;
+
+    const dist = Math.sqrt((x - this.cropCenterX) ** 2 + (y - this.cropCenterY) ** 2);
+
+    if (Math.abs(dist - this.cropRadius) < 20) {
+      this.cropMode = 'resize';
+    } else if (dist < this.cropRadius) {
+      this.cropMode = 'move';
+    } else {
+      return;
+    }
+
+    this.pointerStartX = pos.x;
+    this.pointerStartY = pos.y;
+    this.startCX = this.cropCenterX;
+    this.startCY = this.cropCenterY;
+  }
+
+  private onPointerMove(event: MouseEvent | TouchEvent): void {
+    if (this.cropMode === 'none') return;
+    event.preventDefault();
+
+    const pos = this.getClientPos(event);
+    const img = this.cropImageRef?.nativeElement;
+    if (!img) return;
+    const w = img.clientWidth;
+    const h = img.clientHeight;
+
+    if (this.cropMode === 'move') {
+      const dx = pos.x - this.pointerStartX;
+      const dy = pos.y - this.pointerStartY;
+      this.cropCenterX = this.clamp(this.startCX + dx, this.cropRadius, w - this.cropRadius);
+      this.cropCenterY = this.clamp(this.startCY + dy, this.cropRadius, h - this.cropRadius);
+    } else if (this.cropMode === 'resize') {
+      const container = this.cropContainerRef?.nativeElement;
+      if (!container) return;
+      const rect = container.getBoundingClientRect();
+      const mx = pos.x - rect.left;
+      const my = pos.y - rect.top;
+      const newR = Math.sqrt((mx - this.cropCenterX) ** 2 + (my - this.cropCenterY) ** 2);
+      const maxR = Math.min(
+        this.cropCenterX, w - this.cropCenterX,
+        this.cropCenterY, h - this.cropCenterY
+      );
+      this.cropRadius = this.clamp(newR, 30, maxR);
+    }
+  }
+
+  private onPointerUp(): void {
+    this.cropMode = 'none';
+  }
+
+  onCropWheel(event: WheelEvent): void {
+    if (!this.cropReady) return;
+    event.preventDefault();
+    const delta = event.deltaY > 0 ? -10 : 10;
+    const img = this.cropImageRef?.nativeElement;
+    if (!img) return;
+    const w = img.clientWidth;
+    const h = img.clientHeight;
+    const maxR = Math.min(
+      this.cropCenterX, w - this.cropCenterX,
+      this.cropCenterY, h - this.cropCenterY
+    );
+    this.cropRadius = this.clamp(this.cropRadius + delta, 30, maxR);
+  }
+
+  async confirmCrop(): Promise<void> {
+    const canvas = this.extractCroppedCanvas();
+    if (!canvas) return;
+
+    const blob = await new Promise<Blob>((resolve, reject) => {
+      canvas.toBlob(b => b ? resolve(b) : reject('toBlob failed'), 'image/jpeg', 0.92);
+    });
+
+    this.selectedFile = new File([blob], 'cap-cropped.jpg', { type: 'image/jpeg' });
+    this.originalSize = blob.size;
+    this.imagePreview = canvas.toDataURL('image/jpeg', 0.92);
+    this.showCropStage = false;
+    this.rawCropPreview = null;
+    this.cropReady = false;
+
     this.compressing = true;
     try {
-      const compressed = await this.imageUploadService.compressImage(file);
+      const compressed = await this.imageUploadService.compressImage(this.selectedFile);
       this.compressedSize = compressed.size;
-    } catch {
-      // Compression preview failed, still ok
-    }
+    } catch { /* ok */ }
     this.compressing = false;
+  }
+
+  private extractCroppedCanvas(): HTMLCanvasElement | null {
+    const img = this.cropImageRef?.nativeElement;
+    if (!img) return null;
+
+    const scaleX = img.naturalWidth / img.clientWidth;
+    const scaleY = img.naturalHeight / img.clientHeight;
+
+    const natCX = this.cropCenterX * scaleX;
+    const natCY = this.cropCenterY * scaleY;
+    const natR = this.cropRadius * Math.max(scaleX, scaleY);
+
+    const diameter = Math.round(natR * 2);
+    const canvas = document.createElement('canvas');
+    canvas.width = diameter;
+    canvas.height = diameter;
+    const ctx = canvas.getContext('2d')!;
+
+    ctx.drawImage(
+      img,
+      natCX - natR, natCY - natR, diameter, diameter,
+      0, 0, diameter, diameter
+    );
+
+    return canvas;
+  }
+
+  cancelCrop(): void {
+    this.showCropStage = false;
+    this.rawCropPreview = null;
+    this.cropReady = false;
   }
 
   removeImage(): void {
@@ -246,7 +413,6 @@ export class CapFormComponent implements OnInit {
         this.toastService.success(this.translateService.instant('TOAST.CAP_UPDATED'));
         this.router.navigate(['/cap', this.capId]);
       } else {
-        // Add new cap first (to get the ID), then upload image
         const capData = {
           name: this.name.trim(),
           country: this.country,
@@ -288,5 +454,20 @@ export class CapFormComponent implements OnInit {
     } else {
       this.router.navigate(['/']);
     }
+  }
+
+  private clamp(value: number, min: number, max: number): number {
+    return Math.max(min, Math.min(max, value));
+  }
+
+  private getClientPos(event: MouseEvent | TouchEvent): { x: number; y: number } {
+    if ('touches' in event && event.touches.length) {
+      return { x: event.touches[0].clientX, y: event.touches[0].clientY };
+    }
+    if ('changedTouches' in event && event.changedTouches.length) {
+      return { x: event.changedTouches[0].clientX, y: event.changedTouches[0].clientY };
+    }
+    const me = event as MouseEvent;
+    return { x: me.clientX, y: me.clientY };
   }
 }

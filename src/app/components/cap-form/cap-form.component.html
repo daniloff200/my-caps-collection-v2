@@ -125,9 +125,9 @@
     <div class="form__group">
       <label class="form__label">{{ 'FORM.PHOTO' | translate }}</label>
 
-      <!-- Drop zone (when no image) -->
+      <!-- Drop zone (when no image and no crop) -->
       <div
-        *ngIf="!imagePreview && !imageUrl"
+        *ngIf="!imagePreview && !imageUrl && !showCropStage"
         class="upload-zone"
         [class.upload-zone--active]="isDragging"
         (dragover)="onDragOver($event)"
@@ -149,8 +149,49 @@
         </div>
       </div>
 
-      <!-- Preview (when image selected or existing URL) -->
-      <div class="upload-preview" *ngIf="imagePreview || imageUrl">
+      <!-- Crop stage (after file selection, before confirm) -->
+      <div class="form-crop" *ngIf="showCropStage">
+        <p class="form-crop__hint">{{ 'FORM.CROP_HINT' | translate }}</p>
+
+        <div
+          class="form-crop__container"
+          #cropContainer
+          (mousedown)="onCropPointerDown($event)"
+          (touchstart)="onCropPointerDown($event)"
+          (wheel)="onCropWheel($event)"
+        >
+          <img
+            [src]="rawCropPreview"
+            #cropImage
+            class="form-crop__image"
+            (load)="onCropImageLoaded()"
+            draggable="false"
+          />
+
+          <div
+            *ngIf="cropReady"
+            class="form-crop__circle"
+            [style.left.px]="cropCenterX - cropRadius"
+            [style.top.px]="cropCenterY - cropRadius"
+            [style.width.px]="cropRadius * 2"
+            [style.height.px]="cropRadius * 2"
+          ></div>
+        </div>
+
+        <p class="form-crop__scroll-hint" *ngIf="cropReady">{{ 'FORM.CROP_SCROLL_HINT' | translate }}</p>
+
+        <div class="form-crop__actions" *ngIf="cropReady">
+          <button type="button" class="form-crop__btn form-crop__btn--confirm" (click)="confirmCrop()">
+            {{ 'FORM.CONFIRM_CROP' | translate }}
+          </button>
+          <button type="button" class="form-crop__btn form-crop__btn--cancel" (click)="cancelCrop()">
+            {{ 'FORM.CANCEL' | translate }}
+          </button>
+        </div>
+      </div>
+
+      <!-- Preview (crop confirmed or existing URL) -->
+      <div class="upload-preview" *ngIf="(imagePreview || imageUrl) && !showCropStage">
         <div class="upload-preview__image">
           <img [src]="imagePreview || imageUrl" alt="Cap photo" />
         </div>
@@ -177,12 +218,12 @@
             <button
               type="button"
               class="upload-preview__change"
-              (click)="fileInput.click()"
+              (click)="fileInput2.click()"
             >
               {{ 'FORM.CHANGE_PHOTO' | translate }}
             </button>
             <input
-              #fileInput
+              #fileInput2
               type="file"
               accept="image/*"
               class="upload-zone__input"
