@@ -42,23 +42,67 @@
     </div>
   </div>
 
-  <!-- Preview + Search again -->
-  <div class="similar-page__query" *ngIf="imagePreview">
-    <div class="similar-page__query-image">
-      <img [src]="imagePreview" alt="Query image" />
+  <!-- Crop stage -->
+  <div class="crop-stage" *ngIf="imagePreview && !searched">
+    <p class="crop-stage__hint">{{ 'SIMILAR.CROP_HINT' | translate }}</p>
+
+    <div
+      class="crop-stage__container"
+      #cropContainer
+      (mousedown)="onCropPointerDown($event)"
+      (touchstart)="onCropPointerDown($event)"
+      (wheel)="onCropWheel($event)"
+    >
+      <img
+        [src]="imagePreview"
+        #cropImage
+        class="crop-stage__image"
+        (load)="onImageLoaded()"
+        draggable="false"
+      />
+
+      <div
+        *ngIf="showCrop"
+        class="crop-stage__circle"
+        [style.left.px]="cropCenterX - cropRadius"
+        [style.top.px]="cropCenterY - cropRadius"
+        [style.width.px]="cropRadius * 2"
+        [style.height.px]="cropRadius * 2"
+      ></div>
     </div>
-    <div class="similar-page__query-actions">
-      <button class="btn btn--outline" (click)="reset()">{{ 'SIMILAR.TRY_ANOTHER' | translate }}</button>
+
+    <p class="crop-stage__scroll-hint" *ngIf="showCrop">{{ 'SIMILAR.SCROLL_HINT' | translate }}</p>
+
+    <div class="crop-stage__actions" *ngIf="showCrop">
+      <button
+        class="btn btn--primary btn--large"
+        (click)="searchWithCrop()"
+        [disabled]="searching"
+      >
+        {{ searching ? ('SIMILAR.SEARCHING' | translate) : ('SIMILAR.SEARCH' | translate) }}
+      </button>
+      <button class="btn btn--outline" (click)="reset()">
+        {{ 'SIMILAR.TRY_ANOTHER' | translate }}
+      </button>
     </div>
   </div>
 
-  <!-- Searching -->
+  <!-- Searching indicator -->
   <div class="similar-page__searching" *ngIf="searching">
     <p>{{ 'SIMILAR.SEARCHING' | translate }}</p>
   </div>
 
   <!-- Results -->
   <div class="similar-page__results" *ngIf="searched && !searching">
+    <div class="similar-page__query">
+      <div class="similar-page__query-image" *ngIf="imagePreview">
+        <img [src]="imagePreview" alt="Query" />
+      </div>
+      <div class="similar-page__query-actions">
+        <button class="btn btn--outline" (click)="reset()">{{ 'SIMILAR.TRY_ANOTHER' | translate }}</button>
+      </div>
+    </div>
+
     <h2 class="similar-page__results-title" *ngIf="results.length">
       {{ 'SIMILAR.RESULTS_TITLE' | translate }}
     </h2>

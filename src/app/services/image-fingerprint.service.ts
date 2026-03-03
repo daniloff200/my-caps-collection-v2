@@ -1,16 +1,10 @@
 import { Injectable } from '@angular/core';
 
-/**
- * Fingerprint v3:
- * - 64 values: dHash (difference hash) — captures structure/pattern, robust to lighting
- * - 216 values: color histogram (6 bins per RGB channel) — captures color distribution, position-invariant
- * Total: 280 numbers per cap
- */
-const DHASH_SIZE = 9; // 9x8 grid → 8x8 = 64 gradient bits
+const DHASH_SIZE = 17; // 17x16 grid → 16x16 = 256 gradient bits
 const HIST_BINS = 6;
 const HIST_LENGTH = HIST_BINS * HIST_BINS * HIST_BINS; // 216
-const DHASH_LENGTH = 64;
-const TOTAL_LENGTH = DHASH_LENGTH + HIST_LENGTH; // 280
+const DHASH_LENGTH = (DHASH_SIZE - 1) * (DHASH_SIZE - 1); // 256
+const TOTAL_LENGTH = DHASH_LENGTH + HIST_LENGTH; // 472
 
 @Injectable({
   providedIn: 'root',
@@ -32,15 +26,13 @@ export class ImageFingerprintService {
 
     if (a.length === TOTAL_LENGTH && b.length === TOTAL_LENGTH) {
       const hashDist = this.hammingDistance(a, b, 0, DHASH_LENGTH);
-      const histDist = this.chiSquared(a, b, DHASH_LENGTH, TOTAL_LENGTH);
-      return hashDist * 0.5 + histDist * 0.5;
+      const histDist = this.histogramDistance(a, b, DHASH_LENGTH, TOTAL_LENGTH);
+      return hashDist * 0.3 + histDist * 0.7;
     }
 
-    // Incompatible old format
     return 1;
   }
 
-  /** Hamming distance for binary hash values, normalized to 0..1 */
   private hammingDistance(a: number[], b: number[], start: number, end: number): number {
     let diff = 0;
     for (let i = start; i < end; i++) {
@@ -49,28 +41,29 @@ export class ImageFingerprintService {
     return diff / (end - start);
   }
 
-  /** Chi-squared distance for histograms, normalized to 0..1 */
-  private chiSquared(a: number[], b: number[], start: number, end: number): number {
-    let sum = 0;
+  private histogramDistance(a: number[], b: number[], start: number, end: number): number {
+    let intersection = 0;
+    let sumA = 0;
+    let sumB = 0;
+
     for (let i = start; i < end; i++) {
-      const denom = a[i] + b[i];
-      if (denom > 0) {
-        sum += ((a[i] - b[i]) ** 2) / denom;
-      }
+      intersection += Math.min(a[i], b[i]);
+      sumA += a[i];
+      sumB += b[i];
     }
-    return Math.min(sum / 2, 1);
+
+    const maxSum = Math.max(sumA, sumB);
+    if (maxSum === 0) return 1;
+
+    return 1 - (intersection / maxSum);
   }
 
   private extractFingerprint(img: HTMLImageElement): number[] {
-    // Center-crop to square
     const size = Math.min(img.naturalWidth, img.naturalHeight);
     const sx = (img.naturalWidth - size) / 2;
     const sy = (img.naturalHeight - size) / 2;
 
-    // Part 1: dHash — captures structure via horizontal gradients in grayscale
     const dHash = this.computeDHash(img, sx, sy, size);
-
-    // Part 2: color histogram — captures color distribution
     const histogram = this.computeHistogram(img, sx, sy, size);
 
     return [...dHash, ...histogram];
@@ -78,8 +71,8 @@ export class ImageFingerprintService {
 
   private computeDHash(img: HTMLImageElement, sx: number, sy: number, cropSize: number): number[] {
     const canvas = document.createElement('canvas');
-    canvas.width = DHASH_SIZE;     // 9 wide
-    canvas.height = DHASH_SIZE - 1; // 8 tall
+    canvas.width = DHASH_SIZE;
+    canvas.height = DHASH_SIZE - 1;
     const ctx = canvas.getContext('2d')!;
     ctx.imageSmoothingEnabled = true;
     ctx.imageSmoothingQuality = 'high';
@@ -92,7 +85,6 @@ export class ImageFingerprintService {
       for (let x = 0; x < DHASH_SIZE - 1; x++) {
         const leftIdx = (y * DHASH_SIZE + x) * 4;
         const rightIdx = (y * DHASH_SIZE + x + 1) * 4;
-        // Grayscale luminance
         const leftGray = data[leftIdx] * 0.299 + data[leftIdx + 1] * 0.587 + data[leftIdx + 2] * 0.114;
         const rightGray = data[rightIdx] * 0.299 + data[rightIdx + 1] * 0.587 + data[rightIdx + 2] * 0.114;
         hash.push(leftGray > rightGray ? 1 : 0);
@@ -102,6 +94,10 @@ export class ImageFingerprintService {
     return hash;
   }
 
+  /**
+   * Circular-masked RGB histogram: only pixels inside the inscribed circle
+   * are counted, reducing background contamination from photo corners.
+   */
   private computeHistogram(img: HTMLImageElement, sx: number, sy: number, cropSize: number): number[] {
     const histSize = 64;
     const canvas = document.createElement('canvas');
@@ -114,18 +110,31 @@ export class ImageFingerprintService {
     const data = ctx.getImageData(0, 0, histSize, histSize).data;
     const histogram = new Array(HIST_LENGTH).fill(0);
     const binWidth = 256 / HIST_BINS;
-    const pixelCount = histSize * histSize;
 
-    for (let i = 0; i < data.length; i += 4) {
-      const rBin = Math.min(HIST_BINS - 1, Math.floor(data[i] / binWidth));
-      const gBin = Math.min(HIST_BINS - 1, Math.floor(data[i + 1] / binWidth));
-      const bBin = Math.min(HIST_BINS - 1, Math.floor(data[i + 2] / binWidth));
-      histogram[rBin * HIST_BINS * HIST_BINS + gBin * HIST_BINS + bBin]++;
+    const center = histSize / 2;
+    const radius = histSize / 2;
+    const r2 = radius * radius;
+    let pixelCount = 0;
+
+    for (let y = 0; y < histSize; y++) {
+      for (let x = 0; x < histSize; x++) {
+        const dx = x - center + 0.5;
+        const dy = y - center + 0.5;
+        if (dx * dx + dy * dy > r2) continue;
+
+        const i = (y * histSize + x) * 4;
+        const rBin = Math.min(HIST_BINS - 1, Math.floor(data[i] / binWidth));
+        const gBin = Math.min(HIST_BINS - 1, Math.floor(data[i + 1] / binWidth));
+        const bBin = Math.min(HIST_BINS - 1, Math.floor(data[i + 2] / binWidth));
+        histogram[rBin * HIST_BINS * HIST_BINS + gBin * HIST_BINS + bBin]++;
+        pixelCount++;
+      }
     }
 
-    // Normalize to 0-255
-    for (let i = 0; i < histogram.length; i++) {
-      histogram[i] = Math.round((histogram[i] / pixelCount) * 255);
+    if (pixelCount > 0) {
+      for (let i = 0; i < histogram.length; i++) {
+        histogram[i] = Math.round((histogram[i] / pixelCount) * 255);
+      }
     }
 
     return histogram;
