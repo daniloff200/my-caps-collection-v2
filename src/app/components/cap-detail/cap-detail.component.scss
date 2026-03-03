@@ -31,12 +31,15 @@
 .detail__image {
   flex-shrink: 0;
   width: 320px;
-  min-height: 320px;
+  aspect-ratio: 1;
+  background: #0f172a;
+  border-radius: 12px 0 0 12px;
+  overflow: hidden;
 
   img {
     width: 100%;
     height: 100%;
-    object-fit: cover;
+    object-fit: contain;
   }
 }
 
@@ -251,7 +254,8 @@
 
   .detail__image {
     width: 100%;
-    height: 260px;
+    aspect-ratio: 1;
+    border-radius: 12px 12px 0 0;
   }
 
   .detail__info {
