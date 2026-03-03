@@ -1,16 +1,16 @@
 import { Injectable } from '@angular/core';
 
 /**
- * Fingerprint structure:
- * - First 768 values: 16x16 normalized RGB pixels (structural match)
- * - Next 64 values: color histogram (4 bins per RGB channel = 64 bins, position-invariant)
- * Total: 832 numbers per cap
+ * Fingerprint v3:
+ * - 64 values: dHash (difference hash) — captures structure/pattern, robust to lighting
+ * - 216 values: color histogram (6 bins per RGB channel) — captures color distribution, position-invariant
+ * Total: 280 numbers per cap
  */
-const THUMB_SIZE = 32;
-const HIST_BINS = 4;
-const HIST_LENGTH = HIST_BINS * HIST_BINS * HIST_BINS; // 64
-const PIXEL_LENGTH = THUMB_SIZE * THUMB_SIZE * 3;      // 768
-const TOTAL_LENGTH = PIXEL_LENGTH + HIST_LENGTH;        // 832
+const DHASH_SIZE = 9; // 9x8 grid → 8x8 = 64 gradient bits
+const HIST_BINS = 6;
+const HIST_LENGTH = HIST_BINS * HIST_BINS * HIST_BINS; // 216
+const DHASH_LENGTH = 64;
+const TOTAL_LENGTH = DHASH_LENGTH + HIST_LENGTH; // 280
 
 @Injectable({
   providedIn: 'root',
@@ -27,122 +27,108 @@ export class ImageFingerprintService {
     return this.extractFingerprint(img);
   }
 
-  /**
-   * Returns distance 0..1. Lower = more similar.
-   * Handles both old (192-length) and new (832-length) fingerprints gracefully.
-   */
   distance(a: number[], b: number[]): number {
     if (!a?.length || !b?.length) return 1;
 
-    // If both are new format, use combined scoring
     if (a.length === TOTAL_LENGTH && b.length === TOTAL_LENGTH) {
-      const pixelDist = this.euclideanNorm(a, b, 0, PIXEL_LENGTH);
-      const histDist = this.chiSquared(a, b, PIXEL_LENGTH, TOTAL_LENGTH);
-      // Weight: 40% pixel structure, 60% color histogram
-      return pixelDist * 0.4 + histDist * 0.6;
+      const hashDist = this.hammingDistance(a, b, 0, DHASH_LENGTH);
+      const histDist = this.chiSquared(a, b, DHASH_LENGTH, TOTAL_LENGTH);
+      return hashDist * 0.5 + histDist * 0.5;
     }
 
-    // Fallback: raw euclidean for old/mismatched formats
-    if (a.length !== b.length) return 1;
-    return this.euclideanNorm(a, b, 0, a.length);
+    // Incompatible old format
+    return 1;
   }
 
-  private euclideanNorm(a: number[], b: number[], start: number, end: number): number {
-    let sum = 0;
-    const len = end - start;
+  /** Hamming distance for binary hash values, normalized to 0..1 */
+  private hammingDistance(a: number[], b: number[], start: number, end: number): number {
+    let diff = 0;
     for (let i = start; i < end; i++) {
-      const diff = a[i] - b[i];
-      sum += diff * diff;
+      if (a[i] !== b[i]) diff++;
     }
-    const maxDist = 255 * 255 * len;
-    return Math.sqrt(sum) / Math.sqrt(maxDist);
+    return diff / (end - start);
   }
 
   /** Chi-squared distance for histograms, normalized to 0..1 */
   private chiSquared(a: number[], b: number[], start: number, end: number): number {
     let sum = 0;
     for (let i = start; i < end; i++) {
-      const ai = a[i];
-      const bi = b[i];
-      const denom = ai + bi;
+      const denom = a[i] + b[i];
       if (denom > 0) {
-        sum += ((ai - bi) * (ai - bi)) / denom;
+        sum += ((a[i] - b[i]) ** 2) / denom;
       }
     }
-    // Chi-squared max is 2 when histograms are completely disjoint (normalized)
     return Math.min(sum / 2, 1);
   }
 
   private extractFingerprint(img: HTMLImageElement): number[] {
-    const canvas = document.createElement('canvas');
-    canvas.width = THUMB_SIZE;
-    canvas.height = THUMB_SIZE;
-    const ctx = canvas.getContext('2d')!;
-
-    ctx.imageSmoothingEnabled = true;
-    ctx.imageSmoothingQuality = 'high';
-
     // Center-crop to square
     const size = Math.min(img.naturalWidth, img.naturalHeight);
     const sx = (img.naturalWidth - size) / 2;
     const sy = (img.naturalHeight - size) / 2;
-    ctx.drawImage(img, sx, sy, size, size, 0, 0, THUMB_SIZE, THUMB_SIZE);
 
-    const imageData = ctx.getImageData(0, 0, THUMB_SIZE, THUMB_SIZE);
-    const data = imageData.data;
+    // Part 1: dHash — captures structure via horizontal gradients in grayscale
+    const dHash = this.computeDHash(img, sx, sy, size);
 
-    // Part 1: normalized pixel values
-    const pixels: number[] = [];
-    let totalR = 0, totalG = 0, totalB = 0;
-    const pixelCount = THUMB_SIZE * THUMB_SIZE;
+    // Part 2: color histogram — captures color distribution
+    const histogram = this.computeHistogram(img, sx, sy, size);
 
-    for (let i = 0; i < data.length; i += 4) {
-      totalR += data[i];
-      totalG += data[i + 1];
-      totalB += data[i + 2];
+    return [...dHash, ...histogram];
+  }
+
+  private computeDHash(img: HTMLImageElement, sx: number, sy: number, cropSize: number): number[] {
+    const canvas = document.createElement('canvas');
+    canvas.width = DHASH_SIZE;     // 9 wide
+    canvas.height = DHASH_SIZE - 1; // 8 tall
+    const ctx = canvas.getContext('2d')!;
+    ctx.imageSmoothingEnabled = true;
+    ctx.imageSmoothingQuality = 'high';
+    ctx.drawImage(img, sx, sy, cropSize, cropSize, 0, 0, DHASH_SIZE, DHASH_SIZE - 1);
+
+    const data = ctx.getImageData(0, 0, DHASH_SIZE, DHASH_SIZE - 1).data;
+    const hash: number[] = [];
+
+    for (let y = 0; y < DHASH_SIZE - 1; y++) {
+      for (let x = 0; x < DHASH_SIZE - 1; x++) {
+        const leftIdx = (y * DHASH_SIZE + x) * 4;
+        const rightIdx = (y * DHASH_SIZE + x + 1) * 4;
+        // Grayscale luminance
+        const leftGray = data[leftIdx] * 0.299 + data[leftIdx + 1] * 0.587 + data[leftIdx + 2] * 0.114;
+        const rightGray = data[rightIdx] * 0.299 + data[rightIdx + 1] * 0.587 + data[rightIdx + 2] * 0.114;
+        hash.push(leftGray > rightGray ? 1 : 0);
+      }
     }
 
-    const avgR = totalR / pixelCount;
-    const avgG = totalG / pixelCount;
-    const avgB = totalB / pixelCount;
-    // Brightness normalization factor — shift average to 128
-    const brightnessTarget = 128;
-    const offsetR = brightnessTarget - avgR;
-    const offsetG = brightnessTarget - avgG;
-    const offsetB = brightnessTarget - avgB;
+    return hash;
+  }
 
-    for (let i = 0; i < data.length; i += 4) {
-      pixels.push(Math.max(0, Math.min(255, Math.round(data[i] + offsetR))));
-      pixels.push(Math.max(0, Math.min(255, Math.round(data[i + 1] + offsetG))));
-      pixels.push(Math.max(0, Math.min(255, Math.round(data[i + 2] + offsetB))));
-    }
-
-    // Part 2: color histogram (from ORIGINAL non-normalized full-res image for accuracy)
-    const histCanvas = document.createElement('canvas');
+  private computeHistogram(img: HTMLImageElement, sx: number, sy: number, cropSize: number): number[] {
     const histSize = 64;
-    histCanvas.width = histSize;
-    histCanvas.height = histSize;
-    const histCtx = histCanvas.getContext('2d')!;
-    histCtx.imageSmoothingEnabled = true;
-    histCtx.drawImage(img, sx, sy, size, size, 0, 0, histSize, histSize);
-    const histData = histCtx.getImageData(0, 0, histSize, histSize).data;
+    const canvas = document.createElement('canvas');
+    canvas.width = histSize;
+    canvas.height = histSize;
+    const ctx = canvas.getContext('2d')!;
+    ctx.imageSmoothingEnabled = true;
+    ctx.drawImage(img, sx, sy, cropSize, cropSize, 0, 0, histSize, histSize);
 
+    const data = ctx.getImageData(0, 0, histSize, histSize).data;
     const histogram = new Array(HIST_LENGTH).fill(0);
-    const histPixels = histSize * histSize;
+    const binWidth = 256 / HIST_BINS;
+    const pixelCount = histSize * histSize;
 
-    for (let i = 0; i < histData.length; i += 4) {
-      const rBin = Math.min(HIST_BINS - 1, Math.floor(histData[i] / (256 / HIST_BINS)));
-      const gBin = Math.min(HIST_BINS - 1, Math.floor(histData[i + 1] / (256 / HIST_BINS)));
-      const bBin = Math.min(HIST_BINS - 1, Math.floor(histData[i + 2] / (256 / HIST_BINS)));
+    for (let i = 0; i < data.length; i += 4) {
+      const rBin = Math.min(HIST_BINS - 1, Math.floor(data[i] / binWidth));
+      const gBin = Math.min(HIST_BINS - 1, Math.floor(data[i + 1] / binWidth));
+      const bBin = Math.min(HIST_BINS - 1, Math.floor(data[i + 2] / binWidth));
       histogram[rBin * HIST_BINS * HIST_BINS + gBin * HIST_BINS + bBin]++;
     }
 
-    // Normalize histogram to 0-255 range for consistent storage
+    // Normalize to 0-255
     for (let i = 0; i < histogram.length; i++) {
-      histogram[i] = Math.round((histogram[i] / histPixels) * 255);
+      histogram[i] = Math.round((histogram[i] / pixelCount) * 255);
     }
 
-    return [...pixels, ...histogram];
+    return histogram;
   }
 
   private loadImageFromFile(file: File): Promise<HTMLImageElement> {

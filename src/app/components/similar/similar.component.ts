@@ -40,7 +40,7 @@ export class SimilarComponent {
   }
 
   private needsReindex(cap: Cap): boolean {
-    return !!(cap.imageUrl && (!cap.fingerprint?.length || cap.fingerprint.length < 3000));
+    return !!(cap.imageUrl && (!cap.fingerprint?.length || cap.fingerprint.length !== 280));
   }
 
   private checkMissingFingerprints(): void {
