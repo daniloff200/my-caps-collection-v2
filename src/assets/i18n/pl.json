@@ -8,6 +8,7 @@
     "COUNTRIES_NAV": "Kraje",
     "LOCK": "Zablokuj",
     "UNLOCK": "Odblokuj",
+    "SIMILAR": "Znajdź podobne",
     "LOGIN": "Zaloguj"
   },
   "COUNTRIES": {
@@ -129,5 +130,20 @@
     "CAP_DELETED": "Kapsel usunięty",
     "DELETE_FAILED": "Nie udało się usunąć kapsla",
     "DROP_IMAGE": "Przeciągnij plik obrazu"
+  },
+  "SIMILAR": {
+    "TITLE": "Znajdź podobne kapsle",
+    "SUBTITLE": "Prześlij zdjęcie kapsla, a znajdziemy wizualnie podobne w Twojej kolekcji",
+    "UPLOAD_TEXT": "Prześlij zdjęcie kapsla do wyszukiwania",
+    "UPLOAD_HINT": "Kliknij lub przeciągnij i upuść zdjęcie",
+    "SEARCHING": "Szukamy podobnych kapsli...",
+    "RESULTS_TITLE": "Znalezione podobne kapsle",
+    "NO_RESULTS": "Nie znaleziono podobnych kapsli. Spróbuj najpierw zindeksować kolekcję.",
+    "TRY_ANOTHER": "Spróbuj inne zdjęcie",
+    "ERROR": "Błąd wyszukiwania. Spróbuj ponownie.",
+    "MISSING_INDEX": "{{count}} kapsli wymaga indeksowania do wyszukiwania wizualnego",
+    "INDEX_NOW": "Indeksuj teraz",
+    "INDEXING": "Indeksowanie...",
+    "INDEXED": "Zindeksowano {{count}} kapsli!"
   }
 }

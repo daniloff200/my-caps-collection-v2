@@ -9,6 +9,7 @@ import { ImageUploadService } from '../../services/image-upload.service';
 import { COUNTRIES } from '../../data/countries';
 import { COMMON_TAGS } from '../../data/tags';
 import { CAP_COLORS, CapColor } from '../../data/colors';
+import { ImageFingerprintService } from '../../services/image-fingerprint.service';
 import { TranslateModule, TranslateService } from '@ngx-translate/core';
 import { TagBadgeComponent } from '../tag-badge/tag-badge.component';
 import { CountryFlagEmojiPipe } from '../../pipes/country-flag-emoji.pipe';
@@ -54,6 +55,7 @@ export class CapFormComponent implements OnInit {
     private capService: CapService,
     private toastService: ToastService,
     private imageUploadService: ImageUploadService,
+    private fingerprintService: ImageFingerprintService,
     private translateService: TranslateService,
     private router: Router,
     private route: ActivatedRoute
@@ -211,8 +213,14 @@ export class CapFormComponent implements OnInit {
     try {
       let finalImageUrl = this.imageUrl;
 
+      let fingerprint: number[] | undefined;
+      if (this.selectedFile) {
+        try {
+          fingerprint = await this.fingerprintService.extractFromFile(this.selectedFile);
+        } catch { /* non-critical */ }
+      }
+
       if (this.isEditMode && this.capId) {
-        // Upload new image if selected
         if (this.selectedFile) {
           finalImageUrl = await this.imageUploadService.uploadCapImage(
             this.selectedFile,
@@ -220,7 +228,7 @@ export class CapFormComponent implements OnInit {
           );
         }
 
-        const capData = {
+        const capData: Record<string, any> = {
           name: this.name.trim(),
           country: this.country,
           manufacturer: this.manufacturer.trim(),
@@ -232,6 +240,7 @@ export class CapFormComponent implements OnInit {
           needsReplacement: this.needsReplacement,
           cciUrl: this.cciUrl.trim(),
         };
+        if (fingerprint) capData['fingerprint'] = fingerprint;
 
         await this.capService.updateCap(this.capId, capData);
         this.toastService.success(this.translateService.instant('TOAST.CAP_UPDATED'));
@@ -253,13 +262,14 @@ export class CapFormComponent implements OnInit {
 
         const newCap = await this.capService.addCap(capData as Omit<Cap, 'id' | 'dateAdded'>);
 
-        // Upload image if selected
         if (this.selectedFile) {
           finalImageUrl = await this.imageUploadService.uploadCapImage(
             this.selectedFile,
             newCap.id
           );
-          await this.capService.updateCap(newCap.id, { imageUrl: finalImageUrl });
+          const updateData: Record<string, any> = { imageUrl: finalImageUrl };
+          if (fingerprint) updateData['fingerprint'] = fingerprint;
+          await this.capService.updateCap(newCap.id, updateData);
         }
 
         this.toastService.success(this.translateService.instant('TOAST.CAP_ADDED'));

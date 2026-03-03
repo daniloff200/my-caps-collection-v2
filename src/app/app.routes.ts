@@ -6,10 +6,12 @@ import { PasswordPromptComponent } from './components/password-prompt/password-p
 import { ContactsComponent } from './components/contacts/contacts.component';
 import { CountriesComponent } from './components/countries/countries.component';
 import { CountryDetailComponent } from './components/country-detail/country-detail.component';
+import { SimilarComponent } from './components/similar/similar.component';
 import { authGuard } from './guards/auth.guard';
 
 export const routes: Routes = [
   { path: '', component: CapListComponent },
+  { path: 'similar', component: SimilarComponent },
   { path: 'countries', component: CountriesComponent },
   { path: 'countries/:country', component: CountryDetailComponent },
   { path: 'contacts', component: ContactsComponent },

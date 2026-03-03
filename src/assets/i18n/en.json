@@ -8,6 +8,7 @@
     "COUNTRIES_NAV": "Countries",
     "LOCK": "Lock editing",
     "UNLOCK": "Unlock editing",
+    "SIMILAR": "Find Similar",
     "LOGIN": "Login"
   },
   "COUNTRIES": {
@@ -129,5 +130,20 @@
     "CAP_DELETED": "Cap deleted",
     "DELETE_FAILED": "Failed to delete cap",
     "DROP_IMAGE": "Please drop an image file"
+  },
+  "SIMILAR": {
+    "TITLE": "Find Similar Caps",
+    "SUBTITLE": "Upload a photo of a cap and we'll find the most visually similar ones in your collection",
+    "UPLOAD_TEXT": "Upload a cap photo to search",
+    "UPLOAD_HINT": "Click or drag & drop an image",
+    "SEARCHING": "Searching for similar caps...",
+    "RESULTS_TITLE": "Similar caps found",
+    "NO_RESULTS": "No similar caps found. Try indexing your collection first.",
+    "TRY_ANOTHER": "Try another photo",
+    "ERROR": "Search failed. Please try again.",
+    "MISSING_INDEX": "{{count}} cap(s) need indexing for visual search to work",
+    "INDEX_NOW": "Index now",
+    "INDEXING": "Indexing...",
+    "INDEXED": "Indexed {{count}} cap(s) successfully!"
   }
 }

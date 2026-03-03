@@ -1,0 +1,84 @@
+<div class="similar-page">
+  <div class="similar-page__header">
+    <h1 class="similar-page__title">{{ 'SIMILAR.TITLE' | translate }}</h1>
+    <p class="similar-page__subtitle">{{ 'SIMILAR.SUBTITLE' | translate }}</p>
+  </div>
+
+  <!-- Index missing fingerprints -->
+  <div class="similar-page__index" *ngIf="capsWithoutFingerprint > 0">
+    <p class="similar-page__index-text">
+      {{ 'SIMILAR.MISSING_INDEX' | translate:{ count: capsWithoutFingerprint } }}
+    </p>
+    <button
+      class="btn btn--primary"
+      (click)="indexExisting()"
+      [disabled]="indexing"
+    >
+      {{ indexing ? ('SIMILAR.INDEXING' | translate) : ('SIMILAR.INDEX_NOW' | translate) }}
+    </button>
+  </div>
+
+  <!-- Upload zone -->
+  <div
+    *ngIf="!imagePreview"
+    class="upload-zone"
+    [class.upload-zone--active]="isDragging"
+    (dragover)="onDragOver($event)"
+    (dragleave)="onDragLeave($event)"
+    (drop)="onDrop($event)"
+    (click)="fileInput.click()"
+  >
+    <input
+      #fileInput
+      type="file"
+      accept="image/*"
+      class="upload-zone__input"
+      (change)="onFileSelected($event)"
+    />
+    <div class="upload-zone__icon">🔍</div>
+    <div class="upload-zone__text">
+      <span class="upload-zone__main">{{ 'SIMILAR.UPLOAD_TEXT' | translate }}</span>
+      <span class="upload-zone__hint">{{ 'SIMILAR.UPLOAD_HINT' | translate }}</span>
+    </div>
+  </div>
+
+  <!-- Preview + Search again -->
+  <div class="similar-page__query" *ngIf="imagePreview">
+    <div class="similar-page__query-image">
+      <img [src]="imagePreview" alt="Query image" />
+    </div>
+    <div class="similar-page__query-actions">
+      <button class="btn btn--outline" (click)="reset()">{{ 'SIMILAR.TRY_ANOTHER' | translate }}</button>
+    </div>
+  </div>
+
+  <!-- Searching -->
+  <div class="similar-page__searching" *ngIf="searching">
+    <p>{{ 'SIMILAR.SEARCHING' | translate }}</p>
+  </div>
+
+  <!-- Results -->
+  <div class="similar-page__results" *ngIf="searched && !searching">
+    <h2 class="similar-page__results-title" *ngIf="results.length">
+      {{ 'SIMILAR.RESULTS_TITLE' | translate }}
+    </h2>
+
+    <div class="similar-page__grid" *ngIf="results.length">
+      <div class="similar-page__result" *ngFor="let result of results">
+        <div class="similar-page__score">
+          <span
+            class="similar-page__score-value"
+            [class.similar-page__score-value--high]="getSimilarityPercent(result.score) >= 70"
+            [class.similar-page__score-value--medium]="getSimilarityPercent(result.score) >= 40 && getSimilarityPercent(result.score) < 70"
+            [class.similar-page__score-value--low]="getSimilarityPercent(result.score) < 40"
+          >{{ getSimilarityPercent(result.score) }}%</span>
+        </div>
+        <app-cap-card [cap]="result.cap"></app-cap-card>
+      </div>
+    </div>
+
+    <div class="similar-page__empty" *ngIf="!results.length">
+      <p>{{ 'SIMILAR.NO_RESULTS' | translate }}</p>
+    </div>
+  </div>
+</div>

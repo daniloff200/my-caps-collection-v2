@@ -10,6 +10,7 @@ export interface Cap {
   forTrade: boolean;
   needsReplacement: boolean;
   cciUrl?: string;
+  fingerprint?: number[];
   dateAdded: string;
   createdAt?: number; // Unix timestamp in ms for precise sorting
 }
