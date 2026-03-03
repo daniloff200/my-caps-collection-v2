@@ -1,7 +1,8 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
-import { Subject, takeUntil } from 'rxjs';
+import { ActivatedRoute, Router } from '@angular/router';
+import { Subject, skip, takeUntil } from 'rxjs';
 import { Cap, CapFilters, SortOption, createDefaultFilters } from '../../models/cap.model';
 import { CapService } from '../../services/cap.service';
 import { TranslateModule } from '@ngx-translate/core';
@@ -31,10 +32,27 @@ export class CapListComponent implements OnInit, OnDestroy {
   currentPage = 1;
 
   private destroy$ = new Subject<void>();
+  private selfNavigation = false;
 
-  constructor(private capService: CapService) {}
+  constructor(
+    private capService: CapService,
+    private route: ActivatedRoute,
+    private router: Router
+  ) {}
 
   ngOnInit(): void {
+    this.applyUrlParams(this.route.snapshot.queryParams);
+
+    this.route.queryParams
+      .pipe(skip(1), takeUntil(this.destroy$))
+      .subscribe((params) => {
+        if (this.selfNavigation) {
+          this.selfNavigation = false;
+          return;
+        }
+        this.applyUrlParams(params);
+      });
+
     this.capService.loaded$
       .pipe(takeUntil(this.destroy$))
       .subscribe((loaded) => (this.loaded = loaded));
@@ -43,9 +61,9 @@ export class CapListComponent implements OnInit, OnDestroy {
       .pipe(takeUntil(this.destroy$))
       .subscribe((caps) => {
         this.filteredCaps = caps;
-        // Reset to page 1 if current page is out of range
-        if (this.currentPage > this.totalPages) {
+        if (this.loaded && this.currentPage > this.totalPages) {
           this.currentPage = 1;
+          this.syncStateToUrl();
         }
       });
 
@@ -62,6 +80,21 @@ export class CapListComponent implements OnInit, OnDestroy {
       .subscribe((filters) => (this.filters = { ...filters }));
   }
 
+  private applyUrlParams(params: Record<string, string>): void {
+    const defaults = createDefaultFilters();
+    this.capService.updateFilters({
+      search: params['search'] || defaults.search,
+      country: params['country'] || defaults.country,
+      tag: params['tag'] || defaults.tag,
+      color: params['color'] || defaults.color,
+      sort: (params['sort'] as SortOption) || defaults.sort,
+      forTrade: params['trade'] === 'true' ? true : params['trade'] === 'false' ? false : defaults.forTrade,
+    });
+
+    const page = parseInt(params['page'], 10);
+    this.currentPage = page > 0 ? page : 1;
+  }
+
   ngOnDestroy(): void {
     this.destroy$.next();
     this.destroy$.complete();
@@ -70,23 +103,27 @@ export class CapListComponent implements OnInit, OnDestroy {
   onSearchChange(search: string): void {
     this.capService.updateFilters({ search });
     this.currentPage = 1;
+    this.syncStateToUrl();
   }
 
   onCountryChange(country: string): void {
     this.capService.updateFilters({ country });
     this.currentPage = 1;
+    this.syncStateToUrl();
   }
 
   onTagClick(tag: string): void {
     const newTag = this.filters.tag === tag ? '' : tag;
     this.capService.updateFilters({ tag: newTag });
     this.currentPage = 1;
+    this.syncStateToUrl();
   }
 
   onColorClick(colorId: string): void {
     const newColor = this.filters.color === colorId ? '' : colorId;
     this.capService.updateFilters({ color: newColor });
     this.currentPage = 1;
+    this.syncStateToUrl();
   }
 
   onTradeFilterChange(value: string): void {
@@ -95,17 +132,20 @@ export class CapListComponent implements OnInit, OnDestroy {
     if (value === 'false') forTrade = false;
     this.capService.updateFilters({ forTrade });
     this.currentPage = 1;
+    this.syncStateToUrl();
   }
 
   toggleForTrade(): void {
     const newValue = this.filters.forTrade === true ? null : true;
     this.capService.updateFilters({ forTrade: newValue });
     this.currentPage = 1;
+    this.syncStateToUrl();
   }
 
   resetFilters(): void {
     this.capService.resetFilters();
     this.currentPage = 1;
+    this.syncStateToUrl();
   }
 
   toggleFilters(): void {
@@ -125,6 +165,7 @@ export class CapListComponent implements OnInit, OnDestroy {
   onSortChange(sort: string): void {
     this.capService.updateFilters({ sort: sort as SortOption });
     this.currentPage = 1;
+    this.syncStateToUrl();
   }
 
   // Pagination
@@ -162,8 +203,29 @@ export class CapListComponent implements OnInit, OnDestroy {
   goToPage(page: number): void {
     if (page >= 1 && page <= this.totalPages) {
       this.currentPage = page;
+      this.syncStateToUrl();
       window.scrollTo({ top: 0, behavior: 'smooth' });
     }
+  }
+
+  private syncStateToUrl(): void {
+    this.selfNavigation = true;
+    const f = this.filters;
+    const queryParams: Record<string, string | null> = {
+      search: f.search || null,
+      country: f.country || null,
+      tag: f.tag || null,
+      color: f.color || null,
+      sort: f.sort !== 'newest' ? f.sort : null,
+      trade: f.forTrade === true ? 'true' : f.forTrade === false ? 'false' : null,
+      page: this.currentPage > 1 ? String(this.currentPage) : null,
+    };
+
+    this.router.navigate([], {
+      relativeTo: this.route,
+      queryParams,
+      replaceUrl: true,
+    });
   }
 
   trackByCap(index: number, cap: Cap): string {

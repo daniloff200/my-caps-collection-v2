@@ -49,6 +49,12 @@ export class HeaderComponent {
     this.menuOpen = !this.menuOpen;
   }
 
+  onLogoClick(event: Event): void {
+    event.preventDefault();
+    this.capService.resetFilters();
+    this.router.navigate(['/'], { queryParams: {} });
+  }
+
   onLogout(): void {
     this.authService.logout();
     this.menuOpen = false;
