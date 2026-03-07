@@ -1,5 +1,8 @@
+export type CapType = 'crown' | 'pet' | 'screw';
+
 export interface Cap {
   id: string;
+  type: CapType;
   name: string;
   country: string;
   manufacturer: string;
@@ -11,12 +14,13 @@ export interface Cap {
   needsReplacement: boolean;
   cciUrl?: string;
   dateAdded: string;
-  createdAt?: number; // Unix timestamp in ms for precise sorting
+  createdAt?: number;
 }
 
 export type SortOption = 'newest' | 'oldest' | 'name_asc' | 'name_desc' | 'country';
 
 export interface CapFilters {
+  type: CapType;
   search: string;
   country: string;
   tag: string;
@@ -27,6 +31,7 @@ export interface CapFilters {
 
 export function createDefaultFilters(): CapFilters {
   return {
+    type: 'crown',
     search: '',
     country: '',
     tag: '',

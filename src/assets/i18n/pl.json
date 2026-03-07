@@ -6,6 +6,8 @@
     "CAPS": "kapli",
     "COUNTRIES": "krajów",
     "COUNTRIES_NAV": "Kraje",
+    "PET": "Kapsle PET",
+    "SCREW": "Zakrętki",
     "LOCK": "Zablokuj",
     "UNLOCK": "Odblokuj",
     "LOGIN": "Zaloguj"
@@ -44,7 +46,10 @@
     "COLOR": "Kolor",
     "LOADING": "Ładowanie kolekcji...",
     "NO_CAPS": "Nic nie znaleziono",
-    "NO_CAPS_HINT": "Spróbuj zmienić kryteria wyszukiwania lub filtry"
+    "NO_CAPS_HINT": "Spróbuj zmienić kryteria wyszukiwania lub filtry",
+    "TITLE_PET": "Kapsle PET",
+    "TITLE_SCREW": "Zakrętki",
+    "ADD": "Dodaj"
   },
   "CARD": {
     "FOR_TRADE": "WYMIANA",
@@ -67,6 +72,10 @@
     "BACK_TO_COLLECTION": "Wróć do kolekcji"
   },
   "FORM": {
+    "CAP_TYPE": "Typ kapsla",
+    "TYPE_CROWN": "Kapsel",
+    "TYPE_PET": "PET",
+    "TYPE_SCREW": "Zakrętka",
     "ADD_TITLE": "Nowy kapsel",
     "EDIT_TITLE": "Edycja",
     "ADD_SUBTITLE": "Dodaj nowy kapsel piwny do kolekcji",

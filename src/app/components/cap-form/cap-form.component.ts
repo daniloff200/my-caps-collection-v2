@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule, NgForm } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
-import { Cap } from '../../models/cap.model';
+import { Cap, CapType } from '../../models/cap.model';
 import { CapService } from '../../services/cap.service';
 import { ToastService } from '../../services/toast.service';
 import { ImageUploadService } from '../../services/image-upload.service';
@@ -24,6 +24,7 @@ export class CapFormComponent implements OnInit {
   isEditMode = false;
   capId: string | null = null;
   saving = false;
+  capType: CapType = 'crown';
 
   name = '';
   country = '';
@@ -60,11 +61,13 @@ export class CapFormComponent implements OnInit {
   ) {}
 
   async ngOnInit(): Promise<void> {
+    this.capType = (this.route.snapshot.data['capType'] as CapType) || 'crown';
     this.capId = this.route.snapshot.paramMap.get('id');
     if (this.capId) {
       const cap = await this.capService.getCapByIdAsync(this.capId);
       if (cap) {
         this.isEditMode = true;
+        this.capType = cap.type || 'crown';
         this.name = cap.name;
         this.country = cap.country;
         this.manufacturer = cap.manufacturer;
@@ -76,6 +79,14 @@ export class CapFormComponent implements OnInit {
         this.needsReplacement = cap.needsReplacement ?? false;
         this.cciUrl = cap.cciUrl || '';
       }
+    }
+  }
+
+  setCapType(type: CapType): void {
+    this.capType = type;
+    if (type !== 'crown') {
+      this.manufacturer = '';
+      this.cciUrl = '';
     }
   }
 
@@ -221,6 +232,7 @@ export class CapFormComponent implements OnInit {
         }
 
         const capData = {
+          type: this.capType,
           name: this.name.trim(),
           country: this.country,
           manufacturer: this.manufacturer.trim(),
@@ -237,8 +249,8 @@ export class CapFormComponent implements OnInit {
         this.toastService.success(this.translateService.instant('TOAST.CAP_UPDATED'));
         this.router.navigate(['/cap', this.capId]);
       } else {
-        // Add new cap first (to get the ID), then upload image
         const capData = {
+          type: this.capType,
           name: this.name.trim(),
           country: this.country,
           manufacturer: this.manufacturer.trim(),

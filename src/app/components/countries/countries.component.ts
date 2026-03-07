@@ -46,7 +46,8 @@ export class CountriesComponent implements OnInit, OnDestroy {
     this.destroy$.complete();
   }
 
-  private buildGroups(caps: Cap[]): void {
+  private buildGroups(allCaps: Cap[]): void {
+    const caps = allCaps.filter(c => c.type === 'crown');
     this.totalCaps = caps.length;
 
     const grouped = new Map<string, Cap[]>();

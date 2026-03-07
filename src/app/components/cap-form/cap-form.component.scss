@@ -99,6 +99,37 @@
   margin-top: 6px;
 }
 
+// Type picker
+.type-picker {
+  display: flex;
+  gap: 8px;
+}
+
+.type-picker__btn {
+  flex: 1;
+  padding: 10px 16px;
+  border-radius: 10px;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  background: #1e293b;
+  color: #718096;
+  font-size: 14px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s ease;
+
+  &:hover {
+    border-color: rgba(245, 197, 66, 0.3);
+    color: #a0aec0;
+  }
+
+  &--active {
+    background: rgba(245, 197, 66, 0.15);
+    border-color: #f5c542;
+    color: #f5c542;
+    font-weight: 600;
+  }
+}
+
 // Color picker
 .color-picker {
   display: flex;

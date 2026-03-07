@@ -21,6 +21,12 @@
 </div>
 
 <div class="collection" *ngIf="loaded">
+  <!-- Page title for non-crown types -->
+  <div class="collection__type-header" *ngIf="capType !== 'crown'">
+    <h1 class="collection__type-title">{{ titleKey | translate }}</h1>
+    <a [routerLink]="addLink" class="collection__type-add">+ {{ 'LIST.ADD' | translate }}</a>
+  </div>
+
   <!-- Search -->
   <div class="search-box">
     <span class="search-box__icon">🔍</span>

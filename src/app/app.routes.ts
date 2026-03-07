@@ -9,12 +9,16 @@ import { CountryDetailComponent } from './components/country-detail/country-deta
 import { authGuard } from './guards/auth.guard';
 
 export const routes: Routes = [
-  { path: '', component: CapListComponent },
+  { path: '', component: CapListComponent, data: { capType: 'crown' } },
+  { path: 'pet', component: CapListComponent, canActivate: [authGuard], data: { capType: 'pet' } },
+  { path: 'screw', component: CapListComponent, canActivate: [authGuard], data: { capType: 'screw' } },
   { path: 'countries', component: CountriesComponent },
   { path: 'countries/:country', component: CountryDetailComponent },
   { path: 'contacts', component: ContactsComponent },
   { path: 'login', component: PasswordPromptComponent },
-  { path: 'add', component: CapFormComponent, canActivate: [authGuard] },
+  { path: 'add', component: CapFormComponent, canActivate: [authGuard], data: { capType: 'crown' } },
+  { path: 'pet/add', component: CapFormComponent, canActivate: [authGuard], data: { capType: 'pet' } },
+  { path: 'screw/add', component: CapFormComponent, canActivate: [authGuard], data: { capType: 'screw' } },
   { path: 'cap/:id', component: CapDetailComponent },
   { path: 'cap/:id/edit', component: CapFormComponent, canActivate: [authGuard] },
   { path: '**', redirectTo: '' },

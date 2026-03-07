@@ -5,6 +5,31 @@
   </div>
 
   <form class="form" #capForm="ngForm" (ngSubmit)="onSubmit(capForm)">
+    <!-- Cap Type -->
+    <div class="form__group">
+      <label class="form__label">{{ 'FORM.CAP_TYPE' | translate }}</label>
+      <div class="type-picker">
+        <button
+          type="button"
+          class="type-picker__btn"
+          [class.type-picker__btn--active]="capType === 'crown'"
+          (click)="setCapType('crown')"
+        >{{ 'FORM.TYPE_CROWN' | translate }}</button>
+        <button
+          type="button"
+          class="type-picker__btn"
+          [class.type-picker__btn--active]="capType === 'pet'"
+          (click)="setCapType('pet')"
+        >{{ 'FORM.TYPE_PET' | translate }}</button>
+        <button
+          type="button"
+          class="type-picker__btn"
+          [class.type-picker__btn--active]="capType === 'screw'"
+          (click)="setCapType('screw')"
+        >{{ 'FORM.TYPE_SCREW' | translate }}</button>
+      </div>
+    </div>
+
     <!-- Name -->
     <div class="form__group">
       <label class="form__label" for="name">{{ 'FORM.NAME' | translate }} *</label>
@@ -25,7 +50,7 @@
     </div>
 
     <!-- Country & Manufacturer -->
-    <div class="form__row">
+    <div class="form__row" *ngIf="capType === 'crown'; else countryOnly">
       <div class="form__group">
         <label class="form__label" for="country">{{ 'FORM.COUNTRY' | translate }} *</label>
         <select
@@ -63,6 +88,27 @@
         </span>
       </div>
     </div>
+
+    <ng-template #countryOnly>
+      <div class="form__group">
+        <label class="form__label" for="country">{{ 'FORM.COUNTRY' | translate }} *</label>
+        <select
+          id="country"
+          class="form__select"
+          [class.form__input--error]="countryField2.invalid && countryField2.touched"
+          [(ngModel)]="country"
+          name="country"
+          #countryField2="ngModel"
+          required
+        >
+          <option value="" disabled>{{ 'FORM.SELECT_COUNTRY' | translate }}</option>
+          <option *ngFor="let c of countries" [value]="c">{{ c }} {{ c | countryFlagEmoji }}</option>
+        </select>
+        <span class="form__error" *ngIf="countryField2.invalid && countryField2.touched">
+          {{ 'FORM.COUNTRY_REQUIRED' | translate }}
+        </span>
+      </div>
+    </ng-template>
 
     <!-- Tags -->
     <div class="form__group">
@@ -213,8 +259,8 @@
       ></textarea>
     </div>
 
-    <!-- CCI URL -->
-    <div class="form__group">
+    <!-- CCI URL (crown only) -->
+    <div class="form__group" *ngIf="capType === 'crown'">
       <label class="form__label" for="cciUrl">{{ 'FORM.CCI_URL' | translate }}</label>
       <input
         type="url"

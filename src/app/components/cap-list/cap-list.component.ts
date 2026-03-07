@@ -1,9 +1,9 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
-import { ActivatedRoute, Router } from '@angular/router';
+import { ActivatedRoute, Router, RouterLink } from '@angular/router';
 import { Subject, skip, takeUntil } from 'rxjs';
-import { Cap, CapFilters, SortOption, createDefaultFilters } from '../../models/cap.model';
+import { Cap, CapFilters, CapType, SortOption, createDefaultFilters } from '../../models/cap.model';
 import { CapService } from '../../services/cap.service';
 import { TranslateModule } from '@ngx-translate/core';
 import { CapCardComponent } from '../cap-card/cap-card.component';
@@ -14,7 +14,7 @@ import { CAP_COLORS } from '../../data/colors';
 @Component({
   selector: 'app-cap-list',
   standalone: true,
-  imports: [CommonModule, FormsModule, TranslateModule, CapCardComponent, TagBadgeComponent, CountryFlagEmojiPipe],
+  imports: [CommonModule, FormsModule, RouterLink, TranslateModule, CapCardComponent, TagBadgeComponent, CountryFlagEmojiPipe],
   templateUrl: './cap-list.component.html',
   styleUrls: ['./cap-list.component.scss'],
 })
@@ -26,6 +26,7 @@ export class CapListComponent implements OnInit, OnDestroy {
   showFilters = false;
   loaded = false;
   capColors = CAP_COLORS;
+  capType: CapType = 'crown';
 
   // Pagination
   readonly pageSize = 25;
@@ -40,7 +41,21 @@ export class CapListComponent implements OnInit, OnDestroy {
     private router: Router
   ) {}
 
+  get addLink(): string {
+    if (this.capType === 'pet') return '/pet/add';
+    if (this.capType === 'screw') return '/screw/add';
+    return '/add';
+  }
+
+  get titleKey(): string {
+    if (this.capType === 'pet') return 'LIST.TITLE_PET';
+    if (this.capType === 'screw') return 'LIST.TITLE_SCREW';
+    return '';
+  }
+
   ngOnInit(): void {
+    this.capType = (this.route.snapshot.data['capType'] as CapType) || 'crown';
+    this.capService.updateFilters({ type: this.capType });
     this.applyUrlParams(this.route.snapshot.queryParams);
 
     this.route.queryParams
@@ -83,6 +98,7 @@ export class CapListComponent implements OnInit, OnDestroy {
   private applyUrlParams(params: Record<string, string>): void {
     const defaults = createDefaultFilters();
     this.capService.updateFilters({
+      type: this.capType,
       search: params['search'] || defaults.search,
       country: params['country'] || defaults.country,
       tag: params['tag'] || defaults.tag,
@@ -144,6 +160,7 @@ export class CapListComponent implements OnInit, OnDestroy {
 
   resetFilters(): void {
     this.capService.resetFilters();
+    this.capService.updateFilters({ type: this.capType });
     this.currentPage = 1;
     this.syncStateToUrl();
   }
