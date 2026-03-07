@@ -34,26 +34,29 @@ export class CapService {
     map(([caps, filters]) => this.applyFilters(caps, filters))
   );
 
-  stats$: Observable<{ total: number; countries: number; forTrade: number }> = this.caps$.pipe(
-    map((caps) => ({
-      total: caps.length,
-      countries: new Set(caps.map((c) => c.country)).size,
-      forTrade: caps.filter((c) => c.forTrade).length,
-    }))
+  stats$: Observable<{ total: number; countries: number; forTrade: number }> = combineLatest([this.caps$, this.filters$]).pipe(
+    map(([caps, filters]) => {
+      const typed = caps.filter(c => c.type === filters.type);
+      return {
+        total: typed.length,
+        countries: new Set(typed.map((c) => c.country)).size,
+        forTrade: typed.filter((c) => c.forTrade).length,
+      };
+    })
   );
 
-  allTags$: Observable<string[]> = this.caps$.pipe(
-    map((caps) => {
+  allTags$: Observable<string[]> = combineLatest([this.caps$, this.filters$]).pipe(
+    map(([caps, filters]) => {
       const tagSet = new Set<string>();
-      caps.forEach((cap) => cap.tags.forEach((tag) => tagSet.add(tag)));
+      caps.filter(c => c.type === filters.type).forEach((cap) => cap.tags.forEach((tag) => tagSet.add(tag)));
       return Array.from(tagSet).sort();
     })
   );
 
-  allCountries$: Observable<string[]> = this.caps$.pipe(
-    map((caps) => {
+  allCountries$: Observable<string[]> = combineLatest([this.caps$, this.filters$]).pipe(
+    map(([caps, filters]) => {
       const countrySet = new Set<string>();
-      caps.forEach((cap) => countrySet.add(cap.country));
+      caps.filter(c => c.type === filters.type).forEach((cap) => countrySet.add(cap.country));
       return Array.from(countrySet).sort();
     })
   );
@@ -67,6 +70,7 @@ export class CapService {
       next: (data) => {
         const caps = (data as any[]).map((d) => ({
           ...d,
+          type: d.type ?? 'crown',
           forTrade: d.forTrade ?? false,
           needsReplacement: d.needsReplacement ?? false,
           colors: d.colors ?? [],
@@ -115,6 +119,8 @@ export class CapService {
 
   private applyFilters(caps: Cap[], filters: CapFilters): Cap[] {
     const filtered = caps.filter((cap) => {
+      if (cap.type !== filters.type) return false;
+
       if (filters.search) {
         const searchLower = filters.search.toLowerCase();
         const matchesSearch =

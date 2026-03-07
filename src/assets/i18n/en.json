@@ -6,6 +6,8 @@
     "CAPS": "caps",
     "COUNTRIES": "countries",
     "COUNTRIES_NAV": "Countries",
+    "PET": "PET Caps",
+    "SCREW": "Screw Caps",
     "LOCK": "Lock editing",
     "UNLOCK": "Unlock editing",
     "LOGIN": "Login"
@@ -44,7 +46,10 @@
     "COLOR": "Color",
     "LOADING": "Loading collection...",
     "NO_CAPS": "No caps found",
-    "NO_CAPS_HINT": "Try adjusting your search or filters"
+    "NO_CAPS_HINT": "Try adjusting your search or filters",
+    "TITLE_PET": "PET Caps",
+    "TITLE_SCREW": "Screw Caps",
+    "ADD": "Add Cap"
   },
   "CARD": {
     "FOR_TRADE": "FOR TRADE",
@@ -67,6 +72,10 @@
     "BACK_TO_COLLECTION": "Back to Collection"
   },
   "FORM": {
+    "CAP_TYPE": "Cap Type",
+    "TYPE_CROWN": "Crown Cap",
+    "TYPE_PET": "PET Cap",
+    "TYPE_SCREW": "Screw Cap",
     "ADD_TITLE": "Add New Cap",
     "EDIT_TITLE": "Edit Cap",
     "ADD_SUBTITLE": "Add a new crown cap to your collection",

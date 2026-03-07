@@ -3,6 +3,7 @@ import { Cap } from '../models/cap.model';
 export const SEED_CAPS: Cap[] = [
   {
     id: '1',
+    type: 'crown',
     name: 'Aldaris Zelta',
     country: 'Latvia',
     manufacturer: 'Aldaris',
@@ -16,6 +17,7 @@ export const SEED_CAPS: Cap[] = [
   },
   {
     id: '2',
+    type: 'crown',
     name: 'Pilsner Urquell',
     country: 'Czech Republic',
     manufacturer: 'Plzeňský Prazdroj',
@@ -29,6 +31,7 @@ export const SEED_CAPS: Cap[] = [
   },
   {
     id: '3',
+    type: 'crown',
     name: 'Guinness Draught',
     country: 'Ireland',
     manufacturer: 'Guinness',
@@ -42,6 +45,7 @@ export const SEED_CAPS: Cap[] = [
   },
   {
     id: '4',
+    type: 'crown',
     name: 'Paulaner Hefe-Weißbier',
     country: 'Germany',
     manufacturer: 'Paulaner',
@@ -55,6 +59,7 @@ export const SEED_CAPS: Cap[] = [
   },
   {
     id: '5',
+    type: 'crown',
     name: 'Chimay Bleue',
     country: 'Belgium',
     manufacturer: 'Bières de Chimay',
@@ -68,6 +73,7 @@ export const SEED_CAPS: Cap[] = [
   },
   {
     id: '6',
+    type: 'crown',
     name: 'Балтика 7',
     country: 'Russia',
     manufacturer: 'Балтика',
@@ -81,6 +87,7 @@ export const SEED_CAPS: Cap[] = [
   },
   {
     id: '7',
+    type: 'crown',
     name: 'Heineken',
     country: 'Netherlands',
     manufacturer: 'Heineken N.V.',
@@ -94,6 +101,7 @@ export const SEED_CAPS: Cap[] = [
   },
   {
     id: '8',
+    type: 'crown',
     name: 'BrewDog Punk IPA',
     country: 'UK',
     manufacturer: 'BrewDog',
@@ -107,6 +115,7 @@ export const SEED_CAPS: Cap[] = [
   },
   {
     id: '9',
+    type: 'crown',
     name: 'Corona Extra',
     country: 'Mexico',
     manufacturer: 'Grupo Modelo',
@@ -120,6 +129,7 @@ export const SEED_CAPS: Cap[] = [
   },
   {
     id: '10',
+    type: 'crown',
     name: 'Sapporo Premium',
     country: 'Japan',
     manufacturer: 'Sapporo Breweries',
@@ -133,6 +143,7 @@ export const SEED_CAPS: Cap[] = [
   },
   {
     id: '11',
+    type: 'crown',
     name: 'Leffe Blonde',
     country: 'Belgium',
     manufacturer: 'Abbaye de Leffe',
@@ -146,6 +157,7 @@ export const SEED_CAPS: Cap[] = [
   },
   {
     id: '12',
+    type: 'crown',
     name: 'Lvivske',
     country: 'Ukraine',
     manufacturer: 'Carlsberg Ukraine',

@@ -38,9 +38,11 @@ export class CountryDetailComponent implements OnInit, OnDestroy {
       )
       .subscribe((caps) => {
         this.caps = caps.filter((c) =>
-          this.countryName === 'Unknown'
-            ? !c.country || c.country === 'Unknown'
-            : c.country === this.countryName
+          c.type === 'crown' && (
+            this.countryName === 'Unknown'
+              ? !c.country || c.country === 'Unknown'
+              : c.country === this.countryName
+          )
         );
         this.loading = false;
       });
