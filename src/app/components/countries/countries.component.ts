@@ -90,6 +90,8 @@ export class CountriesComponent implements OnInit, OnDestroy {
   }
 
   navigateToCountry(countryName: string): void {
-    this.router.navigate(['/countries', countryName]);
+    this.router.navigate(['/countries', countryName]).then(() => {
+      window.scrollTo({ top: 0 });
+    });
   }
 }
