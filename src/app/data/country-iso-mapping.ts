@@ -1,6 +1,7 @@
 /**
  * Mapping from ISO 3166-1 numeric codes (as used in world-atlas TopoJSON)
  * to country names used in our application.
+ * mega.nz save key  = XVtDR-joDx4fSwWGTkkDpw
  */
 export const ISO_TO_COUNTRY: Record<string, string> = {
   '004': 'Afghanistan',

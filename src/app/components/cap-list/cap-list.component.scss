@@ -253,6 +253,7 @@
 .colors-bar {
   display: flex;
   align-items: center;
+  flex-wrap: wrap;
   gap: 8px;
   margin-bottom: 16px;
   padding: 10px 16px;
