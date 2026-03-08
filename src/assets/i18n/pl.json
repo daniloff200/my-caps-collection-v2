@@ -53,7 +53,8 @@
   },
   "CARD": {
     "FOR_TRADE": "WYMIANA",
-    "REPLACE": "WYMIEŃ"
+    "REPLACE": "WYMIEŃ",
+    "COLORS": "Kolory"
   },
   "DETAIL": {
     "BACK": "← Wróć do kolekcji",

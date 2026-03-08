@@ -116,7 +116,14 @@
 
 .card__colors {
   display: flex;
+  align-items: center;
   gap: 4px;
+}
+
+.card__colors-label {
+  font-size: 11px;
+  color: #718096;
+  margin-right: 2px;
 }
 
 .card__color-dot {

@@ -53,7 +53,8 @@
   },
   "CARD": {
     "FOR_TRADE": "ОБМЕН",
-    "REPLACE": "ЗАМЕНА"
+    "REPLACE": "ЗАМЕНА",
+    "COLORS": "Цвета"
   },
   "DETAIL": {
     "BACK": "← Назад к коллекции",

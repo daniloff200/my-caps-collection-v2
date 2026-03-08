@@ -14,6 +14,7 @@
       <a *ngIf="cciId" class="card__cci" [href]="cap.cciUrl" target="_blank" rel="noopener noreferrer" (click)="$event.stopPropagation()">CCI #{{ cciId }}</a>
     </div>
     <div class="card__colors" *ngIf="cap.colors?.length">
+      <span class="card__colors-label">{{ 'CARD.COLORS' | translate }}:</span>
       <span
         *ngFor="let color of cap.colors"
         class="card__color-dot"
