@@ -5,12 +5,83 @@
 
   <div class="country-detail__header">
     <h1 class="country-detail__title"><app-country-flag [country]="countryName"></app-country-flag> {{ countryName }}</h1>
-    <span class="country-detail__count">{{ caps.length }} {{ 'COUNTRIES.CAPS_LABEL' | translate }}</span>
+    <span class="country-detail__count">{{ allCaps.length }} {{ 'COUNTRIES.CAPS_LABEL' | translate }}</span>
   </div>
 
-  <div class="country-detail__grid" *ngIf="caps.length > 0">
+  <!-- Search -->
+  <div class="search-box">
+    <span class="search-box__icon">🔍</span>
+    <input
+      type="text"
+      class="search-box__input"
+      [placeholder]="'LIST.SEARCH_PLACEHOLDER' | translate"
+      [ngModel]="search"
+      (ngModelChange)="onSearchChange($event)"
+    />
+    <button *ngIf="search" class="search-box__clear" (click)="onSearchChange('')">×</button>
+  </div>
+
+  <!-- Toolbar -->
+  <div class="cd-toolbar">
+    <button
+      class="cd-btn cd-btn--trade"
+      [class.cd-btn--trade-active]="forTrade === true"
+      (click)="toggleForTrade()"
+    >
+      🔄 {{ 'LIST.FOR_TRADE' | translate }}
+    </button>
+    <button
+      *ngIf="hasActiveFilters"
+      class="cd-btn cd-btn--ghost"
+      (click)="resetFilters()"
+    >
+      {{ 'LIST.CLEAR_ALL' | translate }}
+    </button>
+  </div>
+
+  <!-- Tags -->
+  <div class="cd-tags" *ngIf="allTags.length">
+    <app-tag-badge
+      *ngFor="let tag of allTags"
+      [tag]="tag"
+      [clickable]="true"
+      [active]="activeTag === tag"
+      (tagClick)="onTagClick($event)"
+    ></app-tag-badge>
+  </div>
+
+  <!-- Colors -->
+  <div class="cd-colors" *ngIf="capColors.length">
+    <span class="cd-colors__label">{{ 'LIST.COLOR' | translate }}:</span>
+    <button
+      *ngFor="let c of capColors"
+      type="button"
+      class="cd-colors__dot"
+      [class.cd-colors__dot--active]="activeColor === c.id"
+      [style.background]="c.hex"
+      [style.border-color]="c.border || c.hex"
+      [title]="c.id"
+      (click)="onColorClick(c.id)"
+    ></button>
+  </div>
+
+  <!-- Meta -->
+  <div class="cd-meta">
+    <span class="cd-meta__count">
+      {{ 'LIST.CAPS_FOUND' | translate:{ count: filteredCaps.length } }}
+    </span>
+    <select class="cd-sort" [ngModel]="sort" (ngModelChange)="onSortChange($event)">
+      <option value="newest">{{ 'LIST.SORT_NEWEST' | translate }}</option>
+      <option value="oldest">{{ 'LIST.SORT_OLDEST' | translate }}</option>
+      <option value="name_asc">{{ 'LIST.SORT_NAME_AZ' | translate }}</option>
+      <option value="name_desc">{{ 'LIST.SORT_NAME_ZA' | translate }}</option>
+    </select>
+  </div>
+
+  <!-- Grid -->
+  <div class="country-detail__grid" *ngIf="filteredCaps.length > 0">
     <a
-      *ngFor="let cap of caps"
+      *ngFor="let cap of filteredCaps"
       [routerLink]="['/cap', cap.id]"
       class="detail-cap"
     >
@@ -26,7 +97,7 @@
     </a>
   </div>
 
-  <div class="country-detail__empty" *ngIf="!loading && caps.length === 0">
+  <div class="country-detail__empty" *ngIf="!loading && filteredCaps.length === 0">
     <p>{{ 'COUNTRY_DETAIL.NO_CAPS' | translate }}</p>
   </div>
 

@@ -42,6 +42,175 @@
   font-weight: 600;
 }
 
+// Search
+.search-box {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 12px 16px;
+  background: rgba(255, 255, 255, 0.04);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 12px;
+  margin-bottom: 14px;
+}
+
+.search-box__icon {
+  font-size: 16px;
+  opacity: 0.5;
+}
+
+.search-box__input {
+  flex: 1;
+  background: none;
+  border: none;
+  outline: none;
+  color: #e2e8f0;
+  font-size: 14px;
+  font-family: inherit;
+
+  &::placeholder {
+    color: #4a5568;
+  }
+}
+
+.search-box__clear {
+  background: none;
+  border: none;
+  color: #718096;
+  font-size: 18px;
+  cursor: pointer;
+  padding: 0 4px;
+
+  &:hover {
+    color: #e2e8f0;
+  }
+}
+
+// Toolbar
+.cd-toolbar {
+  display: flex;
+  gap: 8px;
+  margin-bottom: 14px;
+}
+
+.cd-btn {
+  padding: 8px 16px;
+  border-radius: 10px;
+  font-size: 13px;
+  font-weight: 500;
+  cursor: pointer;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  background: rgba(255, 255, 255, 0.04);
+  color: #a0aec0;
+  transition: all 0.2s ease;
+
+  &--trade {
+    &:hover {
+      border-color: rgba(72, 187, 120, 0.4);
+      color: #48bb78;
+    }
+  }
+
+  &--trade-active {
+    background: rgba(72, 187, 120, 0.15);
+    border-color: #48bb78;
+    color: #48bb78;
+  }
+
+  &--ghost {
+    background: transparent;
+    border-color: transparent;
+    color: #718096;
+
+    &:hover {
+      color: #e2e8f0;
+    }
+  }
+}
+
+// Tags
+.cd-tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  margin-bottom: 14px;
+  padding: 12px 16px;
+  background: rgba(255, 255, 255, 0.03);
+  border-radius: 10px;
+  border: 1px solid rgba(255, 255, 255, 0.04);
+}
+
+// Colors
+.cd-colors {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-bottom: 14px;
+  padding: 10px 16px;
+  background: rgba(255, 255, 255, 0.03);
+  border-radius: 10px;
+  border: 1px solid rgba(255, 255, 255, 0.04);
+}
+
+.cd-colors__label {
+  font-size: 12px;
+  font-weight: 600;
+  color: #718096;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  white-space: nowrap;
+  margin-right: 4px;
+}
+
+.cd-colors__dot {
+  width: 22px;
+  height: 22px;
+  border-radius: 50%;
+  border: 2.5px solid;
+  cursor: pointer;
+  padding: 0;
+  transition: all 0.2s ease;
+
+  &:hover {
+    transform: scale(1.2);
+  }
+
+  &--active {
+    transform: scale(1.25);
+    box-shadow: 0 0 0 3px rgba(245, 197, 66, 0.4);
+  }
+}
+
+// Meta (count + sort)
+.cd-meta {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 16px;
+}
+
+.cd-meta__count {
+  font-size: 14px;
+  color: #718096;
+}
+
+.cd-sort {
+  padding: 8px 12px;
+  border-radius: 8px;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  background: #1e293b;
+  color: #a0aec0;
+  font-size: 13px;
+  font-family: inherit;
+  cursor: pointer;
+  outline: none;
+
+  &:focus {
+    border-color: #f5c542;
+  }
+}
+
 // Cap grid
 .country-detail__grid {
   display: grid;
