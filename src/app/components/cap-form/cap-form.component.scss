@@ -34,6 +34,10 @@
   .form__group {
     flex: 1;
   }
+
+  @media (max-width: 480px) {
+    flex-direction: column;
+  }
 }
 
 .form__group {
@@ -103,6 +107,10 @@
 .type-picker {
   display: flex;
   gap: 8px;
+
+  @media (max-width: 480px) {
+    gap: 6px;
+  }
 }
 
 .type-picker__btn {
