@@ -2,7 +2,7 @@ import { Component, OnInit, OnDestroy } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { ActivatedRoute, RouterLink } from '@angular/router';
-import { Subject, takeUntil, switchMap } from 'rxjs';
+import { Subject, takeUntil, switchMap, from } from 'rxjs';
 import { TranslateModule } from '@ngx-translate/core';
 import { Cap, SortOption } from '../../models/cap.model';
 import { CapService } from '../../services/cap.service';
@@ -45,19 +45,13 @@ export class CountryDetailComponent implements OnInit, OnDestroy {
         switchMap((params) => {
           this.countryName = decodeURIComponent(params.get('country') || '');
           this.loading = true;
-          return this.capService.caps$;
+          return from(this.capService.fetchCountryCaps(this.countryName));
         })
       )
       .subscribe((caps) => {
-        this.allCaps = caps.filter((c) =>
-          c.type === 'crown' && (
-            this.countryName === 'Unknown'
-              ? !c.country || c.country === 'Unknown'
-              : c.country === this.countryName
-          )
-        );
+        this.allCaps = caps;
         const tagSet = new Set<string>();
-        this.allCaps.forEach(cap => cap.tags.forEach(t => tagSet.add(t)));
+        this.allCaps.forEach((cap) => cap.tags.forEach((t) => tagSet.add(t)));
         this.allTags = Array.from(tagSet).sort();
         this.loading = false;
       });

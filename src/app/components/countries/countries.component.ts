@@ -3,15 +3,14 @@ import { CommonModule } from '@angular/common';
 import { Router, RouterLink } from '@angular/router';
 import { Subject, takeUntil } from 'rxjs';
 import { TranslateModule } from '@ngx-translate/core';
-import { Cap } from '../../models/cap.model';
 import { CapService } from '../../services/cap.service';
+import { CollectionMeta } from '../../models/cap.model';
 import { WorldMapComponent } from '../world-map/world-map.component';
 import { CountryFlagComponent } from '../country-flag/country-flag.component';
 
 interface CountryGroup {
   country: string;
   count: number;
-  caps: Cap[];
 }
 
 @Component({
@@ -22,11 +21,10 @@ interface CountryGroup {
   styleUrls: ['./countries.component.scss'],
 })
 export class CountriesComponent implements OnInit, OnDestroy {
-  unknownCaps: Cap[] = [];
+  unknownCount = 0;
   countryGroups: CountryGroup[] = [];
   totalCaps = 0;
   totalCountries = 0;
-  expandedCountries = new Set<string>();
 
   private destroy$ = new Subject<void>();
 
@@ -36,9 +34,11 @@ export class CountriesComponent implements OnInit, OnDestroy {
   ) {}
 
   ngOnInit(): void {
-    this.capService.caps$.pipe(takeUntil(this.destroy$)).subscribe((caps) => {
-      this.buildGroups(caps);
-    });
+    this.capService.meta$
+      .pipe(takeUntil(this.destroy$))
+      .subscribe((meta) => {
+        if (meta) this.buildGroups(meta);
+      });
   }
 
   ngOnDestroy(): void {
@@ -46,43 +46,17 @@ export class CountriesComponent implements OnInit, OnDestroy {
     this.destroy$.complete();
   }
 
-  private buildGroups(allCaps: Cap[]): void {
-    const caps = allCaps.filter(c => c.type === 'crown');
-    this.totalCaps = caps.length;
+  private buildGroups(meta: CollectionMeta): void {
+    const crown = meta.crown;
+    this.totalCaps = crown.total;
+    this.unknownCount = crown.countryCounts['Unknown'] || 0;
 
-    const grouped = new Map<string, Cap[]>();
-    for (const cap of caps) {
-      const country = cap.country || 'Unknown';
-      if (!grouped.has(country)) {
-        grouped.set(country, []);
-      }
-      grouped.get(country)!.push(cap);
-    }
-
-    this.unknownCaps = grouped.get('Unknown') || [];
-    grouped.delete('Unknown');
-
-    this.countryGroups = Array.from(grouped.entries())
-      .map(([country, countryCaps]) => ({
-        country,
-        count: countryCaps.length,
-        caps: countryCaps,
-      }))
+    this.countryGroups = Object.entries(crown.countryCounts)
+      .filter(([country]) => country !== 'Unknown')
+      .map(([country, count]) => ({ country, count }))
       .sort((a, b) => b.count - a.count || a.country.localeCompare(b.country));
 
     this.totalCountries = this.countryGroups.length;
-  }
-
-  toggleCountry(country: string): void {
-    if (this.expandedCountries.has(country)) {
-      this.expandedCountries.delete(country);
-    } else {
-      this.expandedCountries.add(country);
-    }
-  }
-
-  isExpanded(country: string): boolean {
-    return this.expandedCountries.has(country);
   }
 
   onMapCountryClick(countryName: string): void {

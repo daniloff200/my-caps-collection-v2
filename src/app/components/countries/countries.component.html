@@ -11,14 +11,14 @@
   <app-world-map (countryClick)="onMapCountryClick($event)"></app-world-map>
 
   <!-- Unknown block -->
-  <div class="country-block country-block--unknown" *ngIf="unknownCaps.length">
+  <div class="country-block country-block--unknown" *ngIf="unknownCount">
     <div class="country-block__header" (click)="navigateToCountry('Unknown')">
       <div class="country-block__left">
         <span class="country-block__icon">❓</span>
         <span class="country-block__name">{{ 'COUNTRIES.UNKNOWN' | translate }}</span>
       </div>
       <div class="country-block__right">
-        <span class="country-block__count">{{ unknownCaps.length }}</span>
+        <span class="country-block__count">{{ unknownCount }}</span>
         <span class="country-block__arrow">▸</span>
       </div>
     </div>
@@ -72,7 +72,7 @@
   </div>
 
   <!-- Empty state -->
-  <div class="countries-empty" *ngIf="!countryGroups.length && !unknownCaps.length">
+  <div class="countries-empty" *ngIf="!countryGroups.length && !unknownCount">
     <p>{{ 'COUNTRIES.EMPTY' | translate }}</p>
   </div>
 </div>

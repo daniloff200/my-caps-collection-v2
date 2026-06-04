@@ -34,11 +34,11 @@
       type="text"
       class="search-box__input"
       [placeholder]="'LIST.SEARCH_PLACEHOLDER' | translate"
-      [ngModel]="filters.search"
+      [ngModel]="searchInput"
       (ngModelChange)="onSearchChange($event)"
     />
     <button
-      *ngIf="filters.search"
+      *ngIf="searchInput"
       class="search-box__clear"
       (click)="onSearchChange('')"
     >×</button>
@@ -133,7 +133,7 @@
   <!-- Results Count + Sort -->
   <div class="collection__meta">
     <span class="collection__count">
-      {{ 'LIST.CAPS_FOUND' | translate:{ count: filteredCaps.length } }}
+      {{ 'LIST.CAPS_FOUND' | translate:{ count: totalCount } }}
     </span>
     <div class="collection__sort">
       <select
@@ -151,9 +151,9 @@
   </div>
 
   <!-- Grid -->
-  <div class="collection__grid" *ngIf="filteredCaps.length; else emptyState">
+  <div class="collection__grid" *ngIf="pageCaps.length; else emptyState">
     <app-cap-card
-      *ngFor="let cap of paginatedCaps; trackBy: trackByCap"
+      *ngFor="let cap of pageCaps; trackBy: trackByCap"
       [cap]="cap"
     ></app-cap-card>
   </div>

@@ -40,3 +40,20 @@ export function createDefaultFilters(): CapFilters {
     sort: 'newest',
   };
 }
+
+export interface PaginatedCapsResult {
+  caps: Cap[];
+  totalCount: number;
+  page: number;
+  pageSize: number;
+}
+
+export interface TypeCollectionMeta {
+  total: number;
+  forTrade: number;
+  countries: string[];
+  tags: string[];
+  countryCounts: Record<string, number>;
+}
+
+export type CollectionMeta = Record<CapType, TypeCollectionMeta>;

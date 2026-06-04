@@ -2,7 +2,7 @@ import { Component, OnDestroy, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { ActivatedRoute, Router, RouterLink } from '@angular/router';
-import { Subject, skip, takeUntil } from 'rxjs';
+import { Subject, debounceTime, distinctUntilChanged, skip, takeUntil } from 'rxjs';
 import { Cap, CapFilters, CapType, SortOption, createDefaultFilters } from '../../models/cap.model';
 import { CapService } from '../../services/cap.service';
 import { TranslateModule } from '@ngx-translate/core';
@@ -19,21 +19,25 @@ import { CAP_COLORS } from '../../data/colors';
   styleUrls: ['./cap-list.component.scss'],
 })
 export class CapListComponent implements OnInit, OnDestroy {
-  filteredCaps: Cap[] = [];
+  pageCaps: Cap[] = [];
+  totalCount = 0;
   allTags: string[] = [];
   allCountries: string[] = [];
   filters: CapFilters = createDefaultFilters();
+  searchInput = '';
   showFilters = false;
   loaded = false;
+  loadingPage = false;
   capColors = CAP_COLORS;
   capType: CapType = 'crown';
 
-  // Pagination
   readonly pageSize = 25;
   currentPage = 1;
 
   private destroy$ = new Subject<void>();
+  private searchDebounced$ = new Subject<string>();
   private selfNavigation = false;
+  private reloadRequest$ = new Subject<void>();
 
   constructor(
     private capService: CapService,
@@ -66,19 +70,14 @@ export class CapListComponent implements OnInit, OnDestroy {
           return;
         }
         this.applyUrlParams(params);
+        this.reloadRequest$.next();
       });
 
-    this.capService.loaded$
+    this.capService.metaReady$
       .pipe(takeUntil(this.destroy$))
-      .subscribe((loaded) => (this.loaded = loaded));
-
-    this.capService.filteredCaps$
-      .pipe(takeUntil(this.destroy$))
-      .subscribe((caps) => {
-        this.filteredCaps = caps;
-        if (this.loaded && this.currentPage > this.totalPages) {
-          this.currentPage = 1;
-          this.syncStateToUrl();
+      .subscribe((ready) => {
+        if (ready && !this.loaded) {
+          this.reloadRequest$.next();
         }
       });
 
@@ -93,13 +92,30 @@ export class CapListComponent implements OnInit, OnDestroy {
     this.capService.filters$
       .pipe(takeUntil(this.destroy$))
       .subscribe((filters) => (this.filters = { ...filters }));
+
+    this.searchDebounced$
+      .pipe(debounceTime(300), distinctUntilChanged(), takeUntil(this.destroy$))
+      .subscribe((search) => {
+        this.capService.updateFilters({ search });
+        this.currentPage = 1;
+        this.syncStateToUrl();
+        this.reloadRequest$.next();
+      });
+
+    this.reloadRequest$
+      .pipe(takeUntil(this.destroy$))
+      .subscribe(() => this.loadPage());
+
+    this.reloadRequest$.next();
   }
 
   private applyUrlParams(params: Record<string, string>): void {
     const defaults = createDefaultFilters();
+    const search = params['search'] || defaults.search;
+    this.searchInput = search;
     this.capService.updateFilters({
       type: this.capType,
-      search: params['search'] || defaults.search,
+      search,
       country: params['country'] || defaults.country,
       tag: params['tag'] || defaults.tag,
       color: params['color'] || defaults.color,
@@ -111,21 +127,49 @@ export class CapListComponent implements OnInit, OnDestroy {
     this.currentPage = page > 0 ? page : 1;
   }
 
+  private async loadPage(): Promise<void> {
+    this.loadingPage = true;
+    try {
+      const result = await this.capService.fetchCapsPage(
+        this.capService.getCurrentFilters(),
+        this.currentPage,
+        this.pageSize
+      );
+      this.pageCaps = result.caps;
+      this.totalCount = result.totalCount;
+
+      if (this.currentPage > 1 && this.pageCaps.length === 0 && this.totalCount > 0) {
+        this.currentPage = 1;
+        this.syncStateToUrl();
+        return this.loadPage();
+      }
+
+      this.loaded = true;
+    } catch (err) {
+      console.error('Failed to load caps page:', err);
+      this.pageCaps = [];
+      this.totalCount = 0;
+      this.loaded = true;
+    } finally {
+      this.loadingPage = false;
+    }
+  }
+
   ngOnDestroy(): void {
     this.destroy$.next();
     this.destroy$.complete();
   }
 
   onSearchChange(search: string): void {
-    this.capService.updateFilters({ search });
-    this.currentPage = 1;
-    this.syncStateToUrl();
+    this.searchInput = search;
+    this.searchDebounced$.next(search);
   }
 
   onCountryChange(country: string): void {
     this.capService.updateFilters({ country });
     this.currentPage = 1;
     this.syncStateToUrl();
+    this.reloadRequest$.next();
   }
 
   onTagClick(tag: string): void {
@@ -133,6 +177,7 @@ export class CapListComponent implements OnInit, OnDestroy {
     this.capService.updateFilters({ tag: newTag });
     this.currentPage = 1;
     this.syncStateToUrl();
+    this.reloadRequest$.next();
   }
 
   onColorClick(colorId: string): void {
@@ -140,6 +185,7 @@ export class CapListComponent implements OnInit, OnDestroy {
     this.capService.updateFilters({ color: newColor });
     this.currentPage = 1;
     this.syncStateToUrl();
+    this.reloadRequest$.next();
   }
 
   onTradeFilterChange(value: string): void {
@@ -149,6 +195,7 @@ export class CapListComponent implements OnInit, OnDestroy {
     this.capService.updateFilters({ forTrade });
     this.currentPage = 1;
     this.syncStateToUrl();
+    this.reloadRequest$.next();
   }
 
   toggleForTrade(): void {
@@ -156,13 +203,16 @@ export class CapListComponent implements OnInit, OnDestroy {
     this.capService.updateFilters({ forTrade: newValue });
     this.currentPage = 1;
     this.syncStateToUrl();
+    this.reloadRequest$.next();
   }
 
   resetFilters(): void {
+    this.searchInput = '';
     this.capService.resetFilters();
     this.capService.updateFilters({ type: this.capType });
     this.currentPage = 1;
     this.syncStateToUrl();
+    this.reloadRequest$.next();
   }
 
   toggleFilters(): void {
@@ -183,16 +233,11 @@ export class CapListComponent implements OnInit, OnDestroy {
     this.capService.updateFilters({ sort: sort as SortOption });
     this.currentPage = 1;
     this.syncStateToUrl();
+    this.reloadRequest$.next();
   }
 
-  // Pagination
   get totalPages(): number {
-    return Math.max(1, Math.ceil(this.filteredCaps.length / this.pageSize));
-  }
-
-  get paginatedCaps(): Cap[] {
-    const start = (this.currentPage - 1) * this.pageSize;
-    return this.filteredCaps.slice(start, start + this.pageSize);
+    return Math.max(1, Math.ceil(this.totalCount / this.pageSize));
   }
 
   get visiblePages(): number[] {
@@ -200,20 +245,16 @@ export class CapListComponent implements OnInit, OnDestroy {
     const current = this.currentPage;
     const pages: number[] = [];
 
-    // Always show first page
     pages.push(1);
 
-    // Pages around current
     for (let i = Math.max(2, current - 1); i <= Math.min(total - 1, current + 1); i++) {
       pages.push(i);
     }
 
-    // Always show last page
     if (total > 1) {
       pages.push(total);
     }
 
-    // Deduplicate and sort
     return [...new Set(pages)].sort((a, b) => a - b);
   }
 
@@ -221,6 +262,7 @@ export class CapListComponent implements OnInit, OnDestroy {
     if (page >= 1 && page <= this.totalPages) {
       this.currentPage = page;
       this.syncStateToUrl();
+      this.reloadRequest$.next();
       window.scrollTo({ top: 0, behavior: 'smooth' });
     }
   }

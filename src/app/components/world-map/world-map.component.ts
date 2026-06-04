@@ -17,7 +17,6 @@ import { feature } from 'topojson-client';
 import worldData from 'world-atlas/countries-110m.json';
 import { ISO_TO_COUNTRY } from '../../data/country-iso-mapping';
 import { CapService } from '../../services/cap.service';
-import { Cap } from '../../models/cap.model';
 
 interface MapFeature {
   id: string;
@@ -74,9 +73,12 @@ export class WorldMapComponent implements OnInit, OnDestroy, AfterViewInit {
 
   ngOnInit(): void {
     this.initGeometry();
-    this.capService.caps$.pipe(takeUntil(this.destroy$)).subscribe((caps) => {
-      this.updateFeatures(caps);
-    });
+    this.capService
+      .getCountryCounts$('crown')
+      .pipe(takeUntil(this.destroy$))
+      .subscribe((counts) => {
+        this.updateFeaturesFromCounts(counts);
+      });
   }
 
   ngAfterViewInit(): void {
@@ -123,13 +125,7 @@ export class WorldMapComponent implements OnInit, OnDestroy, AfterViewInit {
     }
   }
 
-  private updateFeatures(caps: Cap[]): void {
-    const countryCounts = new Map<string, number>();
-    for (const cap of caps) {
-      const country = cap.country || 'Unknown';
-      countryCounts.set(country, (countryCounts.get(country) || 0) + 1);
-    }
-
+  private updateFeaturesFromCounts(countryCounts: Map<string, number>): void {
     const maxCount = Math.max(1, ...Array.from(countryCounts.values()));
 
     this.features = [];
