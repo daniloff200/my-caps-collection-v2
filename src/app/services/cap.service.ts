@@ -3,12 +3,12 @@ import { BehaviorSubject, Observable, combineLatest, map } from 'rxjs';
 import {
   Firestore,
   collection,
-  collectionData,
   doc,
   addDoc,
   updateDoc,
   deleteDoc,
   getDoc,
+  getDocs,
 } from '@angular/fire/firestore';
 import { Cap, CapFilters, createDefaultFilters } from '../models/cap.model';
 import { SEED_CAPS } from '../data/seed-data';
@@ -62,32 +62,48 @@ export class CapService {
   );
 
   constructor() {
-    this.subscribeToFirestore();
+    this.loadCaps();
   }
 
-  private subscribeToFirestore(): void {
-    collectionData(this.capsCollection, { idField: 'id' }).subscribe({
-      next: (data) => {
-        const caps = (data as any[]).map((d) => ({
-          ...d,
-          type: d.type ?? 'crown',
-          forTrade: d.forTrade ?? false,
-          needsReplacement: d.needsReplacement ?? false,
-          colors: d.colors ?? [],
-          cciUrl: d.cciUrl ?? '',
-          createdAt: d.createdAt ?? 0,
-        })) as Cap[];
-        this.capsSubject.next(caps);
-        this.loadedSubject.next(true);
+  private mapDoc(id: string, data: Record<string, unknown>): Cap {
+    return {
+      id,
+      ...(data as Omit<Cap, 'id'>),
+      type: (data['type'] as Cap['type']) ?? 'crown',
+      forTrade: (data['forTrade'] as boolean) ?? false,
+      needsReplacement: (data['needsReplacement'] as boolean) ?? false,
+      colors: (data['colors'] as string[]) ?? [],
+      cciUrl: (data['cciUrl'] as string) ?? '',
+      createdAt: (data['createdAt'] as number) ?? 0,
+    };
+  }
 
-        // Backfill createdAt for old records that don't have it
-        this.backfillCreatedAt(caps);
-      },
-      error: (err) => {
-        console.error('Firestore read error:', err);
-        this.loadedSubject.next(true);
-      },
-    });
+  private upsertCapLocal(cap: Cap): void {
+    const caps = [...this.capsSubject.value];
+    const index = caps.findIndex((c) => c.id === cap.id);
+    if (index >= 0) {
+      caps[index] = cap;
+    } else {
+      caps.push(cap);
+    }
+    this.capsSubject.next(caps);
+  }
+
+  private removeCapLocal(id: string): void {
+    this.capsSubject.next(this.capsSubject.value.filter((c) => c.id !== id));
+  }
+
+  private async loadCaps(): Promise<void> {
+    try {
+      const snapshot = await getDocs(this.capsCollection);
+      const caps = snapshot.docs.map((d) => this.mapDoc(d.id, d.data() as Record<string, unknown>));
+      this.capsSubject.next(caps);
+      this.loadedSubject.next(true);
+      this.backfillCreatedAt(caps);
+    } catch (err) {
+      console.error('Firestore read error:', err);
+      this.loadedSubject.next(true);
+    }
   }
 
   private backfillDone = false;
@@ -206,7 +222,9 @@ export class CapService {
     const docRef = doc(this.firestore, COLLECTION_NAME, id);
     const snapshot = await getDoc(docRef);
     if (snapshot.exists()) {
-      return { id: snapshot.id, ...snapshot.data() } as Cap;
+      const cap = this.mapDoc(snapshot.id, snapshot.data() as Record<string, unknown>);
+      this.upsertCapLocal(cap);
+      return cap;
     }
     return undefined;
   }
@@ -220,7 +238,9 @@ export class CapService {
       createdAt: Date.now(),
     };
     const docRef = await addDoc(this.capsCollection, capData);
-    return { ...capData, id: docRef.id } as Cap;
+    const newCap = { ...capData, id: docRef.id } as Cap;
+    this.upsertCapLocal(newCap);
+    return newCap;
   }
 
   async updateCap(id: string, updates: Partial<Cap>): Promise<void> {
@@ -232,11 +252,17 @@ export class CapService {
       data[key] = value === undefined ? '' : value;
     }
     await updateDoc(docRef, data);
+
+    const existing = this.getCapById(id);
+    if (existing) {
+      this.upsertCapLocal({ ...existing, ...updates, id });
+    }
   }
 
   async deleteCap(id: string): Promise<void> {
     const docRef = doc(this.firestore, COLLECTION_NAME, id);
     await deleteDoc(docRef);
+    this.removeCapLocal(id);
   }
 
   async seedData(): Promise<void> {
@@ -244,5 +270,6 @@ export class CapService {
       const { id, ...data } = cap;
       await addDoc(this.capsCollection, data);
     }
+    await this.loadCaps();
   }
 }

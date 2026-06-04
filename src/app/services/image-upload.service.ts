@@ -49,6 +49,7 @@ export class ImageUploadService {
 
     await uploadBytes(storageRef, compressed, {
       contentType: 'image/jpeg',
+      cacheControl: 'public, max-age=31536000',
       customMetadata: {
         originalName: file.name,
         originalSize: String(file.size),
@@ -56,7 +57,9 @@ export class ImageUploadService {
       },
     });
 
-    return getDownloadURL(storageRef);
+    const url = await getDownloadURL(storageRef);
+    // Cache-bust when photo is replaced — browser fetches fresh image automatically
+    return `${url}${url.includes('?') ? '&' : '?'}v=${Date.now()}`;
   }
 
   /**

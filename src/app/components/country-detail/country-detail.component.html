@@ -86,7 +86,7 @@
       class="detail-cap"
     >
       <div class="detail-cap__image">
-        <img *ngIf="cap.imageUrl" [src]="cap.imageUrl" [alt]="cap.name" />
+        <img *ngIf="cap.imageUrl" [src]="cap.imageUrl" [alt]="cap.name" loading="lazy" decoding="async" />
         <span *ngIf="!cap.imageUrl" class="detail-cap__placeholder">🍺</span>
       </div>
       <div class="detail-cap__info">

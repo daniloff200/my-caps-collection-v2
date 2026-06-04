@@ -5,7 +5,7 @@
 
   <div class="detail__content">
     <div class="detail__image">
-      <img *ngIf="cap.imageUrl" [src]="cap.imageUrl" [alt]="cap.name" />
+      <img *ngIf="cap.imageUrl" [src]="cap.imageUrl" [alt]="cap.name" loading="lazy" decoding="async" />
       <div *ngIf="!cap.imageUrl" class="detail__placeholder">
         <span>🍺</span>
       </div>
