@@ -93,7 +93,7 @@ export class CapService {
   ): Promise<PaginatedCapsResult> {
     const safePage = Math.max(1, page);
 
-    if (filters.search.trim()) {
+    if ((filters.search ?? '').trim()) {
       return this.fetchCapsPageWithSearch(filters, safePage, pageSize);
     }
 
@@ -331,12 +331,13 @@ export class CapService {
       if (filters.tag && !cap.tags.includes(filters.tag)) return false;
       if (filters.color && !cap.colors?.includes(filters.color)) return false;
       if (filters.forTrade !== null && cap.forTrade !== filters.forTrade) return false;
-      if (filters.search.trim()) {
-        const q = filters.search.toLowerCase();
-        const matches = cap.name.toLowerCase().includes(q);
-          // || cap.manufacturer.toLowerCase().includes(q)
-          // || cap.description?.toLowerCase().includes(q);
-        if (!matches) return false;
+      const searchQuery = (filters.search ?? '').trim();
+      if (searchQuery) {
+        const q = searchQuery.toLowerCase();
+        const name = (cap.name ?? '').toLowerCase();
+        if (!name.includes(q)) return false;
+        // manufacturer: (cap.manufacturer ?? '').toLowerCase().includes(q)
+        // description: (cap.description ?? '').toLowerCase().includes(q)
       }
       return true;
     });

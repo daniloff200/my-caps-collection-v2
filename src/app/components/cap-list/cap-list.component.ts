@@ -111,7 +111,10 @@ export class CapListComponent implements OnInit, OnDestroy {
 
   private applyUrlParams(params: Record<string, string>): void {
     const defaults = createDefaultFilters();
-    const search = params['search'] || defaults.search;
+    const rawSearch = params['search'];
+    const search = Array.isArray(rawSearch)
+      ? rawSearch[0] ?? defaults.search
+      : rawSearch || defaults.search;
     this.searchInput = search;
     this.capService.updateFilters({
       type: this.capType,
