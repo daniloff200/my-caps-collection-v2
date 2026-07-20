@@ -320,7 +320,7 @@ export class CapService {
       );
       const caps = snap.docs.map((d) => this.mapDoc(d.id, d.data() as Record<string, unknown>));
       this.searchCache.set(filters.type, caps);
-      this.backfillCreatedAt(caps);
+      // this.backfillCreatedAt(caps); // dead: one-time createdAt backfill already done
     }
     return this.searchCache.get(filters.type)!;
   }
@@ -505,25 +505,29 @@ export class CapService {
     this.capsCache.next(this.capsCache.value.filter((c) => c.id !== id));
   }
 
-  private backfillDone = false;
-
-  private async backfillCreatedAt(caps: Cap[]): Promise<void> {
-    if (this.backfillDone) return;
-    this.backfillDone = true;
-
-    const toFix = caps.filter((c) => !c.createdAt && c.dateAdded);
-    for (const cap of toFix) {
-      const ts = this.parseDateStr(cap.dateAdded);
-      if (ts > 0) {
-        try {
-          const docRef = doc(this.firestore, COLLECTION_NAME, cap.id);
-          await updateDoc(docRef, { createdAt: ts });
-        } catch (err) {
-          console.warn('Backfill failed for', cap.id, err);
-        }
-      }
-    }
-  }
+  // Dead code — one-time createdAt backfill.
+  // Never worked for its purpose: `caps` here come from a query ordered by
+  // createdAt, so docs missing createdAt are never in the input. The real
+  // one-time backfill was run as a standalone script; kept here for reference.
+  // private backfillDone = false;
+  //
+  // private async backfillCreatedAt(caps: Cap[]): Promise<void> {
+  //   if (this.backfillDone) return;
+  //   this.backfillDone = true;
+  //
+  //   const toFix = caps.filter((c) => !c.createdAt && c.dateAdded);
+  //   for (const cap of toFix) {
+  //     const ts = this.parseDateStr(cap.dateAdded);
+  //     if (ts > 0) {
+  //       try {
+  //         const docRef = doc(this.firestore, COLLECTION_NAME, cap.id);
+  //         await updateDoc(docRef, { createdAt: ts });
+  //       } catch (err) {
+  //         console.warn('Backfill failed for', cap.id, err);
+  //       }
+  //     }
+  //   }
+  // }
 
   private formatDate(date: Date): string {
     const dd = String(date.getDate()).padStart(2, '0');
