@@ -333,10 +333,9 @@ export class CapService {
       if (filters.forTrade !== null && cap.forTrade !== filters.forTrade) return false;
       if (filters.search.trim()) {
         const q = filters.search.toLowerCase();
-        const matches =
-          cap.name.toLowerCase().includes(q) ||
-          cap.manufacturer.toLowerCase().includes(q) ||
-          cap.description?.toLowerCase().includes(q);
+        const matches = cap.name.toLowerCase().includes(q);
+          // || cap.manufacturer.toLowerCase().includes(q)
+          // || cap.description?.toLowerCase().includes(q);
         if (!matches) return false;
       }
       return true;
